@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RentRide — Sewa Kendaraan</title>
+  <title>JOOS MOTOR — Sewa Kendaraan</title>
   <link rel="icon" type="image/jpeg" href="BOY.jpg">
   <!-- PWA -->
   <meta name="theme-color" content="#0D9488">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="RentRide">
+  <meta name="apple-mobile-web-app-title" content="JOOS MOTOR">
   <link rel="apple-touch-icon" href="BOY.jpg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']}}}}</script>
@@ -194,7 +194,7 @@
     .prof-banner{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#D97706;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
     .prof-pend{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.4);color:#2563EB;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
     .prof-lock{background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.3);color:var(--teal);font-size:12px;font-weight:600;padding:10px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
-    .prof-locked{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#EF4444;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:none;align-items:center;gap:9px}
+    .prof-locked{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#EF4444;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:none;align-items:center;gap:9px;flex-wrap:wrap}
     .ro-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--card-border);font-size:13px}
     .ro-row:last-child{border:none}
     .ro-row .rl{color:var(--text-muted);font-weight:600;flex-shrink:0;font-size:12px}
@@ -206,7 +206,6 @@
     .cloud-pill{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:99px}
     .cloud-pill.on{background:rgba(34,197,94,.12);color:#16A34A}
     .cloud-pill.off{background:rgba(100,116,139,.12);color:var(--text-muted)}
-    /* ===================== BANNER INSTALL APP ===================== */
     .inst-banner{position:fixed;bottom:90px;left:12px;right:12px;z-index:85;background:linear-gradient(135deg,#0C2E2E,#0F4A4A);border-radius:18px;padding:14px 16px;display:none;align-items:center;gap:12px;box-shadow:0 10px 32px rgba(0,0,0,.35);animation:sheetUp .4s}
     .inst-banner.on{display:flex}
     .inst-banner img{width:48px;height:48px;border-radius:12px;object-fit:contain;background:#fff;padding:2px;flex-shrink:0}
@@ -221,9 +220,9 @@
   <div class="splash" id="splash">
     <div class="sp-logo">
       <i class="fa-solid fa-car-side" id="spIcon"></i>
-      <img id="spLogoImg" data-logo src="BOY.jpg" alt="BOY" style="display:none">
+      <img id="spLogoImg" data-logo src="BOY.jpg" alt="JOOS" style="display:none">
     </div>
-    <div class="sp-t">RentRide</div>
+    <div class="sp-t">JOOS MOTOR</div>
     <div class="sp-s">SEWA KENDARAAN MUDAH</div>
     <div class="sp-bar-w"><div class="sp-bar" id="spBar"></div></div>
   </div>
@@ -231,7 +230,7 @@
   <header class="app-top">
     <div class="brand" onclick="nav('home')">
       <img class="logo-img" data-logo src="BOY.jpg" alt="Logo" onerror="this.style.display='none'">
-      <div><div class="bt">RentRide</div><div class="bs">SEWA KENDARAAN</div></div>
+      <div><div class="bt">JOOS MOTOR</div><div class="bs">SEWA KENDARAAN</div></div>
     </div>
     <button class="lang-btn" onclick="togLang()"><i class="fa-solid fa-globe"></i><span id="langTxt">ID</span></button>
     <button class="icon-btn" onclick="togDM()" id="dmBtn"><i class="fa-solid fa-moon"></i></button>
@@ -369,10 +368,15 @@
       </div>
 
       <div class="f-card" style="margin-bottom:14px">
-        <div class="prof-locked" id="profLockAcc"><i class="fa-solid fa-lock"></i> <span data-i18n="p_lockacc">Akun Anda <b>dikunci oleh Admin</b>. Hubungi Admin RentRide untuk membuka kembali akses booking.</span></div>
+        <div class="prof-locked" id="profLockAcc">
+          <i class="fa-solid fa-lock"></i>
+          <span data-i18n="p_lockacc" style="flex:1;min-width:180px">Akun Anda <b>dikunci oleh Admin</b>. Hubungi Admin untuk membuka kembali akses booking.</span>
+          <button class="btn btn-p" style="padding:8px 14px;font-size:12px;width:100%;margin-top:8px" onclick="contactAdmin()"><i class="fa-brands fa-whatsapp"></i> Hubungi Admin via WhatsApp</button>
+          <button class="btn btn-s" style="padding:8px 14px;font-size:12px;width:100%;margin-top:6px" onclick="mailAdmin()"><i class="fa-solid fa-envelope"></i> Kirim Email ke Admin</button>
+        </div>
         <div class="prof-banner" id="profBanner" style="display:none"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="p_banner">Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b></span></div>
         <div class="prof-pend" id="profPend" style="display:none"><i class="fa-solid fa-hourglass-half"></i> <span data-i18n="p_pend">Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.</span></div>
-        <div class="prof-lock" id="profLock" style="display:none"><i class="fa-solid fa-lock"></i> <span data-i18n="p_lock">Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.</span></div>
+        <div class="prof-lock" id="profLock" style="display:none"><i class="fa-solid fa-lock"></i> <span data-i18n="p_lock">Data terkunci. Perubahan hanya melalui <b>Admin JOOS MOTOR</b>.</span></div>
 
         <div id="profEdit">
           <h3 style="font-size:14.5px;font-weight:800;margin-bottom:4px" data-i18n="p_edit_t">🪪 Data Diri Sesuai KTP</h3>
@@ -393,6 +397,13 @@
         </div>
       </div>
 
+      <!-- KARTU KONTAK ADMIN -->
+      <div class="f-card" style="margin-bottom:14px">
+        <h3 style="font-size:14.5px;font-weight:800;margin-bottom:10px">📞 Butuh Bantuan? Hubungi Admin</h3>
+        <button class="btn btn-p btn-block" style="background:linear-gradient(135deg,#25D366,#128C7E)" onclick="contactAdmin()"><i class="fa-brands fa-whatsapp"></i> WhatsApp: 0819-3330-1033</button>
+        <button class="btn btn-s btn-block" style="margin-top:8px" onclick="mailAdmin()"><i class="fa-solid fa-envelope"></i> Email: infojoossmotor@gmail.com</button>
+      </div>
+
       <div class="f-card" style="margin-bottom:14px">
         <div class="tgl-row" style="border:none;padding-top:0"><div style="font-size:14px;font-weight:700">🌙 <span data-i18n="dark">Mode Gelap</span></div><div class="tgl" id="pDark" onclick="togDM()"></div></div>
       </div>
@@ -400,7 +411,7 @@
       <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
       <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">JOOS MOTOR Customer v2.1<br>© 2026 — by LEONK</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">JOOS MOTOR Customer v2.2<br>© 2026 — by LEONK</div>
     </div>
   </div>
 
@@ -415,7 +426,7 @@
 
   <!-- BANNER INSTALL APP -->
   <div class="inst-banner" id="instBan">
-    <img src="BOY.jpg" alt="RentRide">
+    <img src="BOY.jpg" alt="JOOS MOTOR">
     <div class="ib-t"><b>📲 Install Aplikasi JOOS MOTOR</b><span>buka seperti aplikasi asli, lebih cepat</span></div>
     <button class="yes" id="instYes">Install</button>
     <button class="no" id="instNo">✕</button>
@@ -424,6 +435,11 @@
   <div class="toast-c" id="toastC"></div>
 
 <script>
+/* ===================== KONTAK ADMIN (fallback + bisa dioverride cloud) ===================== */
+const ADMIN_WA='081933301033';
+const ADMIN_EMAIL='infojoossmotor@gmail.com';
+const BRAND='JOOS MOTOR';
+
 /* ===================== LOGO TANPA LATAR ===================== */
 (function(){
   const im=new Image();im.crossOrigin='anonymous';
@@ -469,17 +485,17 @@ function toast(type,msg){const c=$('toastC');const d=document.createElement('div
   const ic=type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':type==='warning'?'fa-triangle-exclamation':'fa-circle-info';
   d.innerHTML=`<i class="fa-solid ti ${ic}"></i><span>${msg}</span>`;c.appendChild(d);
   setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),300);},3200);}
-function sheet(title,body,yesTxt,cb,cls='btn-d',icon='fa-circle-check'){
+function sheet(title,body,yesTxt,cb,cls='btn-d',icon='fa-circle-check',extra){
   const ov=document.createElement('div');ov.className='sheet-ov';
-  ov.innerHTML=`<div class="sheet"><h3 style="font-size:16px;font-weight:800">${title}</h3><p style="font-size:13px;color:var(--text-secondary);margin:10px 0 18px;line-height:1.6">${body}</p><div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" data-x>${t('lg_cancel')}</button><button class="btn ${cls}" style="flex:1" data-y><i class="fa-solid ${icon}"></i> ${yesTxt}</button></div></div>`;
+  ov.innerHTML=`<div class="sheet"><h3 style="font-size:16px;font-weight:800">${title}</h3><p style="font-size:13px;color:var(--text-secondary);margin:10px 0 18px;line-height:1.6">${body}</p>${extra||''}<div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" data-x>${t('lg_cancel')}</button><button class="btn ${cls}" style="flex:1" data-y><i class="fa-solid ${icon}"></i> ${yesTxt}</button></div></div>`;
   document.body.appendChild(ov);
   ov.onclick=e=>{if(e.target===ov||e.target.closest('[data-x]'))ov.remove();else if(e.target.closest('[data-y]')){ov.remove();cb();}};}
 function timeAgo(ts){const m=Math.floor((Date.now()-ts)/60000);if(m<1)return t('nj');if(m<60)return m+' '+t('nm');const h=Math.floor(m/60);if(h<24)return h+' '+t('nh');return new Date(ts).toLocaleDateString();}
 
 /* ===================== BAHASA (ID/EN) ===================== */
 const DICT={
-id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunci)',btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_locked:'🔒 Akun Anda DIKUNCI oleh Admin — hubungi Admin RentRide untuk membuka akses',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari server',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒',t_valid:'Periksa data bertanda merah — semua wajib sesuai KTP',desc_tpl:'# dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.',sp_cat:'Kategori',sp_year:'Tahun',sp_cap:'Kapasitas',sp_trans:'Transmisi',sp_fuel:'BBM',sp_plate:'Plat',sp_loc:'Lokasi',day_s:'hari',nj:'Baru saja',nm:'mnt lalu',nh:'jam lalu',cloud_ok:'Tersambung',cloud_off:'Offline',cloud_on_toast:'☁️ Tersambung ke server — data sinkron real-time',cloud_off_toast:'📴 Tidak bisa ke server — data tersimpan di perangkat',p_lockacc:'Akun Anda <b>dikunci oleh Admin</b>. Hubungi Admin RentRide untuk membuka kembali akses booking.'},
-en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_locked:'🔒 Your account was LOCKED by Admin — contact RentRide Admin to regain access',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from server',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒',t_valid:'Check the red fields — all required as per ID',desc_tpl:'# is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.',sp_cat:'Category',sp_year:'Year',sp_cap:'Capacity',sp_trans:'Transmission',sp_fuel:'Fuel',sp_plate:'Plate',sp_loc:'Location',day_s:'day(s)',nj:'Just now',nm:'m ago',nh:'h ago',cloud_ok:'Connected',cloud_off:'Offline',cloud_on_toast:'☁️ Connected to server — real-time sync active',cloud_off_toast:'📴 Server unreachable — data saved on device',p_lockacc:'Your account is <b>locked by Admin</b>. Contact RentRide Admin to unlock booking access.'}
+id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin JOOS MOTOR</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunci)',btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_locked:'🔒 Akun Anda DIKUNCI oleh Admin — hubungi Admin untuk membuka akses',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin (WA 0819-3330-1033) untuk perubahan data 🔒',t_valid:'Periksa data bertanda merah — semua wajib sesuai KTP',desc_tpl:'# dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.',sp_cat:'Kategori',sp_year:'Tahun',sp_cap:'Kapasitas',sp_trans:'Transmisi',sp_fuel:'BBM',sp_plate:'Plat',sp_loc:'Lokasi',day_s:'hari',nj:'Baru saja',nm:'mnt lalu',nh:'jam lalu',cloud_ok:'Tersambung',cloud_off:'Offline',cloud_on_toast:'☁️ Tersambung ke server — data sinkron real-time',cloud_off_toast:'📴 Tidak bisa ke server — data tersimpan di perangkat',p_lockacc:'Akun Anda <b>dikunci oleh Admin</b>. Silakan hubungi Admin untuk membuka kembali akses booking.'},
+en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>JOOS MOTOR Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_locked:'🔒 Your account was LOCKED by Admin — contact Admin to regain access',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact Admin (WA 0819-3330-1033) for data changes 🔒',t_valid:'Check the red fields — all required as per ID',desc_tpl:'# is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.',sp_cat:'Category',sp_year:'Year',sp_cap:'Capacity',sp_trans:'Transmission',sp_fuel:'Fuel',sp_plate:'Plate',sp_loc:'Location',day_s:'day(s)',nj:'Just now',nm:'m ago',nh:'h ago',cloud_ok:'Connected',cloud_off:'Offline',cloud_on_toast:'☁️ Connected to server — real-time sync active',cloud_off_toast:'📴 Server unreachable — data saved on device',p_lockacc:'Your account is <b>locked by Admin</b>. Please contact Admin to unlock booking access.'}
 };
 let lang=localStorage.getItem('rr-lang')||'id';
 function t(k){return (DICT[lang]&&DICT[lang][k])||DICT.id[k]||k;}
@@ -568,7 +584,8 @@ function normalize(v){
     motors:arr(v&&v.motors).length?arr(v.motors):DEFAULTS.motors,
     promos:arr(v&&v.promos).length?arr(v.promos):PROMOS,
     orders:arr(v&&v.orders),
-    customers:arr(v&&v.customers)
+    customers:arr(v&&v.customers),
+    contact:(v&&v.contact)||{wa:ADMIN_WA,email:ADMIN_EMAIL}
   };
 }
 function updCloudUI(showToast){
@@ -620,6 +637,38 @@ const allV=()=>[...data().vehicles,...data().motors];
 const byId=id=>allV().find(v=>v.id===id);
 function rentedIds(){const s=new Set();allV().forEach(v=>{if(v.status==='disewa')s.add(v.id)});data().orders.forEach(o=>{if(['konf','konfirmasi','aktif'].includes(o.status))s.add(o.vid)});return s;}
 
+/* ===================== 📞 HUBUNGI ADMIN (WA + Email) ===================== */
+function waClean(p){let n=String(p||'').replace(/[^0-9]/g,'');if(n.startsWith('0'))n='62'+n.slice(1);else if(n.startsWith('8'))n='62'+n;return n;}
+function getAdminWa(){
+  const c=data().contact;
+  const num=waClean((c&&c.wa)||ADMIN_WA);
+  return num.length>=10?num:waClean(ADMIN_WA);
+}
+function getAdminEmail(){
+  const c=data().contact;
+  return (c&&c.email)||ADMIN_EMAIL;
+}
+function lockMsg(){
+  const nama=(USER&&USER.nama)||'Pelanggan';
+  return 'Halo Admin '+BRAND+' 👋\n\nAkun saya *DIKUNCI* oleh admin.\nNama: '+nama+'\nID Perangkat: '+DEV+'\n\nMohon bantuan untuk membuka akses kembali. Terima kasih 🙏';
+}
+function contactAdmin(){
+  window.open('https://wa.me/'+getAdminWa()+'?text='+encodeURIComponent(lockMsg()),'_blank');
+}
+function mailAdmin(){
+  const nama=(USER&&USER.nama)||'Pelanggan';
+  const subj='Permohonan Buka Kunci Akun - '+nama;
+  const body='Halo Admin '+BRAND+',\n\nAkun saya dikunci oleh admin.\n\nNama: '+nama+'\nID Perangkat: '+DEV+'\n\nMohon bantuan untuk membuka akses kembali.\n\nTerima kasih.';
+  window.open('mailto:'+getAdminEmail()+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_blank');
+}
+function showLockSheet(){
+  sheet('🔒 Akun Anda Dikunci',
+    t('p_lockacc')+'<br><br><b>📞 WA:</b> 0819-3330-1033<br><b>✉️ Email:</b> '+ADMIN_EMAIL,
+    '💬 Hubungi Admin',
+    contactAdmin,
+    'btn-p','fa-headset');
+}
+
 /* ===================== SINKRONISASI ===================== */
 let lastOrderStat={};
 function sync(){
@@ -627,7 +676,7 @@ function sync(){
   if(USER&&USER.locked){
     const c=d.customers.find(c=>c.deviceId===DEV);
     if(!c){USER=null;saveUser();NOTIFS=[];saveNotifs();toast('error',t('t_deleted'));if(curPage==='profil')renderProf();}
-    else if(c.status==='locked'&&USER.status!=='locked'){USER.status='locked';saveUser();addNotif('fa-lock','#EF4444','t_locked');toast('error',t('t_locked'));if(curPage==='profil')renderProf();}
+    else if(c.status==='locked'&&USER.status!=='locked'){USER.status='locked';saveUser();addNotif('fa-lock','#EF4444','t_locked');toast('error',t('t_locked'));showLockSheet();if(curPage==='profil')renderProf();}
     else if(c.status==='approved'&&USER.status!=='approved'){USER.status='approved';saveUser();addNotif('fa-circle-check','#22C55E','t_approved');toast('success',t('t_approved'));if(curPage==='profil')renderProf();}
     else if(c.status==='pending'&&USER.status!=='pending'){USER.status='pending';saveUser();}
   }
@@ -745,7 +794,7 @@ function rKat(){
 let curV=null,curThumbs=[];
 function openDetail(id){
   const v=byId(id);if(!v)return;
-  if(USER&&USER.status==='locked'){toast('error',t('t_locked'));return;}
+  if(USER&&USER.status==='locked'){showLockSheet();return;}
   if(rentedIds().has(id)){toast('warning',tw('t_rented',v.nama));return;}
   curV=v;
   curThumbs=[v.img].concat((v.photos||[]).map(p=>p.img||p)).slice(0,4);
@@ -779,7 +828,7 @@ let appliedPromo=null;
 function openBooking(){
   if(!curV)return;
   if(!USER||!USER.locked){toast('warning',t('t_fill_ktp'));nav('profil');return;}
-  if(USER.status==='locked'){toast('error',t('t_locked'));nav('profil');return;}
+  if(USER.status==='locked'){showLockSheet();nav('profil');return;}
   if(USER.status==='pending'){toast('warning',t('t_pending_book'));return;}
   if(rentedIds().has(curV.id)){toast('warning',tw('t_rented',curV.nama));nav('katalog');return;}
   $('bThumb').style.backgroundImage=`url('${curV.img}')`;
@@ -825,7 +874,7 @@ function checkPromo(){
 function confirmBooking(){
   if(!curV)return;
   if(!USER||!USER.locked){toast('warning',t('t_fill_ktp'));nav('profil');return;}
-  if(USER.status==='locked'){toast('error',t('t_locked'));return;}
+  if(USER.status==='locked'){showLockSheet();return;}
   if(USER.status==='pending'){toast('warning',t('t_pending_book'));return;}
   const a=$('bMulai').value,b=$('bSelesai').value;
   const dur=Math.round((new Date(b)-new Date(a))/86400000);
@@ -916,7 +965,7 @@ function renderProf(){
   $('pDark').classList.toggle('on',document.documentElement.classList.contains('dark'));
 }
 function saveProf(){
-  if(USER&&USER.status==='locked'){toast('error',t('t_locked'));return;}
+  if(USER&&USER.status==='locked'){showLockSheet();return;}
   const n=$('pInNama').value.trim(),tp=$('pInTelp').value.trim(),em=$('pInEmail').value.trim(),ak=$('pInAlamatKtp').value.trim(),ad=$('pInAlamatDom').value.trim();
   let ok=true;
   const mark=(el,bad)=>{el.classList.toggle('err',bad);if(bad)ok=false;};
@@ -939,7 +988,9 @@ function saveProf(){
   addNotif(same?'fa-hourglass-half':'fa-circle-check',same?'#F59E0B':'#22C55E',same?'t_same_name':'t_saved');
   renderProf();
 }
-function reqChange(){toast('info',t('t_need_admin'));}
+function reqChange(){
+  sheet('Minta Perubahan Data','Hubungi Admin '+BRAND+' untuk perubahan data terkunci.','💬 WhatsApp',contactAdmin,'btn-p','fa-headset');
+}
 function upAv(inp){
   if(!inp.files||!inp.files[0])return;
   compressImg(inp.files[0],url=>{if(!USER)USER={};USER.avatar=url;saveUser();renderProf();toast('success',t('t_photo'));},300,.7);
@@ -989,10 +1040,7 @@ function togDM(){
   if(curPage==='profil')$('pDark').classList.toggle('on',dk);
 }
 
-/* ============================================================
-   📲 INSTALL APLIKASI (PWA) — TANGGUH, SELALU TAMPIL
-   ============================================================ */
-/* 1) Manifest dinamis: logo BOY.jpg → ikon PNG 192 & 512 dengan latar teal perusahaan */
+/* ===================== 📲 INSTALL APLIKASI (PWA) ===================== */
 (async function makeManifest(){
   try{
     const mk=size=>new Promise(res=>{
@@ -1012,66 +1060,66 @@ function togDM(){
       im.src='BOY.jpg';
     });
     const [i192,i512]=await Promise.all([mk(192),mk(512)]);
-    if(!i192||!i512){console.warn('[PWA] Ikon gagal dibuat — pastikan BOY.jpg ada');return;}
+    if(!i192||!i512)return;
     const manifest={
-      name:'RentRide — Sewa Kendaraan',short_name:'RentRide',
+      name:'JOOS MOTOR — Sewa Kendaraan',short_name:'JOOS MOTOR',
       description:'Sewa mobil & motor terbaik. Booking mudah langsung dari HP.',
       start_url:location.pathname,scope:'./',display:'standalone',
       background_color:'#0C2E2E',theme_color:'#0D9488',orientation:'portrait',
-      icons:[{src:i192,sizes:'192x192',type:'image/png'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]
+      icons:[
+        {src:i192,sizes:'192x192',type:'image/png'},
+        {src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}
+      ]
     };
     const url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
     let link=document.querySelector('link[rel="manifest"]');
     if(!link){link=document.createElement('link');link.rel='manifest';document.head.appendChild(link);}
     link.href=url;
-    console.log('[PWA] Manifest terpasang ✅ (logo BOY → ikon 192 & 512)');
-  }catch(e){console.warn('[PWA] Manifest gagal:',e);}
+  }catch(e){}
 })();
 
-/* 2) Service Worker (offline + syarat install) */
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
-  navigator.serviceWorker.register('sw.js').then(()=>console.log('[PWA] Service Worker terdaftar ✅')).catch(e=>console.warn('[PWA] SW gagal:',e.message));
-}else{
-  console.warn('[PWA] SW butuh http://localhost atau https:// — saat ini:',location.protocol);
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 
-/* 3) Banner install — SELALU tampil jika belum terinstall (tidak hanya mengandalkan beforeinstallprompt) */
 let deferredPrompt=null;
 const IS_STANDALONE=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();
   deferredPrompt=e;
-  console.log('[PWA] beforeinstallprompt tersedia ✅ — Install browser siap');
 });
 function showInstBan(){
   if(IS_STANDALONE)return;
   if(localStorage.getItem('rr-inst-hide'))return;
-  setTimeout(()=>{const b=$('instBan');if(b)b.classList.add('on');},2500);
+  if(localStorage.getItem('rr-inst-seen'))return;
+  setTimeout(()=>{
+    const b=$('instBan');
+    if(!b)return;
+    b.classList.add('on');
+    localStorage.setItem('rr-inst-seen','1');
+    setTimeout(()=>{b.classList.remove('on');},12000);
+  },2500);
 }
-/* Tombol Install permanen di Profil */
 function updInstBtn(){
   const b=$('btnInstallApp');
   if(!b)return;
   b.style.display=IS_STANDALONE?'none':'inline-flex';
 }
 async function doInstall(){
-  /* Android/desktop Chrome: dialog asli bila tersedia */
   if(deferredPrompt){
     deferredPrompt.prompt();
     const{outcome}=await deferredPrompt.userChoice;
-    if(outcome==='accepted')toast('success','📲 Menginstall RentRide...');
+    if(outcome==='accepted')toast('success','📲 Menginstall JOOS MOTOR...');
     deferredPrompt=null;
     $('instBan').classList.remove('on');
     localStorage.setItem('rr-inst-hide','1');
     return;
   }
-  /* iPhone/iPad Safari: petunjuk manual */
   if(/iphone|ipad|ipod/i.test(navigator.userAgent)){
     toast('info','📱 iPhone: tekan tombol Bagikan (⬆️) di Safari → "Tambah ke Layar Utama"',5000);
     return;
   }
-  /* Chrome desktop tanpa sinyal install: petunjuk address bar */
-  toast('info','💻 Chrome: klik ikon ⊕ / 🖥️ di kanan address bar → "Install RentRide"',5000);
+  toast('info','💻 Chrome: klik ikon ⊕ / 🖥️ di kanan address bar → "Install"',5000);
 }
 function initInstall(){
   const yes=$('instYes'),no=$('instNo');
@@ -1084,7 +1132,7 @@ window.addEventListener('appinstalled',()=>{
   deferredPrompt=null;
   const b=$('instBan');if(b)b.classList.remove('on');
   updInstBtn();
-  toast('success','🎉 RentRide terinstall! Logo BOY ada di layar utama Anda');
+  toast('success','🎉 JOOS MOTOR terinstall! Logo ada di layar utama Anda');
 });
 function manualInstall(){doInstall();}
 
