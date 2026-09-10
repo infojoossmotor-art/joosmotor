@@ -397,13 +397,6 @@
         </div>
       </div>
 
-      <!-- KARTU KONTAK ADMIN -->
-      <div class="f-card" style="margin-bottom:14px">
-        <h3 style="font-size:14.5px;font-weight:800;margin-bottom:10px">📞 Butuh Bantuan? Hubungi Admin</h3>
-        <button class="btn btn-p btn-block" style="background:linear-gradient(135deg,#25D366,#128C7E)" onclick="contactAdmin()"><i class="fa-brands fa-whatsapp"></i> WhatsApp: 0819-3330-1033</button>
-        <button class="btn btn-s btn-block" style="margin-top:8px" onclick="mailAdmin()"><i class="fa-solid fa-envelope"></i> Email: infojoossmotor@gmail.com</button>
-      </div>
-
       <div class="f-card" style="margin-bottom:14px">
         <div class="tgl-row" style="border:none;padding-top:0"><div style="font-size:14px;font-weight:700">🌙 <span data-i18n="dark">Mode Gelap</span></div><div class="tgl" id="pDark" onclick="togDM()"></div></div>
       </div>
@@ -411,7 +404,7 @@
       <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
       <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">JOOS MOTOR Customer v2.2<br>© 2026 — by LEONK</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">JOOS MOTOR Customer v2.3<br>© 2026 — by LEONK</div>
     </div>
   </div>
 
@@ -485,9 +478,9 @@ function toast(type,msg){const c=$('toastC');const d=document.createElement('div
   const ic=type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':type==='warning'?'fa-triangle-exclamation':'fa-circle-info';
   d.innerHTML=`<i class="fa-solid ti ${ic}"></i><span>${msg}</span>`;c.appendChild(d);
   setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),300);},3200);}
-function sheet(title,body,yesTxt,cb,cls='btn-d',icon='fa-circle-check',extra){
+function sheet(title,body,yesTxt,cb,cls='btn-d',icon='fa-circle-check'){
   const ov=document.createElement('div');ov.className='sheet-ov';
-  ov.innerHTML=`<div class="sheet"><h3 style="font-size:16px;font-weight:800">${title}</h3><p style="font-size:13px;color:var(--text-secondary);margin:10px 0 18px;line-height:1.6">${body}</p>${extra||''}<div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" data-x>${t('lg_cancel')}</button><button class="btn ${cls}" style="flex:1" data-y><i class="fa-solid ${icon}"></i> ${yesTxt}</button></div></div>`;
+  ov.innerHTML=`<div class="sheet"><h3 style="font-size:16px;font-weight:800">${title}</h3><p style="font-size:13px;color:var(--text-secondary);margin:10px 0 18px;line-height:1.6">${body}</p><div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" data-x>${t('lg_cancel')}</button><button class="btn ${cls}" style="flex:1" data-y><i class="fa-solid ${icon}"></i> ${yesTxt}</button></div></div>`;
   document.body.appendChild(ov);
   ov.onclick=e=>{if(e.target===ov||e.target.closest('[data-x]'))ov.remove();else if(e.target.closest('[data-y]')){ov.remove();cb();}};}
 function timeAgo(ts){const m=Math.floor((Date.now()-ts)/60000);if(m<1)return t('nj');if(m<60)return m+' '+t('nm');const h=Math.floor(m/60);if(h<24)return h+' '+t('nh');return new Date(ts).toLocaleDateString();}
@@ -603,12 +596,12 @@ if(fbRef){
   fbRef.on('value',snap=>{
     const v=snap.val();
     if(!v){
-      const local=shGet();
-      fbRef.set(normalize({vehicles:local.vehicles,motors:local.motors,promos:local.promos,orders:local.orders,customers:local.customers}));
+      /* Jangan seed dari customer saat snapshot kosong sesaat — tunggu admin */
       cloudData=normalize(null);
-    }else{
-      cloudData=normalize(v);
+      cloudOn=true;updCloudUI(true);sync();
+      return;
     }
+    cloudData=normalize(v);
     cloudOn=true;updCloudUI(true);sync();
   },err=>{cloudOn=false;updCloudUI(true);console.warn('Cloud error:',err.message);});
   firebase.database().ref('.info/connected').on('value',s=>{
@@ -619,12 +612,20 @@ if(fbRef){
   setTimeout(()=>{cloudOn=false;updCloudUI(true);},800);
 }
 
+/* ===================== COMMIT AMAN: hanya orders & customers, data admin TIDAK disentuh ===================== */
+function cleanArr(a){return (a||[]).filter(x=>x!==null&&x!==undefined);}
 function commit(fn){
-  if(fbRef&&cloudData){
-    const copy=JSON.parse(JSON.stringify(cloudData));
-    fn(copy);
-    fbRef.set(normalize(copy));
-    cloudData=normalize(copy);
+  if(fbRef){
+    const base=cloudData?JSON.parse(JSON.stringify({orders:cloudData.orders,customers:cloudData.customers})):{orders:[],customers:[]};
+    const orders=JSON.parse(JSON.stringify(base.orders||[]));
+    const customers=JSON.parse(JSON.stringify(base.customers||[]));
+    const mock={orders,customers};
+    fn(mock);
+    const o=cleanArr(mock.orders),c=cleanArr(mock.customers);
+    fbRef.child('orders').set(o).catch(e=>console.warn('Commit orders gagal:',e.message));
+    fbRef.child('customers').set(c).catch(e=>console.warn('Commit customers gagal:',e.message));
+    if(cloudData){cloudData.orders=o;cloudData.customers=c;}
+    const local=shGet();local.orders=o;local.customers=c;shSet(local);
   }else{
     const s=shGet();fn(s);shSet(s);
   }
@@ -675,7 +676,11 @@ function sync(){
   const d=data();
   if(USER&&USER.locked){
     const c=d.customers.find(c=>c.deviceId===DEV);
-    if(!c){USER=null;saveUser();NOTIFS=[];saveNotifs();toast('error',t('t_deleted'));if(curPage==='profil')renderProf();}
+    if(!c){
+      /* ⚠️ Penjaga: jangan hapus USER saat cloud belum terverifikasi */
+      if(!cloudOn){return;}
+      USER=null;saveUser();NOTIFS=[];saveNotifs();toast('error',t('t_deleted'));if(curPage==='profil')renderProf();
+    }
     else if(c.status==='locked'&&USER.status!=='locked'){USER.status='locked';saveUser();addNotif('fa-lock','#EF4444','t_locked');toast('error',t('t_locked'));showLockSheet();if(curPage==='profil')renderProf();}
     else if(c.status==='approved'&&USER.status!=='approved'){USER.status='approved';saveUser();addNotif('fa-circle-check','#22C55E','t_approved');toast('success',t('t_approved'));if(curPage==='profil')renderProf();}
     else if(c.status==='pending'&&USER.status!=='pending'){USER.status='pending';saveUser();}
@@ -942,6 +947,21 @@ function cancelOrder(id){
 }
 
 /* ===================== PROFIL ===================== */
+function ensureHelpCard(){
+  let help=document.getElementById('helpCard');
+  if(!help){
+    help=document.createElement('div');
+    help.id='helpCard';
+    help.className='f-card';
+    help.style.marginBottom='14px';
+    help.innerHTML=`<h3 style="font-size:14.5px;font-weight:800;margin-bottom:10px">📞 Butuh Bantuan? Hubungi Admin</h3>
+      <button class="btn btn-p btn-block" style="background:linear-gradient(135deg,#25D366,#128C7E)" onclick="contactAdmin()"><i class="fa-brands fa-whatsapp"></i> WhatsApp: 0819-3330-1033</button>
+      <button class="btn btn-s btn-block" style="margin-top:8px" onclick="mailAdmin()"><i class="fa-solid fa-envelope"></i> Email: infojoossmotor@gmail.com</button>`;
+    const anchor=$('profLockAcc').closest('.f-card');
+    if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(help,anchor.nextSibling);
+  }
+  return help;
+}
 function renderProf(){
   const has=!!(USER&&USER.locked);
   const locked=has&&USER.status==='locked';
@@ -953,6 +973,8 @@ function renderProf(){
   $('profEdit').style.display=has?'none':'block';
   $('profView').style.display=has?'block':'none';
   $('profLockAcc').style.display=locked?'flex':'none';
+  /* Kartu bantuan HANYA muncul saat akun DIKUNCI */
+  ensureHelpCard().style.display=locked?'block':'none';
   $('profBanner').style.display=!USER?'flex':'none';
   $('profPend').style.display=has&&USER.status==='pending'?'flex':'none';
   $('profLock').style.display=has&&!locked?'flex':'none';
