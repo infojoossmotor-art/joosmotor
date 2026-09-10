@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RentRide — Sewa Kendaraan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root{--bg:#F0FDFA;--card:#FFFFFF;--card-border:rgba(13,148,136,0.10);--input-bg:#F8FFFE;--input-border:#E2E8F0;--input-focus:#0D9488;--text-primary:#1E293B;--text-secondary:#64748B;--text-muted:#94A3B8;--shadow-card:0 1px 3px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);--shadow-hover:0 10px 28px rgba(13,148,136,0.15);--teal:#0D9488;--teal-l:#14B8A6}
+    .dark{--bg:#0B1A1A;--card:#112424;--card-border:rgba(13,148,136,0.18);--input-bg:#0E2020;--input-border:#1E3A3A;--input-focus:#14B8A6;--text-primary:#E2E8F0;--text-secondary:#94A3B8;--text-muted:#64748B;--shadow-card:0 1px 3px rgba(0,0,0,0.25),0 4px 16px rgba(0,0,0,0.18);--shadow-hover:0 10px 28px rgba(13,148,136,0.22)}
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;transition:background .3s,color .3s;padding-bottom:76px}
+    ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:10px}
+    .splash{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0C2E2E 0%,#0F4A4A 55%,#091E1E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+    .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .splash::before{content:'';position:absolute;top:-30%;right:-15%;width:450px;height:450px;border-radius:50%;background:rgba(13,148,136,.18);filter:blur(80px);animation:spP 3s infinite}
+    @keyframes spP{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+    .sp-logo{width:120px;height:120px;border-radius:26px;background:#fff;padding:10px;object-fit:contain;box-shadow:0 20px 60px rgba(13,148,136,.45);animation:spB 1.6s infinite,spG 2s infinite}
+    @keyframes spB{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+    @keyframes spG{0%,100%{box-shadow:0 20px 60px rgba(13,148,136,.45)}50%{box-shadow:0 20px 80px rgba(20,184,166,.75)}}
+    .sp-t{font-size:32px;font-weight:800;color:#fff;margin-top:22px;animation:sfU .8s .2s both}
+    .sp-s{font-size:11px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:3px;margin-top:5px;animation:sfU .8s .35s both}
+    .sp-bar-w{width:200px;height:5px;background:rgba(255,255,255,.12);border-radius:10px;margin-top:30px;overflow:hidden;animation:sfU .8s .5s both}
+    .sp-bar{height:100%;width:0%;background:linear-gradient(90deg,#14B8A6,#5EEAD4);border-radius:10px;transition:width .25s}
+    @keyframes sfU{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    body.splashed{animation:appIn .5s}
+    @keyframes appIn{from{opacity:0}to{opacity:1}}
+    .app-top{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0C2E2E,#0F4A4A);padding:14px 18px;display:flex;align-items:center;gap:12px}
+    .app-top .brand{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
+    .app-top .brand img{width:38px;height:38px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;flex-shrink:0}
+    .app-top .brand .bt{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.1}
+    /* ✅ FIX: subteks header jelas terlihat di mode terang & gelap */
+    .app-top .brand .bs{font-size:9px;color:rgba(255,255,255,.85);letter-spacing:1.5px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+    .icon-btn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:15px;transition:all .2s;position:relative}
+    .icon-btn:hover{background:rgba(255,255,255,.2)}
+    .icon-btn .dot{position:absolute;top:7px;right:8px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid #0C2E2E;display:none}
+    /* ✅ TOMBOL BAHASA */
+    .lang-btn{width:auto;min-width:44px;height:38px;padding:0 9px;border-radius:12px;background:rgba(255,255,255,.1);border:none;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:#fff;font-size:11.5px;font-weight:800;font-family:inherit;transition:all .2s}
+    .lang-btn:hover{background:rgba(255,255,255,.22)}
+    .lang-btn i{font-size:12px}
+    .page{display:none}.page.on{display:block}
+    .wrap{max-width:680px;margin:0 auto;padding:18px 16px}
+    .hero{background:linear-gradient(135deg,#0C2E2E 0%,#0F4A4A 60%,#0D9488 130%);border-radius:22px;padding:26px 22px;position:relative;overflow:hidden;margin-bottom:20px}
+    .hero::after{content:'';position:absolute;top:-40%;right:-20%;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.06);filter:blur(40px)}
+    .hero h1{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;line-height:1.3;position:relative;z-index:1}
+    .hero p{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px;position:relative;z-index:1}
+    .hero .hl{color:#5EEAD4}
+    .search-box{position:relative;margin-top:16px;z-index:1}
+    .search-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.6);font-size:14px}
+    .search-box input{width:100%;padding:13px 15px 13px 42px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);border-radius:14px;font-size:14px;font-family:inherit;color:#fff;outline:none;transition:border .2s}
+    .search-box input::placeholder{color:rgba(255,255,255,.6)}
+    .search-box input:focus{border-color:rgba(255,255,255,.45)}
+    .sec-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 14px}
+    .sec-head h2{font-size:16.5px;font-weight:800;letter-spacing:-.3px}
+    .sec-head a{font-size:12.5px;font-weight:600;color:var(--teal);text-decoration:none;cursor:pointer}
+    .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+    .chips::-webkit-scrollbar{display:none}
+    .chip{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:9px 15px;background:var(--card);border:1.5px solid var(--card-border);border-radius:12px;font-size:12.5px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .2s;user-select:none}
+    .chip i{font-size:13px;color:var(--teal)}
+    .chip.on{background:linear-gradient(135deg,var(--teal),#0F766E);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(13,148,136,.3)}
+    .chip.on i{color:#fff}
+    .promo-card{flex-shrink:0;width:230px;background:linear-gradient(135deg,#0D9488,#115E59);border-radius:16px;padding:18px;color:#fff;position:relative;overflow:hidden;cursor:pointer}
+    .promo-card::after{content:'\f02b';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;bottom:-14px;right:-8px;font-size:70px;opacity:.12}
+    .promo-card .pc-d{font-size:26px;font-weight:800}
+    .promo-card .pc-n{font-size:12.5px;font-weight:600;margin-top:2px}
+    .promo-card .pc-k{display:inline-block;margin-top:10px;padding:4px 10px;background:rgba(255,255,255,.2);border-radius:8px;font-size:11px;font-weight:700;font-family:monospace;letter-spacing:.5px}
+    .v-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-card);cursor:pointer;transition:all .3s;position:relative}
+    .v-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-4px)}
+    .v-card:active{transform:scale(.98)}
+    .v-img{height:170px;background-size:cover;background-position:center;position:relative}
+    .v-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 55%)}
+    .v-badge{position:absolute;top:10px;left:10px;z-index:2}
+    .v-fav{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer;border:none;color:#EF4444;font-size:13px;transition:transform .2s}
+    .v-price{position:absolute;bottom:10px;right:12px;z-index:2;color:#fff}
+    .v-price .vp{font-size:16px;font-weight:800}
+    .v-price .vp span{font-size:10.5px;font-weight:400;opacity:.8}
+    .v-rate{position:absolute;bottom:10px;left:12px;z-index:2;color:#fff;font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:4px}
+    .v-rate i{color:#FBBF24;font-size:10px}
+    .v-body{padding:14px}
+    .v-body h3{font-size:14.5px;font-weight:700;line-height:1.35}
+    .v-loc{font-size:11.5px;color:var(--text-muted);margin-top:4px}
+    .v-specs{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+    .v-specs span{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--input-bg);border:1px solid var(--card-border);border-radius:6px;font-size:10.5px;color:var(--text-secondary)}
+    .v-specs span i{font-size:9px;color:var(--teal)}
+    .v-card.rented,.chip.rented{opacity:.55;filter:grayscale(1);pointer-events:none;cursor:not-allowed}
+    .v-card.rented .v-fav{display:none}
+    .rented-tag{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;background:rgba(15,23,42,.85);color:#fff;padding:9px 18px;border-radius:12px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:7px;backdrop-filter:blur(4px);letter-spacing:.3px}
+    .rented-tag i{color:#F87171;font-size:11px}
+    .dark .v-card.rented,.dark .chip.rented{opacity:.45}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:8px;font-size:10.5px;font-weight:700}
+    .bs{background:#F0FDF4;color:#16A34A}.bi{background:#F0FDFA;color:#0D9488}.bw{background:#FFFBEB;color:#D97706}.bd{background:#FEF2F2;color:#EF4444}.b2{background:#F1F5F9;color:#64748B}
+    .dark .bs{background:rgba(34,197,94,.15)}.dark .bi{background:rgba(13,148,136,.18)}.dark .bw{background:rgba(245,158,11,.15)}.dark .bd{background:rgba(239,68,68,.15)}.dark .b2{background:rgba(100,116,139,.2)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
+    .btn-p{background:linear-gradient(135deg,#0D9488,#0F766E);color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.35)}.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,148,136,.45)}
+    .btn-s{background:var(--input-bg);color:var(--text-primary);border:1.5px solid var(--input-border)}
+    .btn-d{background:rgba(239,68,68,.1);color:#EF4444;border:1.5px solid rgba(239,68,68,.3)}
+    .btn-block{width:100%}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+    .d-hero{height:260px;background-size:cover;background-position:center;position:relative}
+    .d-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 40%,rgba(0,0,0,.6))}
+    .d-back{position:absolute;top:14px;left:14px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#1E293B}
+    .d-fav{position:absolute;top:14px;right:14px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#EF4444}
+    .d-title{position:absolute;bottom:16px;left:18px;right:18px;z-index:2;color:#fff}
+    .d-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 2px}
+    .d-thumb{flex-shrink:0;width:72px;height:54px;border-radius:10px;overflow:hidden;position:relative;border:2.5px solid transparent;cursor:pointer}
+    .d-thumb.on{border-color:var(--teal)}
+    .d-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .d-thumb em{position:absolute;bottom:2px;left:3px;font-size:7.5px;font-style:normal;font-weight:700;background:rgba(0,0,0,.65);color:#fff;padding:1px 5px;border-radius:4px}
+    .f-label{display:block;font-size:12.5px;font-weight:700;margin-bottom:7px}
+    .f-input{width:100%;padding:12px 14px;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:13px;font-size:14px;font-family:inherit;color:var(--text-primary);outline:none;transition:all .2s}
+    .f-input:focus{border-color:var(--input-focus);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+    .f-input.err{border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,.12)}
+    .f-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;box-shadow:var(--shadow-card);padding:20px}
+    .prow{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;color:var(--text-secondary)}
+    .prow b{color:var(--text-primary);font-weight:700}
+    .prow.total{border-top:1.5px dashed var(--card-border);margin-top:8px;padding-top:13px;font-size:15px}
+    .prow.total b{color:var(--teal);font-size:19px;font-weight:800}
+    .tgl-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--card-border)}
+    .tgl{position:relative;width:46px;height:26px;background:#CBD5E1;border-radius:13px;cursor:pointer;transition:background .25s;flex-shrink:0}
+    .tgl.on{background:var(--teal)}
+    .tgl::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .25s}
+    .tgl.on::after{transform:translateX(20px)}
+    .o-item{background:var(--card);border:1px solid var(--card-border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-card);margin-bottom:12px;cursor:pointer}
+    .o-top{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--card-border)}
+    .o-code{font-size:13px;font-weight:800;color:var(--teal);flex:1}
+    .o-body{display:flex;gap:12px;padding:13px 14px}
+    .o-thumb{width:82px;height:62px;border-radius:10px;background-size:cover;background-position:center;flex-shrink:0;background-color:var(--input-bg)}
+    .stepper{display:flex;align-items:center;justify-content:space-between;margin:18px 0 6px;position:relative}
+    .stepper::before{content:'';position:absolute;top:13px;left:24px;right:24px;height:3px;background:var(--input-border);z-index:0}
+    .stp{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;width:25%}
+    .stp .sdot{width:28px;height:28px;border-radius:50%;background:var(--input-bg);border:2.5px solid var(--input-border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted)}
+    .stp span{font-size:9.5px;font-weight:600;color:var(--text-muted)}
+    .stp.done .sdot{background:var(--teal);border-color:var(--teal);color:#fff}
+    .stp.done span{color:var(--teal)}
+    .bnav{position:fixed;bottom:0;left:0;right:0;z-index:80;background:var(--card);border-top:1px solid var(--card-border);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+    .bnav button{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;color:var(--text-muted);font-family:inherit;font-size:10px;font-weight:600}
+    .bnav button i{font-size:18px}
+    .bnav button.on{color:var(--teal)}
+    .bnav .bnav-center{flex:0 0 56px;margin-top:-24px}
+    .bnav .bnav-center .cb{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#0D9488);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 6px 20px rgba(13,148,136,.45);border:4px solid var(--bg)}
+    .toast-c{position:fixed;top:74px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;width:min(92%,400px);pointer-events:none}
+    .toast{display:flex;align-items:center;gap:11px;padding:13px 16px;border-radius:14px;background:var(--card);border:1px solid var(--card-border);box-shadow:0 8px 30px rgba(0,0,0,.18);font-size:13px;font-weight:500;animation:tIn .35s;pointer-events:auto}
+    .toast.out{animation:tOut .3s forwards}
+    .toast i.ti{font-size:17px}
+    .toast.success .ti{color:#22C55E}.toast.error .ti{color:#EF4444}.toast.warning .ti{color:#F59E0B}.toast.info .ti{color:var(--teal)}
+    @keyframes tIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes tOut{to{opacity:0;transform:translateY(-14px)}}
+    .np-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:120;display:none}.np-ov.on{display:block}
+    .np{position:fixed;top:0;right:-360px;width:min(340px,88vw);height:100%;background:var(--card);z-index:121;transition:right .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.2)}
+    .np.on{right:0}
+    .np-head{padding:18px;border-bottom:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between}
+    .np-list{flex:1;overflow-y:auto}
+    .empty{text-align:center;padding:50px 20px;color:var(--text-muted)}
+    .empty i{font-size:52px;opacity:.18;display:block;margin-bottom:14px}
+    .empty h3{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:5px}
+    .empty p{font-size:13px}
+    /* ✅ FOTO PROFIL: UTUH (tidak terpotong) + TEPAT TENGAH, latar blur premium */
+    .prof-av{width:104px;height:104px;border-radius:50%;background:#0F4A4A;position:relative;overflow:hidden;cursor:pointer;border:4px solid var(--card);box-shadow:var(--shadow-card);flex-shrink:0}
+    .prof-av .pbg{position:absolute;inset:-12%;width:124%;height:124%;object-fit:cover;filter:blur(14px) brightness(.65);display:none}
+    .prof-av .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;display:none;z-index:1}
+    .prof-av.has .pbg,.prof-av.has .pimg{display:block}
+    .prof-av .pinit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800;z-index:0;background:linear-gradient(135deg,#14B8A6,#0D9488)}
+    .prof-av.has .pinit{display:none}
+    .prof-av .cam{position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;z-index:3;border:2px solid var(--card)}
+    .prof-banner{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#D97706;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+    .prof-pend{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.4);color:#2563EB;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+    .prof-lock{background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.3);color:var(--teal);font-size:12px;font-weight:600;padding:10px 14px;border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+    .ro-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--card-border);font-size:13px}
+    .ro-row:last-child{border:none}
+    .ro-row .rl{color:var(--text-muted);font-weight:600;flex-shrink:0;font-size:12px}
+    .ro-row .rv{font-weight:700;text-align:right;word-break:break-word}
+    .fade{animation:fadeIn .4s ease-out}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .sheet-ov{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .25s}
+    .sheet{background:var(--card);border-radius:22px 22px 0 0;width:min(560px,100%);padding:22px 20px calc(22px + env(safe-area-inset-bottom));animation:sheetUp .3s cubic-bezier(.4,0,.2,1)}
+    @keyframes sheetUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+  </style>
+</head>
+<body>
+  <div class="splash" id="splash">
+    <img class="sp-logo" id="spLogo" alt="Logo">
+    <div class="sp-t">RentRide</div>
+    <div class="sp-s">SEWA KENDARAAN MUDAH</div>
+    <div class="sp-bar-w"><div class="sp-bar" id="spBar"></div></div>
+  </div>
+
+  <header class="app-top">
+    <div class="brand" onclick="nav('home')">
+      <img id="hdLogo" alt="Logo">
+      <div><div class="bt">RentRide</div><div class="bs">SEWA KENDARAAN</div></div>
+    </div>
+    <button class="lang-btn" onclick="togLang()"><i class="fa-solid fa-globe"></i><span id="langTxt">ID</span></button>
+    <button class="icon-btn" onclick="togDM()" id="dmBtn"><i class="fa-solid fa-moon"></i></button>
+    <button class="icon-btn" onclick="togNP()"><i class="fa-solid fa-bell"></i><span class="dot" id="nDot"></span></button>
+  </header>
+
+  <div class="np-ov" id="npOv" onclick="togNP()"></div>
+  <div class="np" id="np">
+    <div class="np-head"><h3 data-i18n="notif">Notifikasi</h3><button class="btn btn-s" style="padding:6px 12px;font-size:11px" onclick="clrN()" data-i18n="read_all">Baca semua</button></div>
+    <div class="np-list" id="nList"></div>
+  </div>
+
+  <!-- BERANDA -->
+  <div class="page on" id="pg-home">
+    <div class="wrap fade">
+      <div class="hero">
+        <h1><span data-i18n="hi">Hai</span>, <span class="hl" id="heroNama">Traveler!</span> 👋<br><span data-i18n="hero_q">Mau ke mana hari ini?</span></h1>
+        <p data-i18n="hero_s">Sewa mobil & motor terbaik, harga bersahabat.</p>
+        <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="heroQ" data-i18n-ph="ph_search" placeholder="Cari Avanza, NMAX, Fortuner..." oninput="quickSearch(this.value)"></div>
+      </div>
+      <div class="chips" id="catChips"></div>
+      <div id="secPromo" style="display:none">
+        <div class="sec-head"><h2 data-i18n="sec_promo">🎁 Promo Spesial</h2></div>
+        <div class="chips" id="promoRow" style="padding-bottom:8px"></div>
+      </div>
+      <div class="sec-head"><h2 data-i18n="sec_pop">⭐ Paling Populer</h2><a onclick="goKat('')" data-i18n="see_all">Lihat semua →</a></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px" id="homeGrid"></div>
+      <div class="sec-head"><h2 data-i18n="sec_mobil">🚗 Mobil</h2><a onclick="goKat('mobil')" data-i18n="see_all2">Lihat semua →</a></div>
+      <div class="chips" id="mobilRow"></div>
+      <div class="sec-head"><h2 data-i18n="sec_motor">🏍️ Motor</h2><a onclick="goKat('motor')" data-i18n="see_all3">Lihat semua →</a></div>
+      <div class="chips" id="motorRow"></div>
+    </div>
+  </div>
+
+  <!-- KATALOG -->
+  <div class="page" id="pg-katalog">
+    <div class="wrap fade">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="position:relative;flex:1"><i class="fa-solid fa-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px"></i><input class="f-input" style="padding-left:38px" id="katQ" data-i18n-ph="ph_search2" placeholder="Cari kendaraan..." oninput="rKat()"></div>
+        <select class="f-input" style="width:auto;padding-right:32px" id="katSort" onchange="rKat()">
+          <option value="pop" data-i18n="sort_pop">Populer</option>
+          <option value="murah" data-i18n="sort_cheap">Harga ↑</option>
+          <option value="mahal" data-i18n="sort_exp">Harga ↓</option>
+          <option value="rating" data-i18n="sort_rating">Rating</option>
+        </select>
+      </div>
+      <div class="chips" style="margin-bottom:14px" id="katChips"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px" id="katGrid"></div>
+      <div class="empty" id="katEmpty" style="display:none"><i class="fa-solid fa-car-side"></i><h3 data-i18n="no_result">Tidak ditemukan</h3><p data-i18n="no_result_s">Coba kata kunci atau filter lain.</p></div>
+    </div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="page" id="pg-detail">
+    <div class="d-hero" id="dHero">
+      <button class="d-back" onclick="nav('katalog')"><i class="fa-solid fa-arrow-left"></i></button>
+      <button class="d-fav" onclick="togFav()"><i class="fa-regular fa-heart" id="dFavI"></i></button>
+      <div class="d-title"><span class="badge bi" id="dBadge"></span><h1 id="dNama" style="font-size:22px;font-weight:800;margin-top:8px;letter-spacing:-.4px"></h1></div>
+    </div>
+    <div class="d-thumbs" id="dThumbs"></div>
+    <div class="wrap fade">
+      <div class="f-card" style="margin-bottom:14px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between">
+          <div><div style="font-size:11px;color:var(--text-muted);font-weight:700" data-i18n="lbl_price">HARGA SEWA</div><div style="font-size:26px;font-weight:800;color:var(--teal)" id="dHarga"></div></div>
+          <div style="text-align:right"><div style="font-size:11px;color:var(--text-muted);font-weight:700" data-i18n="lbl_rating">RATING</div><div style="font-size:17px;font-weight:800"><i class="fa-solid fa-star" style="color:#F59E0B;font-size:14px"></i> <span id="dRating"></span></div></div>
+        </div>
+      </div>
+      <div class="f-card" style="margin-bottom:14px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px" id="dSpecs"></div></div>
+      <div class="f-card" style="margin-bottom:20px"><h3 style="font-size:14.5px;font-weight:800;margin-bottom:8px" data-i18n="lbl_desc">Deskripsi</h3><p style="font-size:13.5px;color:var(--text-secondary);line-height:1.75" id="dDesk"></p></div>
+    </div>
+    <div style="position:sticky;bottom:76px;padding:12px 16px;background:linear-gradient(to top,var(--bg) 60%,transparent);z-index:40">
+      <div class="wrap" style="padding:0"><button class="btn btn-p btn-block" id="dBookBtn" onclick="openBooking()"><i class="fa-solid fa-calendar-check"></i> <span id="dBookTxt" data-i18n="btn_book">Booking Sekarang</span></button></div>
+    </div>
+  </div>
+
+  <!-- BOOKING -->
+  <div class="page" id="pg-booking">
+    <div class="wrap fade">
+      <button class="btn btn-s" style="padding:8px 14px;font-size:12.5px;margin-bottom:16px" onclick="nav('detail')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Kembali</span></button>
+      <div class="f-card" style="display:flex;gap:14px;align-items:center;margin-bottom:16px">
+        <div class="o-thumb" id="bThumb" style="width:86px;height:66px"></div>
+        <div style="flex:1;min-width:0"><h3 id="bNama" style="font-size:14.5px;font-weight:800"></h3><div style="font-size:12.5px;color:var(--teal);font-weight:700;margin-top:3px" id="bHarga"></div><div style="font-size:10.5px;color:var(--text-muted);margin-top:5px"><i class="fa-solid fa-id-badge"></i> <span id="bUser"></span></div></div>
+      </div>
+      <div class="f-card" style="margin-bottom:14px">
+        <h3 style="font-size:14.5px;font-weight:800;margin-bottom:14px" data-i18n="b_dates">📅 Tanggal Sewa</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><label class="f-label" data-i18n="b_start">Tanggal Mulai</label><input type="date" class="f-input" id="bMulai" onchange="$('bSelesai').min=this.value;calcPrice()"></div>
+          <div><label class="f-label" data-i18n="b_end">Tanggal Selesai</label><input type="date" class="f-input" id="bSelesai" onchange="calcPrice()"></div>
+        </div>
+        <div id="bDurasi" style="font-size:12.5px;color:var(--teal);font-weight:700;margin-top:10px"></div>
+      </div>
+      <div class="f-card" style="margin-bottom:14px">
+        <div class="tgl-row" style="border:none;padding-top:0"><div><div style="font-size:14px;font-weight:700" data-i18n="b_driver">🧑‍✈️ Include Driver</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:2px" data-i18n="b_driver_s">+Rp 150.000/hari (opsional)</div></div><div class="tgl" id="bDriver" onclick="this.classList.toggle('on');calcPrice()"></div></div>
+      </div>
+      <div class="f-card" style="margin-bottom:14px">
+        <h3 style="font-size:14.5px;font-weight:800;margin-bottom:12px" data-i18n="b_promo">🎟️ Kode Promo</h3>
+        <div style="display:flex;gap:10px"><input class="f-input" id="bPromo" data-i18n-ph="b_promo_ph" placeholder="Contoh: WEEKEND20" style="flex:1;text-transform:uppercase" oninput="checkPromo()"><div id="bPromoStat" style="display:flex;align-items:center;font-size:16px"></div></div>
+      </div>
+      <div class="f-card" style="margin-bottom:16px">
+        <h3 style="font-size:14.5px;font-weight:800;margin-bottom:8px" data-i18n="b_summary">💰 Rincian Biaya</h3>
+        <div class="prow"><span data-i18n="row_daily">Harga harian</span><b id="pHarian">-</b></div>
+        <div class="prow"><span data-i18n="row_dur">Durasi</span><b id="pDurasi">-</b></div>
+        <div class="prow" id="pDriverRow" style="display:none"><span data-i18n="row_driver">Driver</span><b id="pDriver">-</b></div>
+        <div class="prow" id="pPromoRow" style="display:none"><span style="color:#16A34A" data-i18n="row_disc">Diskon promo</span><b style="color:#16A34A" id="pPromo">-</b></div>
+        <div class="prow total"><span data-i18n="row_total">Total</span><b id="pTotal">-</b></div>
+      </div>
+      <button class="btn btn-p btn-block" id="bConfirm" onclick="confirmBooking()" style="margin-bottom:30px"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_confirm">Konfirmasi Booking</span></button>
+    </div>
+  </div>
+
+  <!-- PESANAN -->
+  <div class="page" id="pg-pesanan">
+    <div class="wrap fade">
+      <div class="sec-head" style="margin-top:0"><h2 data-i18n="pg_orders">📋 Pesanan Saya</h2></div>
+      <div class="chips" style="margin-bottom:14px" id="ordChips"></div>
+      <div id="ordList"></div>
+    </div>
+  </div>
+
+  <!-- PROFIL -->
+  <div class="page" id="pg-profil">
+    <div class="wrap fade">
+      <div style="text-align:center;margin:10px 0 22px">
+        <div class="prof-av" id="pAv" onclick="document.getElementById('pAvIn').click()" style="margin:0 auto"><div class="pinit" id="pAvTxt">?</div><img class="pbg" id="pAvBg" alt=""><img class="pimg" id="pAvImg" alt=""><div class="cam"><i class="fa-solid fa-camera"></i></div></div>
+        <input type="file" id="pAvIn" accept="image/*" style="display:none" onchange="upAv(this)">
+        <h2 id="pNama" style="font-size:19px;font-weight:800;margin-top:14px">-</h2>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-top:3px" id="pSub">-</p>
+      </div>
+
+      <div class="f-card" style="margin-bottom:14px">
+        <div class="prof-banner" id="profBanner" style="display:none"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="p_banner">Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b></span></div>
+        <div class="prof-pend" id="profPend" style="display:none"><i class="fa-solid fa-hourglass-half"></i> <span data-i18n="p_pend">Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.</span></div>
+        <div class="prof-lock" id="profLock" style="display:none"><i class="fa-solid fa-lock"></i> <span data-i18n="p_lock">Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.</span></div>
+
+        <div id="profEdit">
+          <h3 style="font-size:14.5px;font-weight:800;margin-bottom:4px" data-i18n="p_edit_t">🪪 Data Diri Sesuai KTP</h3>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-bottom:14px" data-i18n="p_edit_w">⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!</p>
+          <div style="margin-bottom:12px"><label class="f-label"><span data-i18n="p_name">Nama Lengkap Sesuai KTP</span> <span style="color:#EF4444">*</span></label><input class="f-input" id="pInNama"></div>
+          <div style="margin-bottom:12px"><label class="f-label"><span data-i18n="p_telp">No. Telepon Aktif / WA</span> <span style="color:#EF4444">*</span></label><input class="f-input" id="pInTelp" inputmode="tel"></div>
+          <div style="margin-bottom:12px"><label class="f-label"><span data-i18n="p_email">Email Aktif</span> <span style="color:#EF4444">*</span></label><input class="f-input" id="pInEmail" inputmode="email"></div>
+          <div style="margin-bottom:12px"><label class="f-label"><span data-i18n="p_addr">Alamat Sesuai KTP</span> <span style="color:#EF4444">*</span></label><textarea class="f-input" id="pInAlamatKtp" style="min-height:64px;resize:vertical"></textarea></div>
+          <div><label class="f-label"><span data-i18n="p_dom">Alamat Domisili (Tempat Tinggal Sekarang)</span> <span style="color:#EF4444">*</span></label><textarea class="f-input" id="pInAlamatDom" style="min-height:52px;resize:vertical"></textarea></div>
+          <button class="btn btn-p btn-block" style="margin-top:16px" onclick="saveProf()"><i class="fa-solid fa-lock"></i> <span data-i18n="btn_lock">Simpan & Kunci Data</span></button>
+          <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="p_hint"><i class="fa-solid fa-circle-info"></i> Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b></p>
+        </div>
+
+        <div id="profView" style="display:none">
+          <h3 style="font-size:14.5px;font-weight:800;margin-bottom:12px" data-i18n="p_view_t">🪪 Data Diri (Terkunci)</h3>
+          <div id="profViewRows"></div>
+          <button class="btn btn-s btn-block" style="margin-top:16px" onclick="reqChange()"><i class="fa-solid fa-headset"></i> <span data-i18n="btn_req">Minta Perubahan ke Admin</span></button>
+        </div>
+      </div>
+
+      <div class="f-card" style="margin-bottom:14px">
+        <div class="tgl-row" style="border:none;padding-top:0"><div style="font-size:14px;font-weight:700">🌙 <span data-i18n="dark">Mode Gelap</span></div><div class="tgl" id="pDark" onclick="togDM()"></div></div>
+      </div>
+
+      <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
+      <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
+
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.2<br>© 2025 — RentRide Admin Panel</div>
+    </div>
+  </div>
+
+  <nav class="bnav" id="bnav">
+    <button data-p="home" class="on" onclick="nav('home')"><i class="fa-solid fa-house"></i><span data-i18n="nav_home">Beranda</span></button>
+    <button data-p="katalog" onclick="nav('katalog')"><i class="fa-solid fa-compass"></i><span data-i18n="nav_katalog">Katalog</span></button>
+    <button class="bnav-center" onclick="nav('katalog')"><div class="cb"><i class="fa-solid fa-magnifying-glass"></i></div></button>
+    <button data-p="pesanan" onclick="nav('pesanan')"><i class="fa-solid fa-clipboard-list"></i><span data-i18n="nav_orders">Pesanan</span></button>
+    <button data-p="profil" onclick="nav('profil')"><i class="fa-solid fa-user"></i><span data-i18n="nav_profil">Profil</span></button>
+  </nav>
+
+  <div class="toast-c" id="toastC"></div>
+
+<script>
+/* ===================== SPLASH ===================== */
+(function(){
+  if(location.search.includes('nosplash')){const s=document.getElementById('splash');if(s)s.remove();document.body.classList.add('splashed');return;}
+  const bar=document.getElementById('spBar');let p=0;
+  const t=setInterval(()=>{p+=p<60?Math.random()*14+7:Math.random()*6+2;if(p>=100)p=100;bar.style.width=p+'%';
+    if(p>=100){clearInterval(t);setTimeout(()=>{document.getElementById('splash').classList.add('hide');document.body.classList.add('splashed');setTimeout(()=>document.getElementById('splash').remove(),700);},350);}
+  },150);
+})();
+
+/* ===================== UTIL ===================== */
+const $=id=>document.getElementById(id);
+const rp=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DRIVER_FEE=150000;
+function compressImg(file,cb,maxW=600,q=0.75){const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q));};img.src=e.target.result;};r.readAsDataURL(file);}
+
+/* ===================== ✅ BAHASA (i18n) ===================== */
+const DICT={
+id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunki)'.replace('Terkunki','Terkunci'),btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari admin',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒'},
+en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from admin',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒'}
+};
+let lang=localStorage.getItem('rr-lang')||'id';
+function t(k){return (DICT[lang]&&DICT[lang][k])||DICT.id[k]||k;}
+function tw(k,rep){return t(k).replace('#',rep);}
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  $('langTxt').textContent=lang.toUpperCase();
+  document.documentElement.lang=lang;
+}
+function togLang(){
+  lang=lang==='id'?'en':'id';
+  localStorage.setItem('rr-lang',lang);
+  applyI18n();
+  if(curPage==='home')renderHome();
+  if(curPage==='katalog'){renderKatChips();rKat();}
+  if(curPage==='pesanan'){renderOrdChips();rOrders();}
+  if(curPage==='profil')renderProf();
+  toast('info',lang==='id'?'Bahasa: Indonesia 🇮🇩':'Language: English 🇬🇧');
+}
+
+/* ===================== DATA (SHARED dengan Admin) ===================== */
+const DEFAULTS={
+vehicles:[
+ {id:1,nama:'Toyota Avanza 2023 G',jenis:'mobil',kategori:'MPV',merek:'Toyota',tahun:2023,trans:'matic',bbm:'bensin',kap:7,plat:'B 1234 XYZ',status:'tersedia',harian:350000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/avanza/600/400',rating:4.9},
+ {id:2,nama:'Honda Brio 2022 Satya E',jenis:'mobil',kategori:'LCGC',merek:'Honda',tahun:2022,trans:'cvt',bbm:'bensin',kap:5,plat:'B 5678 ABC',status:'tersedia',harian:275000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/brio/600/400',rating:4.7},
+ {id:3,nama:'Toyota Innova Zenix 2023',jenis:'mobil',kategori:'MPV',merek:'Toyota',tahun:2023,trans:'matic',bbm:'bensin',kap:7,plat:'B 9012 DEF',status:'tersedia',harian:650000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/innova/600/400',rating:4.9},
+ {id:4,nama:'Mitsubishi Pajero Sport 2022',jenis:'mobil',kategori:'SUV',merek:'Mitsubishi',tahun:2022,trans:'matic',bbm:'diesel',kap:7,plat:'B 3456 GHI',status:'tersedia',harian:900000,lokasi:'Jakarta Barat',img:'https://picsum.photos/seed/pajero/600/400',rating:4.8},
+ {id:5,nama:'Toyota Fortuner 2023 VRZ',jenis:'mobil',kategori:'SUV',merek:'Toyota',tahun:2023,trans:'matic',bbm:'diesel',kap:7,plat:'B 7890 JKL',status:'tersedia',harian:1100000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/fortuner/600/400',rating:5.0},
+ {id:7,nama:'Daihatsu Sigra 2022 R',jenis:'mobil',kategori:'MPV',merek:'Daihatsu',tahun:2022,trans:'manual',bbm:'bensin',kap:7,plat:'B 6789 PQR',status:'tersedia',harian:300000,lokasi:'Bandung',img:'https://picsum.photos/seed/sigra/600/400',rating:4.5},
+ {id:8,nama:'Suzuki Ertiga 2022 GX',jenis:'mobil',kategori:'MPV',merek:'Suzuki',tahun:2022,trans:'manual',bbm:'bensin',kap:7,plat:'B 0123 STU',status:'tersedia',harian:325000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/ertiga/600/400',rating:4.6}],
+motors:[
+ {id:101,nama:'Honda Vario 160 2023',jenis:'motor',kategori:'Matic',plat:'B 1111 AA',status:'tersedia',harian:85000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/vario/600/400',rating:4.8},
+ {id:102,nama:'Yamaha NMAX 2023',jenis:'motor',kategori:'Matic',plat:'B 2222 BB',status:'tersedia',harian:95000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/nmax/600/400',rating:4.9},
+ {id:103,nama:'Honda Beat 2022',jenis:'motor',kategori:'Matic',plat:'B 3333 CC',status:'tersedia',harian:70000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/beat/600/400',rating:4.6},
+ {id:104,nama:'Yamaha Aerox 2023',jenis:'motor',kategori:'Matic',plat:'B 4444 DD',status:'tersedia',harian:100000,lokasi:'Tangerang',img:'https://picsum.photos/seed/aerox/600/400',rating:4.8}],
+orders:[],customers:[],deletedCustomers:[],
+promos:[
+ {id:'PRM-01',kode:'TAHUNBARU2025',nama:'Promo Tahun Baru',diskon:'15%',periode:'1–31 Jan 2025',status:'Aktif',pakai:45},
+ {id:'PRM-02',kode:'WEEKEND20',nama:'Diskon Weekend',diskon:'20%',periode:'Jum–Min',status:'Aktif',pakai:78},
+ {id:'PRM-03',kode:'SEWABULANAN',nama:'Sewa Bulanan',diskon:'10%',periode:'Sewa ≥30 hari',status:'Aktif',pakai:12}],
+notifs:[]
+};
+let vehicles,motors,orders,promos,notifs,customers,deletedCustomers;
+function loadData(){
+  try{const d=JSON.parse(localStorage.getItem('rr-data'));
+    vehicles=d?.vehicles||structuredClone(DEFAULTS.vehicles);
+    motors=d?.motors||structuredClone(DEFAULTS.motors);
+    orders=d?.orders||[];promos=d?.promos||structuredClone(DEFAULTS.promos);
+    notifs=d?.notifs||[];customers=d?.customers||[];deletedCustomers=d?.deletedCustomers||[];
+  }catch(e){vehicles=structuredClone(DEFAULTS.vehicles);motors=structuredClone(DEFAULTS.motors);orders=[];promos=structuredClone(DEFAULTS.promos);notifs=[];customers=[];deletedCustomers=[];}
+}
+function saveData(){
+  try{const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
+    localStorage.setItem('rr-data',JSON.stringify({...d,vehicles,motors,orders,promos,notifs,customers,deletedCustomers}));}
+  catch(e){toast('error','Storage penuh');}
+}
+function freshUser(){return {nama:'',telp:'',email:'',alamatKtp:'',alamatDom:'',avatar:'',favs:[],locked:false,approved:false,pending:false};}
+let user=JSON.parse(localStorage.getItem('rr-user')||'null')||freshUser();
+function saveUser(){localStorage.setItem('rr-user',JSON.stringify(user));}
+
+function applyLogo(){
+  let src='BOY.jpg';
+  try{const d=JSON.parse(localStorage.getItem('rr-data'));if(d&&d.settings&&d.settings.logo)src=d.settings.logo;}catch(e){}
+  const fb='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#0D9488"/><text x="50" y="70" font-size="56" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#fff">R</text></svg>');
+  ['spLogo','hdLogo'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.onerror=()=>{el.onerror=null;el.src=fb;};el.src=src;});
+}
+
+let curPage='home',curVeh=null,katJenis='',ordFilter='',promoApplied=null,bDays=0,pendingBooking=false;
+
+function toast(type,msg){
+  const icons={success:'fa-circle-check',error:'fa-circle-xmark',warning:'fa-triangle-exclamation',info:'fa-circle-info'};
+  const el=document.createElement('div');el.className='toast '+type;
+  el.innerHTML='<i class="fa-solid '+icons[type]+' ti"></i><span style="flex:1">'+esc(msg)+'</span>';
+  $('toastC').appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300)},3500);
+}
+
+function nav(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  $('pg-'+page).classList.add('on');
+  curPage=page;
+  document.querySelectorAll('.bnav button[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===page));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(page==='home')renderHome();
+  if(page==='katalog'){renderKatChips();rKat();}
+  if(page==='pesanan'){renderOrdChips();rOrders();}
+  if(page==='profil')renderProf();
+}
+function togDM(){
+  const dark=document.documentElement.classList.toggle('dark');
+  $('dmBtn').innerHTML='<i class="fa-solid '+(dark?'fa-sun':'fa-moon')+'"></i>';
+  localStorage.setItem('rr-dark',dark?'1':'0');
+  const pd=$('pDark');if(pd)pd.classList.toggle('on',dark);
+}
+if(localStorage.getItem('rr-dark')==='1'){document.documentElement.classList.add('dark');document.addEventListener('DOMContentLoaded',()=>{$('dmBtn').innerHTML='<i class="fa-solid fa-sun"></i>';});}
+
+window.addEventListener('storage',e=>{
+  if(e.key==='rr-data'){
+    loadData();applyLogo();checkUserStatus();
+    if(curPage==='home')renderHome();
+    if(curPage==='katalog')rKat();
+    if(curPage==='pesanan')rOrders();
+    if(curPage==='profil')renderProf();
+    toast('info',t('t_sync'));
+  }
+});
+
+/* Status: dihapus admin? pending? approved? */
+function checkUserStatus(){
+  if(!user.nama||!user.locked)return;
+  try{
+    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
+    if((d.deletedCustomers||[]).includes(user.nama)){forceLogout(t('t_deleted'));return;}
+    const c=(d.customers||[]).find(x=>x.nama===user.nama);
+    if(c){
+      const wasPending=user.pending;
+      user.pending=!!c.pending;user.approved=!c.pending;
+      saveUser();
+      if(wasPending&&!user.pending)toast('success',t('t_approved'));
+      if(curPage==='profil')renderProf();
+    }
+  }catch(e){}
+}
+function forceLogout(msg){
+  localStorage.removeItem('rr-user');user=freshUser();
+  renderProf();renderHome();toast('warning',msg);nav('home');
+}
+
+function allV(){return vehicles.concat(motors);}
+function findV(id){return allV().find(v=>v.id===id);}
+function isFav(id){return (user.favs||[]).includes(id);}
+function daysBetween(a,b){if(!a||!b)return 0;const d=Math.round((new Date(b)-new Date(a))/86400000);return d>0?d:0;}
+
+function vCard(v){
+  const fav=isFav(v.id);
+  const rented=v.status!=='tersedia';
+  return '<div class="v-card'+(rented?' rented':'')+'" onclick="openDetail('+v.id+')">'+
+  '<div class="v-img" style="background-image:url('+v.img+')">'+
+    '<span class="badge bi v-badge" style="background:rgba(255,255,255,.92)">'+esc(v.kategori||'-')+'</span>'+
+    '<button class="v-fav" onclick="event.stopPropagation();favToggle('+v.id+')"><i class="fa-'+(fav?'solid':'regular')+' fa-heart"></i></button>'+
+    '<div class="v-rate"><i class="fa-solid fa-star"></i>'+(v.rating||4.8)+'</div>'+
+    '<div class="v-price"><div class="vp">'+rp(v.harian)+'<span>'+t('lbl_price').includes('HARGA')?'/hari':'/day'+'</span></div></div>'+
+    (rented?'<div class="rented-tag"><i class="fa-solid fa-ban"></i> '+t('rented')+'</div>':'')+
+  '</div><div class="v-body"><h3>'+esc(v.nama)+'</h3>'+
+  '<div class="v-loc"><i class="fa-solid fa-location-dot"></i> '+esc(v.lokasi||'-')+'</div>'+
+  '<div class="v-specs">'+(v.jenis==='motor'?'<span><i class="fa-solid fa-gears"></i>'+esc(v.kategori||'-')+'</span>':'<span><i class="fa-solid fa-user-group"></i>'+(v.kap||'-')+'</span><span><i class="fa-solid fa-gears"></i>'+esc(v.trans||'-')+'</span><span><i class="fa-solid fa-gas-pump"></i>'+esc(v.bbm||'-')+'</span>')+'</div></div></div>';
+}
+
+function renderHome(){
+  $('heroNama').textContent=user.nama?user.nama.split(' ')[0]+'!':'Traveler!';
+  const avail=allV().filter(v=>v.status==='tersedia');
+  const cats=[['','fa-border-all',t('c_all')],['mobil','fa-car',t('c_car')],['motor','fa-motorcycle',t('c_moto')],['MPV','fa-van-shuttle','MPV'],['SUV','fa-car-side','SUV'],['Matic','fa-gauge-high','Matic']];
+  $('catChips').innerHTML=cats.map(c=>'<div class="chip" onclick="goKat(\''+c[0]+'\')"><i class="fa-solid '+c[1]+'"></i>'+c[2]+'</div>').join('');
+  const aktif=promos.filter(p=>p.status==='Aktif');
+  $('secPromo').style.display=aktif.length?'block':'none';
+  $('promoRow').innerHTML=aktif.map(p=>'<div class="promo-card" onclick="copyPromo(\''+esc(p.kode)+'\')"><div class="pc-d">'+esc(p.diskon)+'</div><div class="pc-n">'+esc(p.nama)+'</div><div class="pc-k">'+esc(p.kode)+'</div></div>').join('');
+  $('homeGrid').innerHTML=[...avail].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4).map(vCard).join('')||'<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted);font-size:13px">—</div>';
+  const dayLb=lang==='id'?'/hari':'/day';
+  const row=list=>list.slice(0,6).map(v=>{
+    const r=v.status!=='tersedia';
+    return '<div class="chip'+(r?' rented':'')+'" style="min-width:210px;padding:0;overflow:hidden;background:var(--card)" onclick="openDetail('+v.id+')"><div style="width:76px;height:62px;background-image:url('+v.img+');background-size:cover;flex-shrink:0;position:relative">'+(r?'<div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-ban" style="color:#F87171;font-size:16px"></i></div>':'')+'</div><div style="padding:8px 12px 8px 10px;text-align:left;min-width:0"><div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary)">'+esc(v.nama)+'</div><div style="font-size:11.5px;font-weight:700;margin-top:2px;color:'+(r?'var(--text-muted)':'var(--teal)')+'">'+(r?t('rented_s'):rp(v.harian)+dayLb)+'</div></div></div>';
+  }).join('')||'<div style="font-size:12.5px;color:var(--text-muted);padding:8px 2px">—</div>';
+  $('mobilRow').innerHTML=row(vehicles);
+  $('motorRow').innerHTML=row(motors);
+}
+function goKat(j){katJenis=j;nav('katalog');}
+function copyPromo(kode){navigator.clipboard?.writeText(kode);toast('success',tw('t_promo_ok',kode));}
+function quickSearch(q){katJenis='';$('katQ').value=q;nav('katalog');}
+
+function renderKatChips(){
+  const c=[['',t('c_all')],['mobil',t('c_car')],['motor',t('c_moto')],['tersedia',t('c_avail')],['fav',t('c_fav')]];
+  $('katChips').innerHTML=c.map(x=>'<div class="chip'+(katJenis===x[0]?' on':'')+'" onclick="katJenis=\''+x[0]+'\';renderKatChips();rKat()">'+x[1]+'</div>').join('');
+}
+function rKat(){
+  const q=($('katQ').value||'').toLowerCase();
+  let list=allV();
+  if(katJenis==='mobil')list=list.filter(v=>v.jenis==='mobil');
+  else if(katJenis==='motor')list=list.filter(v=>v.jenis==='motor');
+  else if(katJenis==='tersedia')list=list.filter(v=>v.status==='tersedia');
+  else if(katJenis==='fav')list=list.filter(v=>isFav(v.id));
+  if(q)list=list.filter(v=>(v.nama+(v.kategori||'')+(v.merek||'')+(v.lokasi||'')).toLowerCase().includes(q));
+  const s=$('katSort').value;
+  if(s==='murah')list.sort((a,b)=>a.harian-b.harian);
+  else if(s==='mahal')list.sort((a,b)=>b.harian-a.harian);
+  else if(s==='rating')list.sort((a,b)=>(b.rating||0)-(a.rating||0));
+  $('katGrid').innerHTML=list.map(vCard).join('');
+  $('katEmpty').style.display=list.length?'none':'block';
+}
+
+const ANGLES=[['utama','Depan','Front'],['sampingKanan','Kanan','Right'],['sampingKiri','Kiri','Left'],['belakang','Belakang','Back'],['dalam','Dalam','Inside']];
+function openDetail(id){
+  const v=findV(id);if(!v)return;
+  if(v.status!=='tersedia'){toast('warning',tw('t_rented',v.nama));return;}
+  curVeh=v;
+  if(!v.photos)v.photos={};
+  ANGLES.forEach(a=>{if(!v.photos[a[0]])v.photos[a[0]]=a[0]==='utama'?v.img:'';});
+  $('dHero').style.backgroundImage='url('+(v.photos.utama||v.img)+')';
+  $('dBadge').textContent=v.kategori||'-';
+  $('dNama').textContent=v.nama;
+  $('dHarga').innerHTML=rp(v.harian)+'<span style="font-size:13px;color:var(--text-muted);font-weight:500"> '+(lang==='id'?'/hari':'/day')+'</span>';
+  $('dRating').textContent=v.rating||4.8;
+  $('dDesk').textContent=v.desk||(v.nama+(lang==='id'?' dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.':' is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.'));
+  const sp=[['fa-tag','Kategori','Category',v.kategori],['fa-calendar','Tahun','Year',v.tahun],['fa-user-group','Kapasitas','Capacity',v.kap?v.kap+' pax':'-'],['fa-gears','Transmisi','Transmission',v.trans],['fa-gas-pump','BBM','Fuel',v.bbm],['fa-id-card','Plat','Plate',v.plat],['fa-location-dot','Lokasi','Location',v.lokasi]];
+  $('dSpecs').innerHTML=sp.map(x=>'<div style="background:var(--input-bg);border:1px solid var(--card-border);border-radius:11px;padding:11px 8px;text-align:center"><i class="fa-solid '+x[0]+'" style="color:var(--teal);font-size:14px"></i><div style="font-size:9px;color:var(--text-muted);font-weight:700;margin-top:5px;text-transform:uppercase">'+(lang==='id'?x[1]:x[2])+'</div><div style="font-size:12px;font-weight:700;text-transform:capitalize;margin-top:2px">'+esc(x[3]||'-')+'</div></div>').join('');
+  const exist=ANGLES.filter(a=>v.photos[a[0]]);
+  $('dThumbs').innerHTML=exist.map((a,i)=>'<div class="d-thumb'+(i===0?' on':'')+'" onclick="swPhoto(this,\''+a[0]+'\')"><img src="'+v.photos[a[0]]+'"><em>'+(lang==='id'?a[1]:a[2])+'</em></div>').join('');
+  $('dFavI').className='fa-'+(isFav(v.id)?'solid':'regular')+' fa-heart';
+  const ok=v.status==='tersedia';
+  $('dBookBtn').disabled=!ok;
+  $('dBookTxt').textContent=ok?t('btn_book'):t('btn_unavail');
+  nav('detail');
+}
+function swPhoto(el,key){$('dHero').style.backgroundImage='url('+curVeh.photos[key]+')';document.querySelectorAll('.d-thumb').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+function favToggle(id){
+  user.favs=user.favs||[];
+  const i=user.favs.indexOf(id);
+  if(i>-1){user.favs.splice(i,1);toast('info',t('t_fav_del'));}
+  else{user.favs.push(id);toast('success',t('t_fav_add'));}
+  saveUser();
+  if(curVeh&&curPage==='detail')$('dFavI').className='fa-'+(isFav(id)?'solid':'regular')+' fa-heart';
+  if(curPage==='katalog')rKat();
+}
+function togFav(){if(curVeh)favToggle(curVeh.id);}
+
+/* ===================== PROFIL KTP ===================== */
+function isProfileComplete(){
+  return user.locked===true&&user.approved===true&&user.pending!==true
+    && user.nama&&user.nama.trim().length>=3
+    && user.telp&&user.telp.replace(/\D/g,'').length>=9
+    && user.email&&user.email.includes('@')
+    && user.alamatKtp&&user.alamatKtp.trim().length>=5
+    && user.alamatDom&&user.alamatDom.trim().length>=5;
+}
+function errIf(el,bad){el.classList.toggle('err',bad);if(bad)el.addEventListener('input',()=>el.classList.remove('err'),{once:true});return bad;}
+
+function renderProf(){
+  $('pNama').textContent=user.nama||(lang==='id'?'Belum diisi':'Not set yet');
+  let sub=t('p_ready');
+  if(user.locked&&user.pending)sub=user.telp+' • '+t('p_waitsub');
+  else if(user.locked)sub=user.telp+' • '+t('p_locked');
+  $('pSub').textContent=sub;
+  const av=$('pAv');
+  if(user.avatar){$('pAvBg').src=user.avatar;$('pAvImg').src=user.avatar;av.classList.add('has');}
+  else{$('pAvTxt').textContent=user.nama?user.nama.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase():'?';av.classList.remove('has');}
+  if(user.locked){
+    $('profEdit').style.display='none';$('profView').style.display='block';
+    $('profLock').style.display='flex';$('profBanner').style.display='none';
+    $('profPend').style.display=user.pending?'flex':'none';
+    const rows=[[t('p_name'),user.nama],[t('p_telp'),user.telp],[t('p_email'),user.email],[t('p_addr'),user.alamatKtp],[t('p_dom'),user.alamatDom],[t('lbl_status'),user.pending?t('st_pending'):t('st_approved')]];
+    $('profViewRows').innerHTML=rows.map(r=>'<div class="ro-row"><span class="rl">'+r[0]+'</span><span class="rv">'+esc(r[1]||'-')+'</span></div>').join('');
+  }else{
+    $('profEdit').style.display='block';$('profView').style.display='none';
+    $('profLock').style.display='none';$('profPend').style.display='none';
+    $('pInNama').value=user.nama||'';$('pInTelp').value=user.telp||'';
+    $('pInEmail').value=user.email||'';$('pInAlamatKtp').value=user.alamatKtp||'';$('pInAlamatDom').value=user.alamatDom||'';
+  }
+  $('pDark').classList.toggle('on',document.documentElement.classList.contains('dark'));
+}
+
+function saveProf(){
+  const nm=$('pInNama').value.trim(),tp=$('pInTelp').value.trim(),em=$('pInEmail').value.trim(),ak=$('pInAlamatKtp').value.trim(),ad=$('pInAlamatDom').value.trim();
+  ['pInNama','pInTelp','pInEmail','pInAlamatKtp','pInAlamatDom'].forEach(id=>$(id).classList.remove('err'));
+  let bad=false;
+  if(errIf($('pInNama'),nm.length<3))bad=true;
+  if(errIf($('pInTelp'),tp.replace(/\D/g,'').length<9))bad=true;
+  if(errIf($('pInEmail'),!em.includes('@')||em.length<6))bad=true;
+  if(errIf($('pInAlamatKtp'),ak.length<10))bad=true;
+  if(errIf($('pInAlamatDom'),ad.length<5))bad=true;
+  if(bad)return toast('error',lang==='id'?'Periksa data bertanda merah — semua wajib sesuai KTP':'Check the red fields — all required as per ID');
+  let approvedNow=true,pendingNow=false;
+  try{
+    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
+    const del=d.deletedCustomers||[];
+    const exist=(d.customers||[]).find(c=>c.nama.toLowerCase()===nm.toLowerCase());
+    if(del.includes(nm)){pendingNow=true;approvedNow=false;}
+    else if(exist&&exist.pending){pendingNow=true;approvedNow=false;}
+  }catch(e){}
+  Object.assign(user,{nama:nm,telp:tp,email:em,alamatKtp:ak,alamatDom:ad,locked:true,approved:approvedNow,pending:pendingNow,lockedAt:new Date().toISOString()});
+  saveUser();
+  try{
+    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
+    if(!d.customers)d.customers=[];
+    const exist=d.customers.find(c=>c.nama.toLowerCase()===nm.toLowerCase());
+    const rec={id:exist?exist.id:'CST-C'+Date.now().toString().slice(-4),nama:nm,telp:tp,email:em,tier:exist?exist.tier:'Bronze',alamat:ak,alamatDom:ad,pending:pendingNow,approved:approvedNow};
+    if(exist)Object.assign(exist,rec);else d.customers.unshift(rec);
+    localStorage.setItem('rr-data',JSON.stringify({...d,vehicles,motors,orders,promos,notifs,customers:d.customers,deletedCustomers:d.deletedCustomers||[]}));
+    customers=d.customers;
+  }catch(e){}
+  renderProf();renderHome();
+  if(pendingNow)toast('warning',t('t_same_name'));
+  else{
+    toast('success',t('t_saved'));
+    if(pendingBooking&&curVeh){pendingBooking=false;setTimeout(()=>openBooking(),900);}
+  }
+}
+function reqChange(){toast('info',t('t_need_admin'));}
+
+/* ===================== LOGOUT ===================== */
+function askLogout(){
+  const ov=document.createElement('div');
+  ov.className='sheet-ov';ov.id='logoutSheet';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  ov.innerHTML='<div class="sheet">'+
+  '<div style="width:40px;height:4px;background:var(--input-border);border-radius:4px;margin:0 auto 16px"></div>'+
+  '<div style="text-align:center;margin-bottom:18px"><div style="width:56px;height:56px;border-radius:50%;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><i class="fa-solid fa-right-from-bracket" style="color:#EF4444;font-size:22px"></i></div><h3 style="font-size:16px;font-weight:800;margin-bottom:6px">'+t('lg_title')+'</h3><p style="font-size:12.5px;color:var(--text-secondary);line-height:1.6">'+t('lg_body')+'</p></div>'+
+  '<div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" onclick="document.getElementById(\'logoutSheet\').remove()">'+t('lg_cancel')+'</button><button class="btn btn-d" style="flex:1" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> '+t('lg_yes')+'</button></div>'+
+  '</div>';
+  document.body.appendChild(ov);
+}
+function doLogout(){
+  localStorage.removeItem('rr-user');user=freshUser();
+  const sh=document.getElementById('logoutSheet');if(sh)sh.remove();
+  renderProf();renderHome();toast('info',t('t_logout'));nav('home');
+}
+
+/* ===================== BOOKING ===================== */
+function openBooking(){
+  const v=curVeh;if(!v)return;
+  if(v.status!=='tersedia'){toast('error',tw('t_rented',v.nama));return;}
+  if(!isProfileComplete()){
+    if(user.locked&&user.pending){toast('warning',t('t_pending_book'));return;}
+    pendingBooking=true;
+    toast('warning',t('t_fill_ktp'));
+    nav('profil');
+    setTimeout(()=>{
+      const b=$('profBanner');if(b)b.style.display='flex';
+      highlightMissing();
+    },350);
+    return;
+  }
+  pendingBooking=false;
+  $('bThumb').style.backgroundImage='url('+(v.photos?.utama||v.img)+')';
+  $('bNama').textContent=v.nama;
+  $('bHarga').textContent=rp(v.harian)+(lang==='id'?' /hari':' /day');
+  $('bUser').textContent=user.nama+' • '+user.telp;
+  const today=new Date().toISOString().split('T')[0];
+  $('bMulai').value='';$('bMulai').min=today;
+  $('bSelesai').value='';$('bSelesai').min=today;
+  $('bDriver').classList.remove('on');
+  $('bPromo').value='';$('bPromoStat').innerHTML='';promoApplied=null;bDays=0;
+  $('bDurasi').textContent='';$('pHarian').textContent=rp(v.harian);
+  $('pDurasi').textContent='-';$('pDriverRow').style.display='none';$('pPromoRow').style.display='none';$('pTotal').textContent='-';
+  nav('booking');
+}
+function highlightMissing(){
+  const checks=[
+    ['pInNama', user.nama&&user.nama.trim().length>=3],
+    ['pInTelp', user.telp&&user.telp.replace(/\D/g,'').length>=9],
+    ['pInEmail', user.email&&user.email.includes('@')],
+    ['pInAlamatKtp', user.alamatKtp&&user.alamatKtp.trim().length>=5],
+    ['pInAlamatDom', user.alamatDom&&user.alamatDom.trim().length>=5]
+  ];
+  checks.forEach(c=>{
+    const el=$(c[0]);if(!el)return;
+    el.classList.toggle('err',!c[1]);
+    if(!c[1])el.addEventListener('input',()=>el.classList.remove('err'),{once:true});
+  });
+  const firstBad=checks.find(c=>!c[1]);
+  if(firstBad)setTimeout(()=>$(firstBad[0]).focus(),400);
+}
+function checkPromo(){
+  const code=$('bPromo').value.trim().toUpperCase();
+  if(!code){$('bPromoStat').innerHTML='';promoApplied=null;calcPrice();return;}
+  const p=promos.find(x=>x.kode.toUpperCase()===code&&x.status==='Aktif');
+  if(p){promoApplied=p;$('bPromoStat').innerHTML='<i class="fa-solid fa-circle-check" style="color:#22C55E"></i>';toast('success',p.kode+' — '+p.diskon+' ✓');}
+  else{promoApplied=null;$('bPromoStat').innerHTML='<i class="fa-solid fa-circle-xmark" style="color:#EF4444"></i>';}
+  calcPrice();
+}
+function calcPrice(){
+  const v=curVeh;if(!v)return;
+  bDays=daysBetween($('bMulai').value,$('bSelesai').value);
+  const drv=$('bDriver').classList.contains('on');
+  if(bDays>0)$('bDurasi').innerHTML='<i class="fa-solid fa-circle-info"></i> '+t('b_dur')+' <b>'+bDays+' '+(lang==='id'?'hari':'day(s)')+'</b>';
+  else $('bDurasi').textContent=(bDays===0&&$('bMulai').value&&$('bSelesai').value)?t('b_dur_bad'):'';
+  let total=v.harian*Math.max(bDays,0);
+  $('pDurasi').textContent=bDays+' × '+rp(v.harian);
+  let drvFee=0;
+  if(drv&&bDays>0){drvFee=DRIVER_FEE*bDays;total+=drvFee;}
+  $('pDriverRow').style.display=drvFee?'flex':'none';
+  $('pDriver').textContent='+'+rp(drvFee);
+  let disc=0;
+  if(promoApplied&&bDays>0){disc=Math.round(total*(parseInt(promoApplied.diskon)||0)/100);total-=disc;}
+  $('pPromoRow').style.display=disc?'flex':'none';
+  $('pPromo').textContent='−'+rp(disc);
+  $('pTotal').textContent=bDays>0?rp(total):'-';
+}
+function confirmBooking(){
+  const v=curVeh;if(!v)return;
+  if(!isProfileComplete()){
+    if(user.pending)return toast('warning',t('t_pending_cant'));
+    return toast('error',lang==='id'?'Lengkapi profil KTP dulu di halaman Profil':'Complete your ID profile first');
+  }
+  if(bDays<1)return toast('error',t('b_dur_bad'));
+  if(v.status!=='tersedia')return toast('error',tw('t_rented',v.nama));
+  let total=v.harian*bDays;
+  if($('bDriver').classList.contains('on'))total+=DRIVER_FEE*bDays;
+  if(promoApplied)total-=Math.round(total*(parseInt(promoApplied.diskon)||0)/100);
+  const tglStr=new Date().toLocaleDateString(lang==='id'?'id-ID':'en-US',{day:'numeric',month:'short',year:'numeric'});
+  const newOrder={id:'ORD-'+(2400+orders.length+1),cust:user.nama,kend:v.nama,tgl:tglStr,lama:bDays+' '+(lang==='id'?'hari':'day(s)'),total,status:'baru',penyewa:true};
+  orders.unshift(newOrder);
+  v.status='disewa';
+  if(promoApplied)promoApplied.pakai++;
+  try{
+    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
+    if(!d.customers)d.customers=[];
+    if(!d.customers.find(c=>c.nama===user.nama))d.customers.unshift({id:'CST-C'+Date.now().toString().slice(-4),nama:user.nama,telp:user.telp||'-',email:user.email||'-',tier:'Bronze',alamat:user.alamatKtp||'-',alamatDom:user.alamatDom||'-',approved:true});
+    d.vehicles=vehicles;d.motors=motors;d.orders=orders;d.promos=promos;d.notifs=notifs;
+    localStorage.setItem('rr-data',JSON.stringify(d));
+  }catch(e){saveData();}
+  renderHome();
+  toast('success',tw('t_book_ok',newOrder.id));
+  nav('pesanan');
+}
+
+/* ===================== PESANAN ===================== */
+function renderOrdChips(){
+  const c=[['',t('f_all')],['baru',t('st_baru')],['konfirmasi',t('st_konf')],['aktif',t('st_aktif')],['selesai',t('st_selesai')],['batal',t('st_batal')]];
+  $('ordChips').innerHTML=c.map(x=>'<div class="chip'+(ordFilter===x[0]?' on':'')+'" onclick="ordFilter=\''+x[0]+'\';renderOrdChips();rOrders()">'+x[1]+'</div>').join('');
+}
+function rOrders(){
+  let list=user.nama?orders.filter(o=>o.cust===user.nama):orders;
+  if(ordFilter)list=list.filter(o=>o.status===ordFilter);
+  if(!list.length){
+    $('ordList').innerHTML='<div class="empty"><i class="fa-solid fa-clipboard-list"></i><h3>'+(user.nama?t('empty_no'):t('empty_hello'))+'</h3><p>'+(user.nama?t('empty_cta'):t('empty_fill'))+'</p><button class="btn btn-p" style="margin-top:16px" onclick="nav(\'katalog\')">'+t('btn_viewcat')+'</button></div>';
+    return;
+  }
+  const OSTM={baru:['bi',t('st_baru')],konfirmasi:['bi',t('st_konf')],aktif:['bs',t('st_aktif')],selesai:['b2',t('st_selesai')],batal:['bd',t('st_batal')]};
+  const stepsI=['fa-inbox','fa-circle-check','fa-key','fa-flag-checkered'];
+  const labels=[t('s_baru'),t('s_konf'),t('s_jalan'),t('s_selesai')];
+  const stepMap={baru:1,konfirmasi:2,aktif:3,selesai:4};
+  $('ordList').innerHTML=list.map(o=>{
+    const v=allV().find(x=>x.nama===o.kend);
+    const st=OSTM[o.status]||['b2',o.status];
+    const step=stepMap[o.status]||0;
+    const stepper=o.status==='batal'?'':'<div class="stepper">'+stepsI.map((s,i)=>'<div class="stp'+(i<step?' done':'')+'"><div class="sdot"><i class="fa-solid '+s+'"></i></div><span>'+labels[i]+'</span></div>').join('')+'</div>';
+    return '<div class="o-item" onclick="ordDetail(\''+o.id+'\')">'+
+    '<div class="o-top"><span class="o-code">'+esc(o.id)+'</span><span class="badge '+st[0]+'">'+st[1]+'</span></div>'+
+    '<div class="o-body"><div class="o-thumb" style="background-image:url('+(v?v.img:'')+')"></div>'+
+    '<div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700">'+esc(o.kend)+'</div>'+
+    '<div style="font-size:11.5px;color:var(--text-muted);margin-top:3px">'+esc(o.tgl)+' • '+esc(o.lama)+'</div>'+
+    '<div style="font-size:14px;font-weight:800;color:var(--teal);margin-top:5px">'+rp(o.total)+'</div></div></div>'+stepper+'</div>';
+  }).join('');
+}
+function ordDetail(id){
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  const v=allV().find(x=>x.nama===o.kend);
+  const OSTM={baru:['bi',t('st_baru')],konfirmasi:['bi',t('st_konf')],aktif:['bs',t('st_aktif')],selesai:['b2',t('st_selesai')],batal:['bd',t('st_batal')]};
+  const st=OSTM[o.status]||['b2',o.status];
+  const ov=document.createElement('div');
+  ov.className='sheet-ov';ov.id='ordSheet';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  const msgs={baru:t('od_wait'),konfirmasi:t('od_conf'),aktif:t('od_on'),selesai:t('od_done'),batal:t('od_batal')};
+  ov.innerHTML='<div class="sheet">'+
+  '<div style="width:40px;height:4px;background:var(--input-border);border-radius:4px;margin:0 auto 16px"></div>'+
+  '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><h3 style="font-size:16px;font-weight:800;flex:1">'+esc(o.id)+'</h3><span class="badge '+st[0]+'">'+st[1]+'</span><button class="btn btn-s" style="padding:6px 10px;font-size:12px" onclick="document.getElementById(\'ordSheet\').remove()"><i class="fa-solid fa-xmark"></i></button></div>'+
+  '<div style="display:flex;gap:12px;background:var(--input-bg);border-radius:14px;padding:12px;margin-bottom:14px"><div class="o-thumb" style="background-image:url('+(v?v.img:'')+')"></div><div><div style="font-size:13.5px;font-weight:700">'+esc(o.kend)+'</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">'+esc(o.tgl)+' • '+esc(o.lama)+'</div><div style="font-size:15px;font-weight:800;color:var(--teal);margin-top:4px">'+rp(o.total)+'</div></div></div>'+
+  '<div style="font-size:12.5px;color:var(--text-secondary);line-height:2;margin-bottom:16px"><div><i class="fa-solid fa-user" style="color:var(--teal);width:18px"></i> '+esc(o.cust)+'</div><div><i class="fa-solid fa-circle-info" style="color:var(--teal);width:18px"></i> '+msgs[o.status]+'</div></div>'+
+  (o.status==='baru'||o.status==='konfirmasi'?'<button class="btn btn-d btn-block" onclick="cancelOrder(\''+o.id+'\')"><i class="fa-solid fa-ban"></i> '+t('btn_cancel')+'</button>':'')+
+  '</div>';
+  document.body.appendChild(ov);
+}
+function cancelOrder(id){
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  o.status='batal';
+  const v=allV().find(x=>x.nama===o.kend);
+  if(v&&v.status==='disewa')v.status='tersedia';
+  saveData();rOrders();renderHome();
+  const sh=document.getElementById('ordSheet');if(sh)sh.remove();
+  toast('info',tw('t_cancel_ok',id));
+}
+
+/* ===================== NOTIF ===================== */
+function togNP(){$('npOv').classList.toggle('on');$('np').classList.toggle('on');renderN();}
+function renderN(){
+  const unread=notifs.filter(n=>!n.read).length;
+  $('nDot').style.display=unread?'block':'none';
+  $('nList').innerHTML=notifs.map((n,i)=>'<div style="padding:14px 18px;display:flex;gap:12px;border-bottom:1px solid var(--card-border);cursor:pointer;opacity:'+(n.read?'.55':'1')+'" onclick="readN('+i+')"><div style="width:34px;height:34px;border-radius:10px;background:'+n.color+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid '+n.icon+'" style="color:'+n.color+';font-size:13px"></i></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500;line-height:1.45">'+esc(n.title)+'</div><div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">'+esc(n.time)+'</div></div></div>').join('')||'<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px">—</div>';
+}
+function readN(i){notifs[i].read=true;renderN();saveData();}
+function clrN(){notifs.forEach(n=>n.read=true);renderN();saveData();toast('success',t('read_all'));}
+
+function upAv(input){
+  const f=input.files[0];if(!f)return;
+  compressImg(f,url=>{user.avatar=url;saveUser();renderProf();toast('success',t('t_photo'));},400,0.85);
+}
+
+/* ===================== INIT ===================== */
+loadData();
+applyLogo();
+applyI18n();
+checkUserStatus();
+renderHome();
+</script>
+</body>
+</html>
