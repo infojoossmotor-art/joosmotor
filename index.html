@@ -9,49 +9,50 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root{--bg:#F0FDFA;--card:#FFFFFF;--card-border:rgba(13,148,136,0.10);--input-bg:#F8FFFE;--input-border:#E2E8F0;--input-focus:#0D9488;--text-primary:#1E293B;--text-secondary:#64748B;--text-muted:#94A3B8;--shadow-card:0 1px 3px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);--shadow-hover:0 10px 28px rgba(13,148,136,0.15);--teal:#0D9488;--teal-l:#14B8A6}
+    :root{--bg:#F0FDFA;--card:#FFFFFF;--card-border:rgba(13,148,136,0.10);--input-bg:#F8FFFE;--input-border:#E2E8F0;--input-focus:#0D9488;--text-primary:#1E293B;--text-secondary:#64748B;--text-muted:#94A3B8;--shadow-card:0 1px 3px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);--shadow-hover:0 10px 28px rgba(13,148,136,0.15);--teal:#0D9488}
     .dark{--bg:#0B1A1A;--card:#112424;--card-border:rgba(13,148,136,0.18);--input-bg:#0E2020;--input-border:#1E3A3A;--input-focus:#14B8A6;--text-primary:#E2E8F0;--text-secondary:#94A3B8;--text-muted:#64748B;--shadow-card:0 1px 3px rgba(0,0,0,0.25),0 4px 16px rgba(0,0,0,0.18);--shadow-hover:0 10px 28px rgba(13,148,136,0.22)}
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;transition:background .3s,color .3s;padding-bottom:76px}
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;transition:background .3s,color .3s;padding-bottom:76px}
     ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:10px}
+    /* SPLASH: ikon teal, tanpa latar putih */
     .splash{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0C2E2E 0%,#0F4A4A 55%,#091E1E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
     .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
     .splash::before{content:'';position:absolute;top:-30%;right:-15%;width:450px;height:450px;border-radius:50%;background:rgba(13,148,136,.18);filter:blur(80px);animation:spP 3s infinite}
     @keyframes spP{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
-    .sp-logo{width:120px;height:120px;border-radius:26px;background:#fff;padding:10px;object-fit:contain;box-shadow:0 20px 60px rgba(13,148,136,.45);animation:spB 1.6s infinite,spG 2s infinite}
+    .sp-logo{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,#14B8A6,#0D9488);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(13,148,136,.45);animation:spB 1.6s infinite,spG 2s infinite}
+    .sp-logo i{font-size:44px;color:#fff}
     @keyframes spB{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
     @keyframes spG{0%,100%{box-shadow:0 20px 60px rgba(13,148,136,.45)}50%{box-shadow:0 20px 80px rgba(20,184,166,.75)}}
     .sp-t{font-size:32px;font-weight:800;color:#fff;margin-top:22px;animation:sfU .8s .2s both}
-    .sp-s{font-size:11px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:3px;margin-top:5px;animation:sfU .8s .35s both}
+    .sp-s{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:3px;margin-top:5px;animation:sfU .8s .35s both;text-shadow:0 1px 3px rgba(0,0,0,.5)}
     .sp-bar-w{width:200px;height:5px;background:rgba(255,255,255,.12);border-radius:10px;margin-top:30px;overflow:hidden;animation:sfU .8s .5s both}
     .sp-bar{height:100%;width:0%;background:linear-gradient(90deg,#14B8A6,#5EEAD4);border-radius:10px;transition:width .25s}
     @keyframes sfU{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     body.splashed{animation:appIn .5s}
     @keyframes appIn{from{opacity:0}to{opacity:1}}
+    /* HEADER: teks saja */
     .app-top{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0C2E2E,#0F4A4A);padding:14px 18px;display:flex;align-items:center;gap:12px}
     .app-top .brand{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
-    .app-top .brand img{width:38px;height:38px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;flex-shrink:0}
     .app-top .brand .bt{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.1}
-    /* ✅ FIX: subteks header jelas terlihat di mode terang & gelap */
-    .app-top .brand .bs{font-size:9px;color:rgba(255,255,255,.85);letter-spacing:1.5px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-    .icon-btn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:15px;transition:all .2s;position:relative}
-    .icon-btn:hover{background:rgba(255,255,255,.2)}
+    .app-top .brand .bs{font-size:9px;color:#FFFFFF;letter-spacing:1.5px;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+    .icon-btn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:15px;transition:all .2s;position:relative}
+    .icon-btn:hover{background:rgba(255,255,255,.25)}
     .icon-btn .dot{position:absolute;top:7px;right:8px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid #0C2E2E;display:none}
-    /* ✅ TOMBOL BAHASA */
-    .lang-btn{width:auto;min-width:44px;height:38px;padding:0 9px;border-radius:12px;background:rgba(255,255,255,.1);border:none;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:#fff;font-size:11.5px;font-weight:800;font-family:inherit;transition:all .2s}
-    .lang-btn:hover{background:rgba(255,255,255,.22)}
+    .lang-btn{width:auto;min-width:46px;height:38px;padding:0 10px;border-radius:12px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:#fff;font-size:11.5px;font-weight:800;font-family:inherit;transition:all .2s}
+    .lang-btn:hover{background:rgba(255,255,255,.25)}
     .lang-btn i{font-size:12px}
     .page{display:none}.page.on{display:block}
     .wrap{max-width:680px;margin:0 auto;padding:18px 16px}
     .hero{background:linear-gradient(135deg,#0C2E2E 0%,#0F4A4A 60%,#0D9488 130%);border-radius:22px;padding:26px 22px;position:relative;overflow:hidden;margin-bottom:20px}
     .hero::after{content:'';position:absolute;top:-40%;right:-20%;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.06);filter:blur(40px)}
     .hero h1{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;line-height:1.3;position:relative;z-index:1}
-    .hero p{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px;position:relative;z-index:1}
+    .hero p{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px;position:relative;z-index:1}
     .hero .hl{color:#5EEAD4}
     .search-box{position:relative;margin-top:16px;z-index:1}
-    .search-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.6);font-size:14px}
-    .search-box input{width:100%;padding:13px 15px 13px 42px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);border-radius:14px;font-size:14px;font-family:inherit;color:#fff;outline:none;transition:border .2s}
-    .search-box input::placeholder{color:rgba(255,255,255,.6)}
-    .search-box input:focus{border-color:rgba(255,255,255,.45)}
+    .search-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65);font-size:14px}
+    .search-box input{width:100%;padding:13px 15px 13px 42px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.22);border-radius:14px;font-size:14px;font-family:inherit;color:#fff;outline:none;transition:border .2s}
+    .search-box input::placeholder{color:rgba(255,255,255,.65)}
+    .search-box input:focus{border-color:rgba(255,255,255,.5)}
     .sec-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 14px}
     .sec-head h2{font-size:16.5px;font-weight:800;letter-spacing:-.3px}
     .sec-head a{font-size:12.5px;font-weight:600;color:var(--teal);text-decoration:none;cursor:pointer}
@@ -66,12 +67,18 @@
     .promo-card .pc-d{font-size:26px;font-weight:800}
     .promo-card .pc-n{font-size:12.5px;font-weight:600;margin-top:2px}
     .promo-card .pc-k{display:inline-block;margin-top:10px;padding:4px 10px;background:rgba(255,255,255,.2);border-radius:8px;font-size:11px;font-weight:700;font-family:monospace;letter-spacing:.5px}
+    /* VEHICLE CARDS */
     .v-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-card);cursor:pointer;transition:all .3s;position:relative}
     .v-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-4px)}
     .v-card:active{transform:scale(.98)}
     .v-img{height:170px;background-size:cover;background-position:center;position:relative}
     .v-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 55%)}
-    .v-badge{position:absolute;top:10px;left:10px;z-index:2}
+    /* ✅ BADGE PERINGKAT POPULER */
+    .v-card .rank{position:absolute;top:10px;left:10px;z-index:3;width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,#64748B,#334155);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+    .v-card .rank.r1{background:linear-gradient(135deg,#FBBF24,#D97706)}
+    .v-card .rank.r2{background:linear-gradient(135deg,#CBD5E1,#64748B)}
+    .v-card .rank.r3{background:linear-gradient(135deg,#FB923C,#C2410C)}
+    .v-badge{position:absolute;top:10px;left:44px;z-index:2}
     .v-fav{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer;border:none;color:#EF4444;font-size:13px;transition:transform .2s}
     .v-price{position:absolute;bottom:10px;right:12px;z-index:2;color:#fff}
     .v-price .vp{font-size:16px;font-weight:800}
@@ -104,6 +111,7 @@
     .d-fav{position:absolute;top:14px;right:14px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#EF4444}
     .d-title{position:absolute;bottom:16px;left:18px;right:18px;z-index:2;color:#fff}
     .d-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 2px}
+    .d-thumbs::-webkit-scrollbar{display:none}
     .d-thumb{flex-shrink:0;width:72px;height:54px;border-radius:10px;overflow:hidden;position:relative;border:2.5px solid transparent;cursor:pointer}
     .d-thumb.on{border-color:var(--teal)}
     .d-thumb img{width:100%;height:100%;object-fit:cover;display:block}
@@ -156,8 +164,7 @@
     .empty i{font-size:52px;opacity:.18;display:block;margin-bottom:14px}
     .empty h3{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:5px}
     .empty p{font-size:13px}
-    /* ✅ FOTO PROFIL: UTUH (tidak terpotong) + TEPAT TENGAH, latar blur premium */
-    .prof-av{width:104px;height:104px;border-radius:50%;background:#0F4A4A;position:relative;overflow:hidden;cursor:pointer;border:4px solid var(--card);box-shadow:var(--shadow-card);flex-shrink:0}
+    .prof-av{width:104px;height:104px;border-radius:50%;background:#0F4A4A;position:relative;overflow:hidden;cursor:pointer;border:4px solid var(--card);box-shadow:var(--shadow-card);flex-shrink:0;display:block}
     .prof-av .pbg{position:absolute;inset:-12%;width:124%;height:124%;object-fit:cover;filter:blur(14px) brightness(.65);display:none}
     .prof-av .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;display:none;z-index:1}
     .prof-av.has .pbg,.prof-av.has .pimg{display:block}
@@ -179,7 +186,7 @@
 </head>
 <body>
   <div class="splash" id="splash">
-    <img class="sp-logo" id="spLogo" alt="Logo">
+    <div class="sp-logo"><i class="fa-solid fa-car-side"></i></div>
     <div class="sp-t">RentRide</div>
     <div class="sp-s">SEWA KENDARAAN MUDAH</div>
     <div class="sp-bar-w"><div class="sp-bar" id="spBar"></div></div>
@@ -187,7 +194,6 @@
 
   <header class="app-top">
     <div class="brand" onclick="nav('home')">
-      <img id="hdLogo" alt="Logo">
       <div><div class="bt">RentRide</div><div class="bs">SEWA KENDARAAN</div></div>
     </div>
     <button class="lang-btn" onclick="togLang()"><i class="fa-solid fa-globe"></i><span id="langTxt">ID</span></button>
@@ -197,7 +203,7 @@
 
   <div class="np-ov" id="npOv" onclick="togNP()"></div>
   <div class="np" id="np">
-    <div class="np-head"><h3 data-i18n="notif">Notifikasi</h3><button class="btn btn-s" style="padding:6px 12px;font-size:11px" onclick="clrN()" data-i18n="read_all">Baca semua</button></div>
+    <div class="np-head"><h3 style="font-size:15px;font-weight:800" data-i18n="notif">Notifikasi</h3><button class="btn btn-s" style="padding:6px 12px;font-size:11px" onclick="clrN()" data-i18n="read_all">Baca semua</button></div>
     <div class="np-list" id="nList"></div>
   </div>
 
@@ -216,9 +222,9 @@
       </div>
       <div class="sec-head"><h2 data-i18n="sec_pop">⭐ Paling Populer</h2><a onclick="goKat('')" data-i18n="see_all">Lihat semua →</a></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px" id="homeGrid"></div>
-      <div class="sec-head"><h2 data-i18n="sec_mobil">🚗 Mobil</h2><a onclick="goKat('mobil')" data-i18n="see_all2">Lihat semua →</a></div>
+      <div class="sec-head"><h2 data-i18n="sec_mobil">🚗 Mobil</h2><a onclick="goKat('mobil')" data-i18n="see_all">Lihat semua →</a></div>
       <div class="chips" id="mobilRow"></div>
-      <div class="sec-head"><h2 data-i18n="sec_motor">🏍️ Motor</h2><a onclick="goKat('motor')" data-i18n="see_all3">Lihat semua →</a></div>
+      <div class="sec-head"><h2 data-i18n="sec_motor">🏍️ Motor</h2><a onclick="goKat('motor')" data-i18n="see_all">Lihat semua →</a></div>
       <div class="chips" id="motorRow"></div>
     </div>
   </div>
@@ -312,7 +318,12 @@
   <div class="page" id="pg-profil">
     <div class="wrap fade">
       <div style="text-align:center;margin:10px 0 22px">
-        <div class="prof-av" id="pAv" onclick="document.getElementById('pAvIn').click()" style="margin:0 auto"><div class="pinit" id="pAvTxt">?</div><img class="pbg" id="pAvBg" alt=""><img class="pimg" id="pAvImg" alt=""><div class="cam"><i class="fa-solid fa-camera"></i></div></div>
+        <div class="prof-av" id="pAv" onclick="document.getElementById('pAvIn').click()" style="margin:0 auto">
+          <div class="pinit" id="pAvTxt">?</div>
+          <img class="pbg" id="pAvBg" alt="">
+          <img class="pimg" id="pAvImg" alt="">
+          <div class="cam"><i class="fa-solid fa-camera"></i></div>
+        </div>
         <input type="file" id="pAvIn" accept="image/*" style="display:none" onchange="upAv(this)">
         <h2 id="pNama" style="font-size:19px;font-weight:800;margin-top:14px">-</h2>
         <p style="font-size:12.5px;color:var(--text-muted);margin-top:3px" id="pSub">-</p>
@@ -349,10 +360,11 @@
       <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
       <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.2<br>© 2025 — RentRide Admin Panel</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.7<br>© 2025 — RentRide Admin Panel</div>
     </div>
   </div>
 
+  <!-- BOTTOM NAV -->
   <nav class="bnav" id="bnav">
     <button data-p="home" class="on" onclick="nav('home')"><i class="fa-solid fa-house"></i><span data-i18n="nav_home">Beranda</span></button>
     <button data-p="katalog" onclick="nav('katalog')"><i class="fa-solid fa-compass"></i><span data-i18n="nav_katalog">Katalog</span></button>
@@ -380,10 +392,10 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const DRIVER_FEE=150000;
 function compressImg(file,cb,maxW=600,q=0.75){const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q));};img.src=e.target.result;};r.readAsDataURL(file);}
 
-/* ===================== ✅ BAHASA (i18n) ===================== */
+/* ===================== BAHASA (ID/EN) ===================== */
 const DICT={
-id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunki)'.replace('Terkunki','Terkunci'),btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari admin',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒'},
-en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from admin',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒'}
+id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunci)',btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari admin',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒',t_valid:'Periksa data bertanda merah — semua wajib sesuai KTP',desc_tpl:'# dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.',sp_cat:'Kategori',sp_year:'Tahun',sp_cap:'Kapasitas',sp_trans:'Transmisi',sp_fuel:'BBM',sp_plate:'Plat',sp_loc:'Lokasi',day_s:'hari'},
+en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from admin',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒',t_valid:'Check the red fields — all required as per ID',desc_tpl:'# is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.',sp_cat:'Category',sp_year:'Year',sp_cap:'Capacity',sp_trans:'Transmission',sp_fuel:'Fuel',sp_plate:'Plate',sp_loc:'Location',day_s:'day(s)'}
 };
 let lang=localStorage.getItem('rr-lang')||'id';
 function t(k){return (DICT[lang]&&DICT[lang][k])||DICT.id[k]||k;}
@@ -405,7 +417,7 @@ function togLang(){
   toast('info',lang==='id'?'Bahasa: Indonesia 🇮🇩':'Language: English 🇬🇧');
 }
 
-/* ===================== DATA (SHARED dengan Admin) ===================== */
+/* ===================== DATA (SHARED dengan Admin — key 'rr-data') ===================== */
 const DEFAULTS={
 vehicles:[
  {id:1,nama:'Toyota Avanza 2023 G',jenis:'mobil',kategori:'MPV',merek:'Toyota',tahun:2023,trans:'matic',bbm:'bensin',kap:7,plat:'B 1234 XYZ',status:'tersedia',harian:350000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/avanza/600/400',rating:4.9},
@@ -439,21 +451,16 @@ function loadData(){
 function saveData(){
   try{const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
     localStorage.setItem('rr-data',JSON.stringify({...d,vehicles,motors,orders,promos,notifs,customers,deletedCustomers}));}
-  catch(e){toast('error','Storage penuh');}
+  catch(e){toast('error',lang==='id'?'Penyimpanan perangkat penuh':'Device storage full');}
 }
 function freshUser(){return {nama:'',telp:'',email:'',alamatKtp:'',alamatDom:'',avatar:'',favs:[],locked:false,approved:false,pending:false};}
 let user=JSON.parse(localStorage.getItem('rr-user')||'null')||freshUser();
 function saveUser(){localStorage.setItem('rr-user',JSON.stringify(user));}
 
-function applyLogo(){
-  let src='BOY.jpg';
-  try{const d=JSON.parse(localStorage.getItem('rr-data'));if(d&&d.settings&&d.settings.logo)src=d.settings.logo;}catch(e){}
-  const fb='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#0D9488"/><text x="50" y="70" font-size="56" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#fff">R</text></svg>');
-  ['spLogo','hdLogo'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.onerror=()=>{el.onerror=null;el.src=fb;};el.src=src;});
-}
-
+/* ===================== STATE ===================== */
 let curPage='home',curVeh=null,katJenis='',ordFilter='',promoApplied=null,bDays=0,pendingBooking=false;
 
+/* ===================== TOAST ===================== */
 function toast(type,msg){
   const icons={success:'fa-circle-check',error:'fa-circle-xmark',warning:'fa-triangle-exclamation',info:'fa-circle-info'};
   const el=document.createElement('div');el.className='toast '+type;
@@ -462,6 +469,7 @@ function toast(type,msg){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300)},3500);
 }
 
+/* ===================== NAV ===================== */
 function nav(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   $('pg-'+page).classList.add('on');
@@ -481,9 +489,10 @@ function togDM(){
 }
 if(localStorage.getItem('rr-dark')==='1'){document.documentElement.classList.add('dark');document.addEventListener('DOMContentLoaded',()=>{$('dmBtn').innerHTML='<i class="fa-solid fa-sun"></i>';});}
 
+/* Sinkronisasi real-time dengan admin */
 window.addEventListener('storage',e=>{
   if(e.key==='rr-data'){
-    loadData();applyLogo();checkUserStatus();
+    loadData();checkUserStatus();
     if(curPage==='home')renderHome();
     if(curPage==='katalog')rKat();
     if(curPage==='pesanan')rOrders();
@@ -492,7 +501,7 @@ window.addEventListener('storage',e=>{
   }
 });
 
-/* Status: dihapus admin? pending? approved? */
+/* ===================== STATUS PENYEWA ===================== */
 function checkUserStatus(){
   if(!user.nama||!user.locked)return;
   try{
@@ -513,39 +522,47 @@ function forceLogout(msg){
   renderProf();renderHome();toast('warning',msg);nav('home');
 }
 
+/* ===================== HELPERS ===================== */
 function allV(){return vehicles.concat(motors);}
 function findV(id){return allV().find(v=>v.id===id);}
 function isFav(id){return (user.favs||[]).includes(id);}
 function daysBetween(a,b){if(!a||!b)return 0;const d=Math.round((new Date(b)-new Date(a))/86400000);return d>0?d:0;}
+/* ✅ label /hari atau /day — dipanggil dari variabel, TIDAK ada ternary di dalam string */
+function dayLbl(){return lang==='id'?'/hari':'/day';}
 
-function vCard(v){
+/* ===================== ✅ VEHICLE CARD — FIXED (tanpa bug /hari berulang) ===================== */
+function vCard(v,rank){
   const fav=isFav(v.id);
   const rented=v.status!=='tersedia';
+  const dl=dayLbl();
   return '<div class="v-card'+(rented?' rented':'')+'" onclick="openDetail('+v.id+')">'+
   '<div class="v-img" style="background-image:url('+v.img+')">'+
+    (rank?'<div class="rank'+(rank===1?' r1':rank===2?' r2':rank===3?' r3':'')+'">'+rank+'</div>':'')+
     '<span class="badge bi v-badge" style="background:rgba(255,255,255,.92)">'+esc(v.kategori||'-')+'</span>'+
     '<button class="v-fav" onclick="event.stopPropagation();favToggle('+v.id+')"><i class="fa-'+(fav?'solid':'regular')+' fa-heart"></i></button>'+
     '<div class="v-rate"><i class="fa-solid fa-star"></i>'+(v.rating||4.8)+'</div>'+
-    '<div class="v-price"><div class="vp">'+rp(v.harian)+'<span>'+t('lbl_price').includes('HARGA')?'/hari':'/day'+'</span></div></div>'+
+    '<div class="v-price"><div class="vp">'+rp(v.harian)+'<span>'+dl+'</span></div></div>'+
     (rented?'<div class="rented-tag"><i class="fa-solid fa-ban"></i> '+t('rented')+'</div>':'')+
   '</div><div class="v-body"><h3>'+esc(v.nama)+'</h3>'+
-  '<div class="v-loc"><i class="fa-solid fa-location-dot"></i> '+esc(v.lokasi||'-')+'</div>'+
-  '<div class="v-specs">'+(v.jenis==='motor'?'<span><i class="fa-solid fa-gears"></i>'+esc(v.kategori||'-')+'</span>':'<span><i class="fa-solid fa-user-group"></i>'+(v.kap||'-')+'</span><span><i class="fa-solid fa-gears"></i>'+esc(v.trans||'-')+'</span><span><i class="fa-solid fa-gas-pump"></i>'+esc(v.bbm||'-')+'</span>')+'</div></div></div>';
+  '<div class="v-loc"><i class="fa-solid fa-location-dot"></i> '+esc(v.lokasi||'-')+' • <i class="fa-solid fa-star" style="color:#F59E0B"></i> '+(v.rating||4.8)+'</div>'+
+  '<div class="v-specs">'+(v.jenis==='motor'?'<span><i class="fa-solid fa-gears"></i>'+esc(v.kategori||'-')+'</span>':'<span><i class="fa-solid fa-user-group"></i>'+(v.kap||'-')+' org</span><span><i class="fa-solid fa-gears"></i>'+esc(v.trans||'-')+'</span><span><i class="fa-solid fa-gas-pump"></i>'+esc(v.bbm||'-')+'</span>')+'</div></div></div>';
 }
 
+/* ===================== HOME ===================== */
 function renderHome(){
   $('heroNama').textContent=user.nama?user.nama.split(' ')[0]+'!':'Traveler!';
-  const avail=allV().filter(v=>v.status==='tersedia');
   const cats=[['','fa-border-all',t('c_all')],['mobil','fa-car',t('c_car')],['motor','fa-motorcycle',t('c_moto')],['MPV','fa-van-shuttle','MPV'],['SUV','fa-car-side','SUV'],['Matic','fa-gauge-high','Matic']];
   $('catChips').innerHTML=cats.map(c=>'<div class="chip" onclick="goKat(\''+c[0]+'\')"><i class="fa-solid '+c[1]+'"></i>'+c[2]+'</div>').join('');
   const aktif=promos.filter(p=>p.status==='Aktif');
   $('secPromo').style.display=aktif.length?'block':'none';
   $('promoRow').innerHTML=aktif.map(p=>'<div class="promo-card" onclick="copyPromo(\''+esc(p.kode)+'\')"><div class="pc-d">'+esc(p.diskon)+'</div><div class="pc-n">'+esc(p.nama)+'</div><div class="pc-k">'+esc(p.kode)+'</div></div>').join('');
-  $('homeGrid').innerHTML=[...avail].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4).map(vCard).join('')||'<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted);font-size:13px">—</div>';
-  const dayLb=lang==='id'?'/hari':'/day';
+  /* ✅ POPULER: 4 teratas berdasarkan rating, dengan badge peringkat 🥇🥈🥉 */
+  const popular=[...allV()].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4);
+  $('homeGrid').innerHTML=popular.map((v,i)=>vCard(v,i+1)).join('')||'<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted);font-size:13px">—</div>';
+  const dl=dayLbl();
   const row=list=>list.slice(0,6).map(v=>{
     const r=v.status!=='tersedia';
-    return '<div class="chip'+(r?' rented':'')+'" style="min-width:210px;padding:0;overflow:hidden;background:var(--card)" onclick="openDetail('+v.id+')"><div style="width:76px;height:62px;background-image:url('+v.img+');background-size:cover;flex-shrink:0;position:relative">'+(r?'<div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-ban" style="color:#F87171;font-size:16px"></i></div>':'')+'</div><div style="padding:8px 12px 8px 10px;text-align:left;min-width:0"><div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary)">'+esc(v.nama)+'</div><div style="font-size:11.5px;font-weight:700;margin-top:2px;color:'+(r?'var(--text-muted)':'var(--teal)')+'">'+(r?t('rented_s'):rp(v.harian)+dayLb)+'</div></div></div>';
+    return '<div class="chip'+(r?' rented':'')+'" style="min-width:210px;padding:0;overflow:hidden;background:var(--card)" onclick="openDetail('+v.id+')"><div style="width:76px;height:62px;background-image:url('+v.img+');background-size:cover;flex-shrink:0;position:relative">'+(r?'<div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-ban" style="color:#F87171;font-size:16px"></i></div>':'')+'</div><div style="padding:8px 12px 8px 10px;text-align:left;min-width:0"><div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary)">'+esc(v.nama)+'</div><div style="font-size:11.5px;font-weight:700;margin-top:2px;color:'+(r?'var(--text-muted)':'var(--teal)')+'">'+(r?t('rented_s'):rp(v.harian)+dl)+'</div></div></div>';
   }).join('')||'<div style="font-size:12.5px;color:var(--text-muted);padding:8px 2px">—</div>';
   $('mobilRow').innerHTML=row(vehicles);
   $('motorRow').innerHTML=row(motors);
@@ -554,6 +571,7 @@ function goKat(j){katJenis=j;nav('katalog');}
 function copyPromo(kode){navigator.clipboard?.writeText(kode);toast('success',tw('t_promo_ok',kode));}
 function quickSearch(q){katJenis='';$('katQ').value=q;nav('katalog');}
 
+/* ===================== KATALOG ===================== */
 function renderKatChips(){
   const c=[['',t('c_all')],['mobil',t('c_car')],['motor',t('c_moto')],['tersedia',t('c_avail')],['fav',t('c_fav')]];
   $('katChips').innerHTML=c.map(x=>'<div class="chip'+(katJenis===x[0]?' on':'')+'" onclick="katJenis=\''+x[0]+'\';renderKatChips();rKat()">'+x[1]+'</div>').join('');
@@ -570,10 +588,11 @@ function rKat(){
   if(s==='murah')list.sort((a,b)=>a.harian-b.harian);
   else if(s==='mahal')list.sort((a,b)=>b.harian-a.harian);
   else if(s==='rating')list.sort((a,b)=>(b.rating||0)-(a.rating||0));
-  $('katGrid').innerHTML=list.map(vCard).join('');
+  $('katGrid').innerHTML=list.map(v=>vCard(v)).join('');
   $('katEmpty').style.display=list.length?'none':'block';
 }
 
+/* ===================== DETAIL ===================== */
 const ANGLES=[['utama','Depan','Front'],['sampingKanan','Kanan','Right'],['sampingKiri','Kiri','Left'],['belakang','Belakang','Back'],['dalam','Dalam','Inside']];
 function openDetail(id){
   const v=findV(id);if(!v)return;
@@ -584,11 +603,11 @@ function openDetail(id){
   $('dHero').style.backgroundImage='url('+(v.photos.utama||v.img)+')';
   $('dBadge').textContent=v.kategori||'-';
   $('dNama').textContent=v.nama;
-  $('dHarga').innerHTML=rp(v.harian)+'<span style="font-size:13px;color:var(--text-muted);font-weight:500"> '+(lang==='id'?'/hari':'/day')+'</span>';
+  $('dHarga').innerHTML=rp(v.harian)+'<span style="font-size:13px;color:var(--text-muted);font-weight:500"> '+dayLbl()+'</span>';
   $('dRating').textContent=v.rating||4.8;
-  $('dDesk').textContent=v.desk||(v.nama+(lang==='id'?' dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.':' is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.'));
-  const sp=[['fa-tag','Kategori','Category',v.kategori],['fa-calendar','Tahun','Year',v.tahun],['fa-user-group','Kapasitas','Capacity',v.kap?v.kap+' pax':'-'],['fa-gears','Transmisi','Transmission',v.trans],['fa-gas-pump','BBM','Fuel',v.bbm],['fa-id-card','Plat','Plate',v.plat],['fa-location-dot','Lokasi','Location',v.lokasi]];
-  $('dSpecs').innerHTML=sp.map(x=>'<div style="background:var(--input-bg);border:1px solid var(--card-border);border-radius:11px;padding:11px 8px;text-align:center"><i class="fa-solid '+x[0]+'" style="color:var(--teal);font-size:14px"></i><div style="font-size:9px;color:var(--text-muted);font-weight:700;margin-top:5px;text-transform:uppercase">'+(lang==='id'?x[1]:x[2])+'</div><div style="font-size:12px;font-weight:700;text-transform:capitalize;margin-top:2px">'+esc(x[3]||'-')+'</div></div>').join('');
+  $('dDesk').textContent=v.desk||tw('desc_tpl',v.nama);
+  const sp=[['fa-tag',t('sp_cat'),v.kategori],['fa-calendar',t('sp_year'),v.tahun],['fa-user-group',t('sp_cap'),v.kap?v.kap+' pax':'-'],['fa-gears',t('sp_trans'),v.trans],['fa-gas-pump',t('sp_fuel'),v.bbm],['fa-id-card',t('sp_plate'),v.plat],['fa-location-dot',t('sp_loc'),v.lokasi]];
+  $('dSpecs').innerHTML=sp.map(x=>'<div style="background:var(--input-bg);border:1px solid var(--card-border);border-radius:11px;padding:11px 8px;text-align:center"><i class="fa-solid '+x[0]+'" style="color:var(--teal);font-size:14px"></i><div style="font-size:9px;color:var(--text-muted);font-weight:700;margin-top:5px;text-transform:uppercase">'+x[1]+'</div><div style="font-size:12px;font-weight:700;text-transform:capitalize;margin-top:2px">'+esc(x[2]||'-')+'</div></div>').join('');
   const exist=ANGLES.filter(a=>v.photos[a[0]]);
   $('dThumbs').innerHTML=exist.map((a,i)=>'<div class="d-thumb'+(i===0?' on':'')+'" onclick="swPhoto(this,\''+a[0]+'\')"><img src="'+v.photos[a[0]]+'"><em>'+(lang==='id'?a[1]:a[2])+'</em></div>').join('');
   $('dFavI').className='fa-'+(isFav(v.id)?'solid':'regular')+' fa-heart';
@@ -653,7 +672,7 @@ function saveProf(){
   if(errIf($('pInEmail'),!em.includes('@')||em.length<6))bad=true;
   if(errIf($('pInAlamatKtp'),ak.length<10))bad=true;
   if(errIf($('pInAlamatDom'),ad.length<5))bad=true;
-  if(bad)return toast('error',lang==='id'?'Periksa data bertanda merah — semua wajib sesuai KTP':'Check the red fields — all required as per ID');
+  if(bad)return toast('error',t('t_valid'));
   let approvedNow=true,pendingNow=false;
   try{
     const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
@@ -718,7 +737,7 @@ function openBooking(){
   pendingBooking=false;
   $('bThumb').style.backgroundImage='url('+(v.photos?.utama||v.img)+')';
   $('bNama').textContent=v.nama;
-  $('bHarga').textContent=rp(v.harian)+(lang==='id'?' /hari':' /day');
+  $('bHarga').textContent=rp(v.harian)+' '+dayLbl();
   $('bUser').textContent=user.nama+' • '+user.telp;
   const today=new Date().toISOString().split('T')[0];
   $('bMulai').value='';$('bMulai').min=today;
@@ -757,7 +776,7 @@ function calcPrice(){
   const v=curVeh;if(!v)return;
   bDays=daysBetween($('bMulai').value,$('bSelesai').value);
   const drv=$('bDriver').classList.contains('on');
-  if(bDays>0)$('bDurasi').innerHTML='<i class="fa-solid fa-circle-info"></i> '+t('b_dur')+' <b>'+bDays+' '+(lang==='id'?'hari':'day(s)')+'</b>';
+  if(bDays>0)$('bDurasi').innerHTML='<i class="fa-solid fa-circle-info"></i> '+t('b_dur')+' <b>'+bDays+' '+t('day_s')+'</b>';
   else $('bDurasi').textContent=(bDays===0&&$('bMulai').value&&$('bSelesai').value)?t('b_dur_bad'):'';
   let total=v.harian*Math.max(bDays,0);
   $('pDurasi').textContent=bDays+' × '+rp(v.harian);
@@ -783,7 +802,7 @@ function confirmBooking(){
   if($('bDriver').classList.contains('on'))total+=DRIVER_FEE*bDays;
   if(promoApplied)total-=Math.round(total*(parseInt(promoApplied.diskon)||0)/100);
   const tglStr=new Date().toLocaleDateString(lang==='id'?'id-ID':'en-US',{day:'numeric',month:'short',year:'numeric'});
-  const newOrder={id:'ORD-'+(2400+orders.length+1),cust:user.nama,kend:v.nama,tgl:tglStr,lama:bDays+' '+(lang==='id'?'hari':'day(s)'),total,status:'baru',penyewa:true};
+  const newOrder={id:'ORD-'+(2400+orders.length+1),cust:user.nama,kend:v.nama,tgl:tglStr,lama:bDays+' '+t('day_s'),total,status:'baru',penyewa:true};
   orders.unshift(newOrder);
   v.status='disewa';
   if(promoApplied)promoApplied.pakai++;
@@ -866,6 +885,7 @@ function renderN(){
 function readN(i){notifs[i].read=true;renderN();saveData();}
 function clrN(){notifs.forEach(n=>n.read=true);renderN();saveData();toast('success',t('read_all'));}
 
+/* ===================== UPLOAD AVATAR ===================== */
 function upAv(input){
   const f=input.files[0];if(!f)return;
   compressImg(f,url=>{user.avatar=url;saveUser();renderProf();toast('success',t('t_photo'));},400,0.85);
@@ -873,7 +893,6 @@ function upAv(input){
 
 /* ===================== INIT ===================== */
 loadData();
-applyLogo();
 applyI18n();
 checkUserStatus();
 renderHome();
