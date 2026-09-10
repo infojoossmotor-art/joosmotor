@@ -4,29 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>RentRide — Sewa Kendaraan</title>
+  <link rel="icon" type="image/jpeg" href="BOY.jpg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']}}}}</script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- FIREBASE SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
   <style>
     :root{--bg:#F0FDFA;--card:#FFFFFF;--card-border:rgba(13,148,136,0.10);--input-bg:#F8FFFE;--input-border:#E2E8F0;--input-focus:#0D9488;--text-primary:#1E293B;--text-secondary:#64748B;--text-muted:#94A3B8;--shadow-card:0 1px 3px rgba(0,0,0,0.05),0 4px 16px rgba(0,0,0,0.04);--shadow-hover:0 10px 28px rgba(13,148,136,0.15);--teal:#0D9488}
     .dark{--bg:#0B1A1A;--card:#112424;--card-border:rgba(13,148,136,0.18);--input-bg:#0E2020;--input-border:#1E3A3A;--input-focus:#14B8A6;--text-primary:#E2E8F0;--text-secondary:#94A3B8;--text-muted:#64748B;--shadow-card:0 1px 3px rgba(0,0,0,0.25),0 4px 16px rgba(0,0,0,0.18);--shadow-hover:0 10px 28px rgba(13,148,136,0.22)}
     *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;transition:background .3s,color .3s;padding-bottom:76px}
     ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--text-muted);border-radius:10px}
-    /* SPLASH */
     .splash{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0C2E2E 0%,#0F4A4A 55%,#091E1E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
     .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
     .splash::before{content:'';position:absolute;top:-30%;right:-15%;width:450px;height:450px;border-radius:50%;background:rgba(13,148,136,.18);filter:blur(80px);animation:spP 3s infinite}
     @keyframes spP{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
-    /* ✅ SPLASH LOGO: BOY.jpg bulat (fallback ikon teal) */
-    .sp-logo{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#0D9488);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(13,148,136,.45),0 0 0 4px rgba(255,255,255,.15);animation:spB 1.6s infinite,spG 2s infinite;overflow:hidden}
+    .sp-logo{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center;animation:spB 1.6s infinite}
     .sp-logo i{font-size:44px;color:#fff}
-    .sp-logo img{width:100%;height:100%;object-fit:cover;object-position:center;display:none;border-radius:50%}
-    .sp-logo.has img{display:block}
-    .sp-logo.has i{display:none}
+    .sp-logo img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 14px 32px rgba(13,148,136,.5))}
     @keyframes spB{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
-    @keyframes spG{0%,100%{box-shadow:0 20px 60px rgba(13,148,136,.45),0 0 0 4px rgba(255,255,255,.15)}50%{box-shadow:0 20px 80px rgba(20,184,166,.75),0 0 0 4px rgba(255,255,255,.15)}}
     .sp-t{font-size:32px;font-weight:800;color:#fff;margin-top:22px;animation:sfU .8s .2s both}
     .sp-s{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:3px;margin-top:5px;animation:sfU .8s .35s both;text-shadow:0 1px 3px rgba(0,0,0,.5)}
     .sp-bar-w{width:200px;height:5px;background:rgba(255,255,255,.12);border-radius:10px;margin-top:30px;overflow:hidden;animation:sfU .8s .5s both}
@@ -34,10 +34,10 @@
     @keyframes sfU{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     body.splashed{animation:appIn .5s}
     @keyframes appIn{from{opacity:0}to{opacity:1}}
-    /* HEADER: logo BOY.jpg bulatan + teks */
     .app-top{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0C2E2E,#0F4A4A);padding:14px 18px;display:flex;align-items:center;gap:12px}
     .app-top .brand{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
-    .app-top .brand img{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center;flex-shrink:0;border:2px solid rgba(255,255,255,.25)}
+    .app-top .brand .logo-img{height:40px;width:auto;max-width:140px;object-fit:contain;flex-shrink:0;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.45))}
+    img.logo-blend{mix-blend-mode:multiply}
     .app-top .brand .bt{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.1}
     .app-top .brand .bs{font-size:9px;color:#FFFFFF;letter-spacing:1.5px;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.55)}
     .icon-btn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:15px;transition:all .2s;position:relative}
@@ -96,9 +96,20 @@
     .v-specs span i{font-size:9px;color:var(--teal)}
     .v-card.rented,.chip.rented{opacity:.55;filter:grayscale(1);pointer-events:none;cursor:not-allowed}
     .v-card.rented .v-fav{display:none}
-    .rented-tag{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;background:rgba(15,23,42,.85);color:#fff;padding:9px 18px;border-radius:12px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:7px;backdrop-filter:blur(4px);letter-spacing:.3px}
+    .rented-tag{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;background:rgba(15,23,42,.85);color:#fff;padding:9px 18px;border-radius:12px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:7px;backdrop-filter:blur(4px);letter-spacing:.3px;white-space:nowrap}
     .rented-tag i{color:#F87171;font-size:11px}
     .dark .v-card.rented,.dark .chip.rented{opacity:.45}
+    .mcard{flex-shrink:0;width:200px;background:var(--card);border:1px solid var(--card-border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-card);cursor:pointer;transition:transform .2s;position:relative}
+    .mcard:hover{transform:translateY(-3px)}
+    .mcard .mi{position:relative;height:110px;background-size:cover;background-position:center}
+    .mcard .mi::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 60%)}
+    .mcard .mrate{position:absolute;bottom:8px;left:9px;z-index:2;color:#fff;font-size:11px;font-weight:700;display:flex;gap:4px;align-items:center}
+    .mcard .mrate i{color:#FBBF24;font-size:9px}
+    .mcard .mb{padding:10px 12px 12px}
+    .mcard .mname{font-size:12.5px;font-weight:700;line-height:1.3}
+    .mcard .mloc{font-size:10.5px;color:var(--text-muted);margin-top:3px}
+    .mcard .mprice2{font-size:13.5px;font-weight:800;color:var(--teal);margin-top:7px}
+    .mcard .mprice2 span{font-size:10px;font-weight:400;color:var(--text-muted)}
     .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:8px;font-size:10.5px;font-weight:700}
     .bs{background:#F0FDF4;color:#16A34A}.bi{background:#F0FDFA;color:#0D9488}.bw{background:#FFFBEB;color:#D97706}.bd{background:#FEF2F2;color:#EF4444}.b2{background:#F1F5F9;color:#64748B}
     .dark .bs{background:rgba(34,197,94,.15)}.dark .bi{background:rgba(13,148,136,.18)}.dark .bw{background:rgba(245,158,11,.15)}.dark .bd{background:rgba(239,68,68,.15)}.dark .b2{background:rgba(100,116,139,.2)}
@@ -118,7 +129,6 @@
     .d-thumb{flex-shrink:0;width:72px;height:54px;border-radius:10px;overflow:hidden;position:relative;border:2.5px solid transparent;cursor:pointer}
     .d-thumb.on{border-color:var(--teal)}
     .d-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .d-thumb em{position:absolute;bottom:2px;left:3px;font-size:7.5px;font-style:normal;font-weight:700;background:rgba(0,0,0,.65);color:#fff;padding:1px 5px;border-radius:4px}
     .f-label{display:block;font-size:12.5px;font-weight:700;margin-bottom:7px}
     .f-input{width:100%;padding:12px 14px;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:13px;font-size:14px;font-family:inherit;color:var(--text-primary);outline:none;transition:all .2s}
     .f-input:focus{border-color:var(--input-focus);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
@@ -162,14 +172,14 @@
     .np{position:fixed;top:0;right:-360px;width:min(340px,88vw);height:100%;background:var(--card);z-index:121;transition:right .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.2)}
     .np.on{right:0}
     .np-head{padding:18px;border-bottom:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between}
-    .np-list{flex:1;overflow-y:auto}
+    .np-list{flex:1;overflow-y:auto;padding:14px}
     .empty{text-align:center;padding:50px 20px;color:var(--text-muted)}
     .empty i{font-size:52px;opacity:.18;display:block;margin-bottom:14px}
     .empty h3{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:5px}
     .empty p{font-size:13px}
     .prof-av{width:104px;height:104px;border-radius:50%;background:#0F4A4A;position:relative;overflow:hidden;cursor:pointer;border:4px solid var(--card);box-shadow:var(--shadow-card);flex-shrink:0;display:block}
     .prof-av .pbg{position:absolute;inset:-12%;width:124%;height:124%;object-fit:cover;filter:blur(14px) brightness(.65);display:none}
-    .prof-av .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;display:none;z-index:1}
+    .prof-av .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:none;z-index:1}
     .prof-av.has .pbg,.prof-av.has .pimg{display:block}
     .prof-av .pinit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800;z-index:0;background:linear-gradient(135deg,#14B8A6,#0D9488)}
     .prof-av.has .pinit{display:none}
@@ -185,21 +195,25 @@
     .sheet-ov{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .25s}
     .sheet{background:var(--card);border-radius:22px 22px 0 0;width:min(560px,100%);padding:22px 20px calc(22px + env(safe-area-inset-bottom));animation:sheetUp .3s cubic-bezier(.4,0,.2,1)}
     @keyframes sheetUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .cloud-pill{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:99px}
+    .cloud-pill.on{background:rgba(34,197,94,.12);color:#16A34A}
+    .cloud-pill.off{background:rgba(100,116,139,.12);color:var(--text-muted)}
   </style>
 </head>
 <body>
-  <!-- ✅ SPLASH dengan logo BOY.jpg (bulatan, fallback ikon teal) -->
   <div class="splash" id="splash">
-    <div class="sp-logo" id="spLogoBox"><i class="fa-solid fa-car-side"></i><img id="spLogo" alt="Logo"></div>
+    <div class="sp-logo">
+      <i class="fa-solid fa-car-side" id="spIcon"></i>
+      <img id="spLogoImg" data-logo src="BOY.jpg" alt="BOY" style="display:none">
+    </div>
     <div class="sp-t">RentRide</div>
     <div class="sp-s">SEWA KENDARAAN MUDAH</div>
     <div class="sp-bar-w"><div class="sp-bar" id="spBar"></div></div>
   </div>
 
-  <!-- HEADER dengan logo BOY.jpg (bulatan) -->
   <header class="app-top">
     <div class="brand" onclick="nav('home')">
-      <img id="hdLogo" alt="Logo">
+      <img class="logo-img" data-logo src="BOY.jpg" alt="Logo" onerror="this.style.display='none'">
       <div><div class="bt">RentRide</div><div class="bs">SEWA KENDARAAN</div></div>
     </div>
     <button class="lang-btn" onclick="togLang()"><i class="fa-solid fa-globe"></i><span id="langTxt">ID</span></button>
@@ -333,6 +347,7 @@
         <input type="file" id="pAvIn" accept="image/*" style="display:none" onchange="upAv(this)">
         <h2 id="pNama" style="font-size:19px;font-weight:800;margin-top:14px">-</h2>
         <p style="font-size:12.5px;color:var(--text-muted);margin-top:3px" id="pSub">-</p>
+        <div class="cloud-pill off" id="cloudPill" style="margin-top:10px"><i class="fa-solid fa-cloud"></i> <span id="cloudTxt">Cloud: —</span></div>
       </div>
 
       <div class="f-card" style="margin-bottom:14px">
@@ -366,7 +381,7 @@
       <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
       <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.9<br>© 2025 — RentRide Admin Panel</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.8 (Firebase)<br>© 2025 — RentRide Admin Panel</div>
     </div>
   </div>
 
@@ -382,6 +397,32 @@
   <div class="toast-c" id="toastC"></div>
 
 <script>
+/* ===================== LOGO TANPA LATAR ===================== */
+(function(){
+  const im=new Image();im.crossOrigin='anonymous';
+  im.onload=()=>{
+    const els=[...document.querySelectorAll('img[data-logo]')];
+    try{
+      const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;
+      const x=c.getContext('2d');x.drawImage(im,0,0);
+      const d=x.getImageData(0,0,c.width,c.height),p=d.data,TH=232;
+      for(let i=0;i<p.length;i+=4){
+        const r=p[i],g=p[i+1],b=p[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+        if(mx>=TH&&mx-mn<26)p[i+3]=Math.min(p[i+3],Math.round(255*(255-mx)/(255-TH)));
+      }
+      x.putImageData(d,0,0);
+      const u=c.toDataURL('image/png');
+      els.forEach(el=>{el.src=u;el.style.display='block';});
+      const ic=document.getElementById('spIcon');if(ic)ic.remove();
+    }catch(e){
+      els.forEach(el=>{el.style.display='block';el.classList.add('logo-blend');});
+      const ic=document.getElementById('spIcon');if(ic)ic.remove();
+    }
+  };
+  im.onerror=()=>{document.querySelectorAll('img[data-logo]').forEach(el=>el.style.display='none');};
+  im.src='BOY.jpg';
+})();
+
 /* ===================== SPLASH ===================== */
 (function(){
   if(location.search.includes('nosplash')){const s=document.getElementById('splash');if(s)s.remove();document.body.classList.add('splashed');return;}
@@ -396,34 +437,22 @@ const $=id=>document.getElementById(id);
 const rp=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const DRIVER_FEE=150000;
-function compressImg(file,cb,maxW=600,q=0.75){const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q));};img.src=e.target.result;};r.readAsDataURL(file);}
-
-/* ===================== ✅ LOGO (BOY.jpg → settings admin → fallback) ===================== */
-/* Dipakai di SPLASH (bulat) & HEADER (bulatan) */
-function getLogoSrc(){
-  let src='BOY.jpg';
-  try{const d=JSON.parse(localStorage.getItem('rr-data'));if(d&&d.settings&&d.settings.logo)src=d.settings.logo;}catch(e){}
-  return src;
-}
-function applySplashLogo(){
-  const img=document.getElementById('spLogo');
-  const box=document.getElementById('spLogoBox');
-  if(!img||!box)return;
-  img.onload=()=>box.classList.add('has');
-  img.onerror=()=>box.classList.remove('has');
-  img.src=getLogoSrc();
-}
-function applyLogo(){
-  const el=document.getElementById('hdLogo');if(!el)return;
-  el.onerror=()=>{el.style.display='none';};
-  el.style.display='';
-  el.src=getLogoSrc();
-}
+function compressImg(file,cb,maxW=600,q=.75){const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q));};img.src=e.target.result;};r.readAsDataURL(file);}
+function toast(type,msg){const c=$('toastC');const d=document.createElement('div');d.className='toast '+type;
+  const ic=type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':type==='warning'?'fa-triangle-exclamation':'fa-circle-info';
+  d.innerHTML=`<i class="fa-solid ti ${ic}"></i><span>${msg}</span>`;c.appendChild(d);
+  setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),300);},3200);}
+function sheet(title,body,yesTxt,cb,cls='btn-d',icon='fa-circle-check'){
+  const ov=document.createElement('div');ov.className='sheet-ov';
+  ov.innerHTML=`<div class="sheet"><h3 style="font-size:16px;font-weight:800">${title}</h3><p style="font-size:13px;color:var(--text-secondary);margin:10px 0 18px;line-height:1.6">${body}</p><div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" data-x>${t('lg_cancel')}</button><button class="btn ${cls}" style="flex:1" data-y><i class="fa-solid ${icon}"></i> ${yesTxt}</button></div></div>`;
+  document.body.appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov||e.target.closest('[data-x]'))ov.remove();else if(e.target.closest('[data-y]')){ov.remove();cb();}};}
+function timeAgo(ts){const m=Math.floor((Date.now()-ts)/60000);if(m<1)return t('nj');if(m<60)return m+' '+t('nm');const h=Math.floor(m/60);if(h<24)return h+' '+t('nh');return new Date(ts).toLocaleDateString();}
 
 /* ===================== BAHASA (ID/EN) ===================== */
 const DICT={
-id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunci)',btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari admin',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒',t_valid:'Periksa data bertanda merah — semua wajib sesuai KTP',desc_tpl:'# dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.',sp_cat:'Kategori',sp_year:'Tahun',sp_cap:'Kapasitas',sp_trans:'Transmisi',sp_fuel:'BBM',sp_plate:'Plat',sp_loc:'Lokasi',day_s:'hari'},
-en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from admin',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒',t_valid:'Check the red fields — all required as per ID',desc_tpl:'# is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.',sp_cat:'Category',sp_year:'Year',sp_cap:'Capacity',sp_trans:'Transmission',sp_fuel:'Fuel',sp_plate:'Plate',sp_loc:'Location',day_s:'day(s)'}
+id:{nav_home:'Beranda',nav_katalog:'Katalog',nav_orders:'Pesanan',nav_profil:'Profil',notif:'Notifikasi',read_all:'Baca semua',hi:'Hai',hero_q:'Mau ke mana hari ini?',hero_s:'Sewa mobil & motor terbaik, harga bersahabat.',ph_search:'Cari Avanza, NMAX, Fortuner...',ph_search2:'Cari kendaraan...',sec_promo:'🎁 Promo Spesial',sec_pop:'⭐ Paling Populer',sec_mobil:'🚗 Mobil',sec_motor:'🏍️ Motor',see_all:'Lihat semua →',c_all:'Semua',c_car:'Mobil',c_moto:'Motor',c_avail:'Tersedia',c_fav:'❤️ Favorit',sort_pop:'Populer',sort_cheap:'Harga ↑',sort_exp:'Harga ↓',sort_rating:'Rating',no_result:'Tidak ditemukan',no_result_s:'Coba kata kunci atau filter lain.',lbl_price:'HARGA SEWA',lbl_rating:'RATING',lbl_desc:'Deskripsi',btn_book:'Booking Sekarang',btn_unavail:'Sedang Tidak Tersedia',rented:'SEDANG DISEWA',rented_s:'Sedang disewa',back:'Kembali',b_dates:'📅 Tanggal Sewa',b_start:'Tanggal Mulai',b_end:'Tanggal Selesai',b_dur:'Durasi:',b_dur_bad:'⚠️ Tanggal selesai harus setelah tanggal mulai',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150.000/hari (opsional)',b_promo:'🎟️ Kode Promo',b_promo_ph:'Contoh: WEEKEND20',b_summary:'💰 Rincian Biaya',row_daily:'Harga harian',row_dur:'Durasi',row_driver:'Driver',row_disc:'Diskon promo',row_total:'Total',btn_confirm:'Konfirmasi Booking',pg_orders:'📋 Pesanan Saya',f_all:'Semua',st_baru:'Baru',st_konf:'Dikonfirmasi',st_aktif:'Berjalan',st_selesai:'Selesai',st_batal:'Batal',s_baru:'Baru',s_konf:'Konfirmasi',s_jalan:'Berjalan',s_selesai:'Selesai',empty_no:'Belum ada pesanan',empty_hello:'Halo!',empty_fill:'Isi data diri di Profil agar pesananmu tersimpan.',empty_cta:'Yuk sewa kendaraan pertamamu!',btn_viewcat:'🚗 Lihat Katalog',od_wait:'Menunggu konfirmasi admin',od_conf:'Admin sudah konfirmasi — siap berangkat!',od_on:'Selamat menikmati perjalanan! 🚗',od_done:'Terima kasih sudah sewa!',od_batal:'Pesanan dibatalkan',btn_cancel:'Batalkan Pesanan',p_ready:'Lengkapi data untuk bisa booking',p_locked:'Terverifikasi & Terkunci 🔒',p_waitsub:'⏳ Menunggu persetujuan admin',p_banner:'Lengkapi data diri sesuai KTP untuk melanjutkan <b>booking</b>',p_pend:'Pendaftaran <b>menunggu persetujuan admin</b>. Anda bisa booking setelah disetujui.',p_lock:'Data terkunci. Perubahan hanya melalui <b>Admin RentRide</b>.',p_edit_t:'🪪 Data Diri Sesuai KTP',p_edit_w:'⚠️ Data hanya bisa diisi <b>SEKALI</b> dan tidak bisa diubah lagi. Pastikan sudah benar!',p_name:'Nama Lengkap Sesuai KTP',p_telp:'No. Telepon Aktif / WA',p_email:'Email Aktif',p_addr:'Alamat Sesuai KTP',p_dom:'Alamat Domisili (Tempat Tinggal Sekarang)',btn_lock:'Simpan & Kunci Data',p_hint:'Jika data sudah pernah terdaftar/dihapus admin, perlu <b>persetujuan admin</b>',p_view_t:'🪪 Data Diri (Terkunci)',btn_req:'Minta Perubahan ke Admin',lbl_status:'Status',st_approved:'✅ Disetujui',st_pending:'⏳ Menunggu persetujuan admin',dark:'Mode Gelap',btn_logout:'Keluar (Logout)',logout_hint:'Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali',lg_title:'Keluar dari akun?',lg_body:'Data profil & favorit akan <b>dihapus dari perangkat ini</b>. Saat sewa lagi, Anda harus isi data diri dari awal.',lg_cancel:'Batal',lg_yes:'Ya, Keluar',t_fill_ktp:'Lengkapi data diri sesuai KTP dulu 📝',t_pending_book:'⏳ Pendaftaran Anda masih menunggu persetujuan admin',t_pending_cant:'⏳ Menunggu persetujuan admin — belum bisa booking',t_rented:'"#" sedang disewa — silakan pilih kendaraan lain 😊',t_book_ok:'🎉 Booking # berhasil! Admin akan konfirmasi.',t_logout:'Logout berhasil — data profil dihapus dari perangkat',t_deleted:'Data Anda dihapus oleh Admin — silakan daftar ulang',t_approved:'✅ Pendaftaran Anda DISETUJUI admin — sudah bisa booking!',t_same_name:'⏳ Data tersimpan — NAMA SAMA terdeteksi, menunggu persetujuan admin',t_saved:'🔒 Data tersimpan, terverifikasi & terkunci!',t_sync:'Data diperbarui dari server',t_promo_ok:'Kode # disalin! Gunakan saat booking 🎟️',t_fav_add:'Ditambahkan ke favorit ❤️',t_fav_del:'Dihapus dari favorit',t_cancel_ok:'Pesanan # dibatalkan',t_photo:'Foto profil diperbarui',t_need_admin:'Silakan hubungi Admin RentRide (WA 08xx-xxxx-xxxx) untuk perubahan data 🔒',t_valid:'Periksa data bertanda merah — semua wajib sesuai KTP',desc_tpl:'# dalam kondisi terawat dan siap pakai. Harga sudah termasuk asuransi dasar. Unit diperiksa rutin sebelum setiap penyewaan.',sp_cat:'Kategori',sp_year:'Tahun',sp_cap:'Kapasitas',sp_trans:'Transmisi',sp_fuel:'BBM',sp_plate:'Plat',sp_loc:'Lokasi',day_s:'hari',nj:'Baru saja',nm:'mnt lalu',nh:'jam lalu',cloud_ok:'Tersambung',cloud_off:'Offline',cloud_on_toast:'☁️ Tersambung ke server — data sinkron real-time',cloud_off_toast:'📴 Tidak bisa ke server — data tersimpan di perangkat'},
+en:{nav_home:'Home',nav_katalog:'Catalog',nav_orders:'Orders',nav_profil:'Profile',notif:'Notifications',read_all:'Mark all read',hi:'Hi',hero_q:'Where to today?',hero_s:'Best car & motorcycle rental, friendly prices.',ph_search:'Search Avanza, NMAX, Fortuner...',ph_search2:'Search vehicles...',sec_promo:'🎁 Special Promo',sec_pop:'⭐ Most Popular',sec_mobil:'🚗 Cars',sec_motor:'🏍️ Motorcycles',see_all:'See all →',c_all:'All',c_car:'Cars',c_moto:'Motorcycles',c_avail:'Available',c_fav:'❤️ Favorites',sort_pop:'Popular',sort_cheap:'Price ↑',sort_exp:'Price ↓',sort_rating:'Rating',no_result:'Not found',no_result_s:'Try another keyword or filter.',lbl_price:'RENTAL PRICE',lbl_rating:'RATING',lbl_desc:'Description',btn_book:'Book Now',btn_unavail:'Currently Unavailable',rented:'RENTED OUT',rented_s:'Being rented',back:'Back',b_dates:'📅 Rental Dates',b_start:'Start Date',b_end:'End Date',b_dur:'Duration:',b_dur_bad:'⚠️ End date must be after start date',b_driver:'🧑‍✈️ Include Driver',b_driver_s:'+Rp 150,000/day (optional)',b_promo:'🎟️ Promo Code',b_promo_ph:'e.g. WEEKEND20',b_summary:'💰 Cost Breakdown',row_daily:'Daily rate',row_dur:'Duration',row_driver:'Driver',row_disc:'Promo discount',row_total:'Total',btn_confirm:'Confirm Booking',pg_orders:'📋 My Orders',f_all:'All',st_baru:'New',st_konf:'Confirmed',st_aktif:'Ongoing',st_selesai:'Completed',st_batal:'Cancelled',s_baru:'New',s_konf:'Confirm',s_jalan:'Ongoing',s_selesai:'Done',empty_no:'No orders yet',empty_hello:'Hello!',empty_fill:'Fill your profile so your orders are saved.',empty_cta:"Let's rent your first ride!",btn_viewcat:'🚗 Browse Catalog',od_wait:'Awaiting admin confirmation',od_conf:'Admin confirmed — ready to go!',od_on:'Enjoy your trip! 🚗',od_done:'Thanks for renting!',od_batal:'Order cancelled',btn_cancel:'Cancel Order',p_ready:'Complete your profile to book',p_locked:'Verified & Locked 🔒',p_waitsub:'⏳ Awaiting admin approval',p_banner:'Complete your ID details to continue <b>booking</b>',p_pend:'Registration <b>awaiting admin approval</b>. You can book once approved.',p_lock:'Data locked. Changes only via <b>RentRide Admin</b>.',p_edit_t:'🪪 Personal Data (per ID Card)',p_edit_w:'⚠️ Data can only be filled <b>ONCE</b> and cannot be changed. Make sure it is correct!',p_name:'Full Name (as per ID)',p_telp:'Active Phone / WA',p_email:'Active Email',p_addr:'Address (as per ID)',p_dom:'Domicile Address (current residence)',btn_lock:'Save & Lock Data',p_hint:'If already registered/deleted by admin, <b>admin approval</b> is required',p_view_t:'🪪 Personal Data (Locked)',btn_req:'Request Change via Admin',lbl_status:'Status',st_approved:'✅ Approved',st_pending:'⏳ Awaiting admin approval',dark:'Dark Mode',btn_logout:'Logout',logout_hint:'Logging out deletes data from this device — you must re-fill when renting again',lg_title:'Sign out?',lg_body:'Profile & favorites will be <b>deleted from this device</b>. You must re-fill your data next time.',lg_cancel:'Cancel',lg_yes:'Yes, Logout',t_fill_ktp:'Complete your ID details first 📝',t_pending_book:'⏳ Your registration is still awaiting admin approval',t_pending_cant:'⏳ Awaiting admin approval — booking not available yet',t_rented:'"#" is being rented — please choose another vehicle 😊',t_book_ok:'🎉 Booking # successful! Admin will confirm.',t_logout:'Logged out — profile data deleted from device',t_deleted:'Your data was deleted by Admin — please register again',t_approved:'✅ Your registration was APPROVED — you can book now!',t_same_name:'⏳ Saved — SAME NAME detected, awaiting admin approval',t_saved:'🔒 Saved, verified & locked!',t_sync:'Data updated from server',t_promo_ok:'Code # copied! Use it when booking 🎟️',t_fav_add:'Added to favorites ❤️',t_fav_del:'Removed from favorites',t_cancel_ok:'Order # cancelled',t_photo:'Profile photo updated',t_need_admin:'Please contact RentRide Admin (WA 08xx-xxxx-xxxx) for data changes 🔒',t_valid:'Check the red fields — all required as per ID',desc_tpl:'# is well-maintained and ready to go. Price includes basic insurance. Units are routinely inspected before every rental.',sp_cat:'Category',sp_year:'Year',sp_cap:'Capacity',sp_trans:'Transmission',sp_fuel:'Fuel',sp_plate:'Plate',sp_loc:'Location',day_s:'day(s)',nj:'Just now',nm:'m ago',nh:'h ago',cloud_ok:'Connected',cloud_off:'Offline',cloud_on_toast:'☁️ Connected to server — real-time sync active',cloud_off_toast:'📴 Server unreachable — data saved on device'}
 };
 let lang=localStorage.getItem('rr-lang')||'id';
 function t(k){return (DICT[lang]&&DICT[lang][k])||DICT.id[k]||k;}
@@ -442,10 +471,12 @@ function togLang(){
   if(curPage==='katalog'){renderKatChips();rKat();}
   if(curPage==='pesanan'){renderOrdChips();rOrders();}
   if(curPage==='profil')renderProf();
+  renderNotifs();
+  updCloudUI(false);
   toast('info',lang==='id'?'Bahasa: Indonesia 🇮🇩':'Language: English 🇬🇧');
 }
 
-/* ===================== DATA (SHARED dengan Admin — key 'rr-data') ===================== */
+/* ===================== DATA LOKAL (FALLBACK) ===================== */
 const DEFAULTS={
 vehicles:[
  {id:1,nama:'Toyota Avanza 2023 G',jenis:'mobil',kategori:'MPV',merek:'Toyota',tahun:2023,trans:'matic',bbm:'bensin',kap:7,plat:'B 1234 XYZ',status:'tersedia',harian:350000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/avanza/600/400',rating:4.9},
@@ -459,471 +490,488 @@ motors:[
  {id:101,nama:'Honda Vario 160 2023',jenis:'motor',kategori:'Matic',plat:'B 1111 AA',status:'tersedia',harian:85000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/vario/600/400',rating:4.8},
  {id:102,nama:'Yamaha NMAX 2023',jenis:'motor',kategori:'Matic',plat:'B 2222 BB',status:'tersedia',harian:95000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/nmax/600/400',rating:4.9},
  {id:103,nama:'Honda Beat 2022',jenis:'motor',kategori:'Matic',plat:'B 3333 CC',status:'tersedia',harian:70000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/beat/600/400',rating:4.6},
- {id:104,nama:'Yamaha Aerox 2023',jenis:'motor',kategori:'Matic',plat:'B 4444 DD',status:'tersedia',harian:100000,lokasi:'Tangerang',img:'https://picsum.photos/seed/aerox/600/400',rating:4.8}],
-orders:[],customers:[],deletedCustomers:[],
-promos:[
- {id:'PRM-01',kode:'TAHUNBARU2025',nama:'Promo Tahun Baru',diskon:'15%',periode:'1–31 Jan 2025',status:'Aktif',pakai:45},
- {id:'PRM-02',kode:'WEEKEND20',nama:'Diskon Weekend',diskon:'20%',periode:'Jum–Min',status:'Aktif',pakai:78},
- {id:'PRM-03',kode:'SEWABULANAN',nama:'Sewa Bulanan',diskon:'10%',periode:'Sewa ≥30 hari',status:'Aktif',pakai:12}],
-notifs:[]
+ {id:104,nama:'Yamaha Aerox 2023',jenis:'motor',kategori:'Matic',plat:'B 4444 DD',status:'tersedia',harian:100000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/aerox/600/400',rating:4.7},
+ {id:105,nama:'Honda PCX 160 2023',jenis:'motor',kategori:'Matic',plat:'B 5555 EE',status:'tersedia',harian:110000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/pcx/600/400',rating:4.8},
+ {id:106,nama:'Yamaha Lexi 2022',jenis:'motor',kategori:'Matic',plat:'B 6666 FF',status:'tersedia',harian:90000,lokasi:'Jakarta Barat',img:'https://picsum.photos/seed/lexi/600/400',rating:4.5},
+ {id:107,nama:'Honda Scoopy 2023 Sporty',jenis:'motor',kategori:'Matic',plat:'B 7777 GG',status:'tersedia',harian:80000,lokasi:'Jakarta Selatan',img:'https://picsum.photos/seed/scoopy/600/400',rating:4.7},
+ {id:108,nama:'Honda CB150 Verza 2022',jenis:'motor',kategori:'Manual',plat:'B 8888 HH',status:'tersedia',harian:120000,lokasi:'Jakarta Pusat',img:'https://picsum.photos/seed/cb150/600/400',rating:4.6}]
 };
-let vehicles,motors,orders,promos,notifs,customers,deletedCustomers;
-function loadData(){
-  try{const d=JSON.parse(localStorage.getItem('rr-data'));
-    vehicles=d?.vehicles||structuredClone(DEFAULTS.vehicles);
-    motors=d?.motors||structuredClone(DEFAULTS.motors);
-    orders=d?.orders||[];promos=d?.promos||structuredClone(DEFAULTS.promos);
-    notifs=d?.notifs||[];customers=d?.customers||[];deletedCustomers=d?.deletedCustomers||[];
-  }catch(e){vehicles=structuredClone(DEFAULTS.vehicles);motors=structuredClone(DEFAULTS.motors);orders=[];promos=structuredClone(DEFAULTS.promos);notifs=[];customers=[];deletedCustomers=[];}
-}
-function saveData(){
-  try{const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
-    localStorage.setItem('rr-data',JSON.stringify({...d,vehicles,motors,orders,promos,notifs,customers,deletedCustomers}));}
-  catch(e){toast('error',lang==='id'?'Penyimpanan perangkat penuh':'Device storage full');}
-}
-function freshUser(){return {nama:'',telp:'',email:'',alamatKtp:'',alamatDom:'',avatar:'',favs:[],locked:false,approved:false,pending:false};}
-let user=JSON.parse(localStorage.getItem('rr-user')||'null')||freshUser();
-function saveUser(){localStorage.setItem('rr-user',JSON.stringify(user));}
+const PROMOS=[
+ {kode:'WEEKEND20',type:'pct',val:20,label:{id:'Diskon 20% Akhir Pekan',en:'20% Off Weekend'}},
+ {kode:'HEMAT50K',type:'cut',val:50000,label:{id:'Potongan Langsung',en:'Direct Discount'}},
+ {kode:'NEWBIE10',type:'pct',val:10,label:{id:'Pelanggan Baru 10%',en:'New Customer 10%'}},
+ {kode:'LIBURAN15',type:'pct',val:15,label:{id:'Promo Liburan 15%',en:'Holiday 15%'}}];
 
-/* ===================== STATE ===================== */
-let curPage='home',curVeh=null,katJenis='',ordFilter='',promoApplied=null,bDays=0,pendingBooking=false;
+const DEV=(()=>{let d=localStorage.getItem('rr-device');if(!d){d='D'+Math.random().toString(36).slice(2,10).toUpperCase();localStorage.setItem('rr-device',d);}return d;})();
+const shGet=()=>{try{return JSON.parse(localStorage.getItem('rr-data'))||{}}catch(_){return{}}};
+const shSet=d=>localStorage.setItem('rr-data',JSON.stringify(d));
+let USER=null;try{USER=JSON.parse(localStorage.getItem('rr-user'))}catch(_){}
+const saveUser=()=>{USER?localStorage.setItem('rr-user',JSON.stringify(USER)):localStorage.removeItem('rr-user');};
+let FAV=new Set(JSON.parse(localStorage.getItem('rr-fav')||'[]'));
+const saveFav=()=>localStorage.setItem('rr-fav',JSON.stringify([...FAV]));
+let NOTIFS=[];try{NOTIFS=JSON.parse(localStorage.getItem('rr-notifs-'+DEV)||'[]')}catch(_){}
+const saveNotifs=()=>{localStorage.setItem('rr-notifs-'+DEV,JSON.stringify(NOTIFS.slice(0,40)));updDot();};
+function addNotif(icon,color,k,p){NOTIFS.unshift({icon,color,k,p,ts:Date.now(),read:false});saveNotifs();}
+function updDot(){$('nDot').style.display=NOTIFS.some(n=>!n.read)?'block':'none';}
+function plabel(p){return (p.label&&(p.label[lang]||p.label.id))||p.kode;}
 
-/* ===================== TOAST ===================== */
-function toast(type,msg){
-  const icons={success:'fa-circle-check',error:'fa-circle-xmark',warning:'fa-triangle-exclamation',info:'fa-circle-info'};
-  const el=document.createElement('div');el.className='toast '+type;
-  el.innerHTML='<i class="fa-solid '+icons[type]+' ti"></i><span style="flex:1">'+esc(msg)+'</span>';
-  $('toastC').appendChild(el);
-  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300)},3500);
+/* ===================== FIREBASE (Realtime Database) ===================== */
+const firebaseConfig={
+  apiKey:"AIzaSyBTMtrS3e-dkPbtoskKwB2bEELnk_PeLn0",
+  authDomain:"joossmotor.firebaseapp.com",
+  databaseURL:"https://joossmotor-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"joossmotor",
+  storageBucket:"joossmotor.firebasestorage.app",
+  messagingSenderId:"576511655021",
+  appId:"1:576511655021:web:433f4c49cad57677155364",
+  measurementId:"G-31JSBKS5VR"
+};
+const RR_PATH='rentride';               /* root data di Realtime Database */
+let fbRef=null,cloudData=null,cloudOn=false,cloudToastShown=false;
+
+try{
+  firebase.initializeApp(firebaseConfig);
+  try{firebase.analytics();}catch(_){}
+  fbRef=firebase.database().ref(RR_PATH);
+}catch(e){fbRef=null;}
+
+const arr=x=>Array.isArray(x)?x:Object.values(x||{});
+function normalize(v){
+  return{
+    vehicles:arr(v&&v.vehicles).length?arr(v.vehicles):DEFAULTS.vehicles,
+    motors:arr(v&&v.motors).length?arr(v.motors):DEFAULTS.motors,
+    promos:arr(v&&v.promos).length?arr(v.promos):PROMOS,
+    orders:arr(v&&v.orders),
+    customers:arr(v&&v.customers)
+  };
 }
-
-/* ===================== NAV ===================== */
-function nav(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  $('pg-'+page).classList.add('on');
-  curPage=page;
-  document.querySelectorAll('.bnav button[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===page));
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(page==='home')renderHome();
-  if(page==='katalog'){renderKatChips();rKat();}
-  if(page==='pesanan'){renderOrdChips();rOrders();}
-  if(page==='profil')renderProf();
+function updCloudUI(showToast){
+  const pill=$('cloudPill'),txt=$('cloudTxt');
+  if(!pill)return;
+  pill.className='cloud-pill '+(cloudOn?'on':'off');
+  txt.textContent='Cloud: '+(cloudOn?t('cloud_ok'):t('cloud_off'));
+  if(showToast&&!cloudToastShown){cloudToastShown=true;toast(cloudOn?'success':'warning',cloudOn?t('cloud_on_toast'):t('cloud_off_toast'));}
 }
-function togDM(){
-  const dark=document.documentElement.classList.toggle('dark');
-  $('dmBtn').innerHTML='<i class="fa-solid '+(dark?'fa-sun':'fa-moon')+'"></i>';
-  localStorage.setItem('rr-dark',dark?'1':'0');
-  const pd=$('pDark');if(pd)pd.classList.toggle('on',dark);
-}
-if(localStorage.getItem('rr-dark')==='1'){document.documentElement.classList.add('dark');document.addEventListener('DOMContentLoaded',()=>{$('dmBtn').innerHTML='<i class="fa-solid fa-sun"></i>';});}
-
-/* Sinkronisasi real-time dengan admin (folder/tab yang sama) */
-window.addEventListener('storage',e=>{
-  if(e.key==='rr-data'){
-    loadData();checkUserStatus();
-    if(curPage==='home')renderHome();
-    if(curPage==='katalog')rKat();
-    if(curPage==='pesanan')rOrders();
-    if(curPage==='profil')renderProf();
-    toast('info',t('t_sync'));
-  }
-});
-
-/* ===================== STATUS PENYEWA ===================== */
-function checkUserStatus(){
-  if(!user.nama||!user.locked)return;
-  try{
-    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
-    if((d.deletedCustomers||[]).includes(user.nama)){forceLogout(t('t_deleted'));return;}
-    const c=(d.customers||[]).find(x=>x.nama===user.nama);
-    if(c){
-      const wasPending=user.pending;
-      user.pending=!!c.pending;user.approved=!c.pending;
-      saveUser();
-      if(wasPending&&!user.pending)toast('success',t('t_approved'));
-      if(curPage==='profil')renderProf();
+if(fbRef){
+  /* Listener real-time: data dari server masuk otomatis */
+  fbRef.on('value',snap=>{
+    const v=snap.val();
+    if(!v){
+      /* Database kosong → seed awal + migrasi data lama dari localStorage */
+      const local=shGet();
+      const seed=normalize({vehicles:local.vehicles,motors:local.motors,promos:local.promos,orders:local.orders,customers:local.customers});
+      fbRef.set(seed);
+      cloudData=seed;
+    }else{
+      cloudData=normalize(v);
     }
-  }catch(e){}
-}
-function forceLogout(msg){
-  localStorage.removeItem('rr-user');user=freshUser();
-  renderProf();renderHome();toast('warning',msg);nav('home');
-}
+    cloudOn=true;
+    updCloudUI(true);
+    sync();
+  },err=>{cloudOn=false;updCloudUI(true);});
 
-/* ===================== HELPERS ===================== */
-function allV(){return vehicles.concat(motors);}
-function findV(id){return allV().find(v=>v.id===id);}
-function isFav(id){return (user.favs||[]).includes(id);}
-function daysBetween(a,b){if(!a||!b)return 0;const d=Math.round((new Date(b)-new Date(a))/86400000);return d>0?d:0;}
-function dayLbl(){return lang==='id'?'/hari':'/day';}
-
-/* ===================== VEHICLE CARD ===================== */
-function vCard(v,rank){
-  const fav=isFav(v.id);
-  const rented=v.status!=='tersedia';
-  const dl=dayLbl();
-  return '<div class="v-card'+(rented?' rented':'')+'" onclick="openDetail('+v.id+')">'+
-  '<div class="v-img" style="background-image:url('+v.img+')">'+
-    (rank?'<div class="rank'+(rank===1?' r1':rank===2?' r2':rank===3?' r3':'')+'">'+rank+'</div>':'')+
-    '<span class="badge bi v-badge" style="background:rgba(255,255,255,.92)">'+esc(v.kategori||'-')+'</span>'+
-    '<button class="v-fav" onclick="event.stopPropagation();favToggle('+v.id+')"><i class="fa-'+(fav?'solid':'regular')+' fa-heart"></i></button>'+
-    '<div class="v-rate"><i class="fa-solid fa-star"></i>'+(v.rating||4.8)+'</div>'+
-    '<div class="v-price"><div class="vp">'+rp(v.harian)+'<span>'+dl+'</span></div></div>'+
-    (rented?'<div class="rented-tag"><i class="fa-solid fa-ban"></i> '+t('rented')+'</div>':'')+
-  '</div><div class="v-body"><h3>'+esc(v.nama)+'</h3>'+
-  '<div class="v-loc"><i class="fa-solid fa-location-dot"></i> '+esc(v.lokasi||'-')+' • <i class="fa-solid fa-star" style="color:#F59E0B"></i> '+(v.rating||4.8)+'</div>'+
-  '<div class="v-specs">'+(v.jenis==='motor'?'<span><i class="fa-solid fa-gears"></i>'+esc(v.kategori||'-')+'</span>':'<span><i class="fa-solid fa-user-group"></i>'+(v.kap||'-')+' org</span><span><i class="fa-solid fa-gears"></i>'+esc(v.trans||'-')+'</span><span><i class="fa-solid fa-gas-pump"></i>'+esc(v.bbm||'-')+'</span>')+'</div></div></div>';
+  /* Status koneksi server */
+  firebase.database().ref('.info/connected').on('value',s=>{
+    cloudOn=!!s.val();
+    updCloudUI(true);
+    if(cloudOn)sync();
+  });
+}else{
+  setTimeout(()=>updCloudUI(true),800);
 }
 
-/* ===================== HOME ===================== */
+/* Tulis data: ke cloud bila tersambung, fallback ke localStorage */
+function commit(fn){
+  if(fbRef&&cloudData){
+    const copy=JSON.parse(JSON.stringify(cloudData));
+    fn(copy);
+    fbRef.set(copy);
+    cloudData=normalize(copy);
+  }else{
+    const s=shGet();fn(s);shSet(s);
+  }
+}
+
+/* Sumber data utama: cloud → fallback localStorage → default */
+function data(){
+  if(cloudData)return cloudData;
+  return normalize(shGet());
+}
+const allV=()=>[...data().vehicles,...data().motors];
+const byId=id=>allV().find(v=>v.id===id);
+function rentedIds(){const s=new Set();allV().forEach(v=>{if(v.status==='disewa')s.add(v.id)});data().orders.forEach(o=>{if(['konf','aktif'].includes(o.status))s.add(o.vid)});return s;}
+
+/* ===================== SINKRONISASI NOTIFIKASI ===================== */
+let lastOrderStat={};
+function sync(){
+  const d=data();
+  if(USER&&USER.locked){
+    const c=d.customers.find(c=>c.deviceId===DEV);
+    if(!c){USER=null;saveUser();NOTIFS=[];saveNotifs();toast('error',t('t_deleted'));if(curPage==='profil')renderProf();}
+    else if(c.status==='approved'&&USER.status!=='approved'){USER.status='approved';saveUser();addNotif('fa-circle-check','#22C55E','t_approved');toast('success',t('t_approved'));if(curPage==='profil')renderProf();}
+    else if(c.status==='pending'&&USER.status!=='pending'){USER.status='pending';saveUser();}
+  }
+  d.orders.filter(o=>o.deviceId===DEV).forEach(o=>{
+    const prev=lastOrderStat[o.id];
+    if(prev&&prev!==o.status){
+      const map={baru:'od_wait',konf:'od_conf',aktif:'od_on',selesai:'od_done',batal:'od_batal'};
+      if(map[o.status]){addNotif('fa-clipboard-check','#0D9488',map[o.status],o.code);toast('info',tw(map[o.status],o.code));}
+    }
+    lastOrderStat[o.id]=o.status;
+  });
+  if(curPage==='home')renderHome();
+  if(curPage==='katalog')rKat();
+  if(curPage==='pesanan')rOrders();
+  if(curPage==='profil')renderProf();
+}
+
+/* ===================== KOMPONEN KARTU ===================== */
+function chipHTML(on,icon,txt,fn){return `<div class="chip ${on?'on':''}" onclick="${fn}"><i class="fa-solid ${icon}"></i>${txt}</div>`}
+function vCard(v,r,rank){
+  const rented=r.has(v.id);
+  const rk=rank!==undefined?`<div class="rank ${rank<3?'r'+(rank+1):''}">${rank+1}</div>`:'';
+  return `<div class="v-card fade ${rented?'rented':''}" onclick="openDetail(${v.id})">
+   ${rk}
+   <div class="v-badge"><span class="badge ${v.jenis==='motor'?'bi':'bs'}">${esc(v.kategori||t('c_'+v.jenis))}</span></div>
+   ${rented?`<div class="rented-tag"><i class="fa-solid fa-ban"></i>${t('rented')}</div>`:`<button class="v-fav" onclick="event.stopPropagation();togFavId(${v.id})"><i class="fa-${FAV.has(v.id)?'solid':'regular'} fa-heart"></i></button>`}
+   <div class="v-img" style="background-image:url('${v.img}')"></div>
+   <div class="v-rate"><i class="fa-solid fa-star"></i>${v.rating}</div>
+   <div class="v-price"><div class="vp">${rp(v.harian)}<span>/${t('day_s')}</span></div></div>
+   <div class="v-body"><h3>${esc(v.nama)}</h3><div class="v-loc"><i class="fa-solid fa-location-dot"></i> ${esc(v.lokasi)}</div>
+   <div class="v-specs"><span><i class="fa-solid fa-gears"></i>${esc(v.trans||v.kategori)}</span><span><i class="fa-solid fa-user-group"></i>${v.kap||2} org</span><span><i class="fa-solid fa-gas-pump"></i>${esc(v.bbm||'bensin')}</span></div></div></div>`;
+}
+function mCard(v){
+  const rented=rentedIds().has(v.id);
+  return `<div class="mcard ${rented?'rented':''}" onclick="openDetail(${v.id})">
+   <div class="mi" style="background-image:url('${v.img}')">
+     <div class="mrate"><i class="fa-solid fa-star"></i>${v.rating}</div>
+     ${rented?`<div class="rented-tag" style="font-size:10px;padding:6px 10px"><i class="fa-solid fa-ban"></i>${t('rented')}</div>`:''}
+   </div>
+   <div class="mb"><div class="mname">${esc(v.nama)}</div><div class="mloc"><i class="fa-solid fa-location-dot"></i> ${esc(v.lokasi)}</div>
+   <div class="mprice2">${rp(v.harian)}<span>/${t('day_s')}</span></div></div></div>`;
+}
+
+/* ===================== BERANDA ===================== */
+let homeKat='',homeQ='';
+function setHomeKat(k){homeKat=k;renderChips();renderHomeGrid();}
+function quickSearch(q){homeQ=q.trim().toLowerCase();renderHomeGrid();}
+function goKat(k){katF=k;$('katQ').value='';nav('katalog');}
+function renderChips(){
+  $('catChips').innerHTML=chipHTML(homeKat==='','fa-border-all',t('c_all'),"setHomeKat('')")
+   +chipHTML(homeKat==='mobil','fa-car',t('c_car'),"setHomeKat('mobil')")
+   +chipHTML(homeKat==='motor','fa-motorcycle',t('c_moto'),"setHomeKat('motor')")
+   +chipHTML(homeKat==='avail','fa-circle-check',t('c_avail'),"setHomeKat('avail')")
+   +chipHTML(homeKat==='fav','fa-heart',t('c_fav'),"setHomeKat('fav')");
+}
+function filtered(){
+  let list=allV();const r=rentedIds();
+  if(homeKat==='mobil')list=list.filter(v=>v.jenis==='mobil');
+  if(homeKat==='motor')list=list.filter(v=>v.jenis==='motor');
+  if(homeKat==='avail')list=list.filter(v=>!r.has(v.id));
+  if(homeKat==='fav')list=list.filter(v=>FAV.has(v.id));
+  if(homeQ){const q=homeQ;list=list.filter(v=>(v.nama+' '+v.lokasi+' '+(v.merek||'')+' '+(v.kategori||'')).toLowerCase().includes(q));}
+  return list;
+}
+function renderHomeGrid(){
+  const r=rentedIds();
+  const list=filtered().sort((a,b)=>b.rating-a.rating);
+  $('homeGrid').innerHTML=list.length?list.slice(0,8).map((v,i)=>vCard(v,r,i)).join('')
+   :`<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-car-side"></i><h3>${t('no_result')}</h3><p>${t('no_result_s')}</p></div>`;
+}
+function renderPromos(){
+  const ps=data().promos;
+  $('secPromo').style.display=ps.length?'block':'none';
+  $('promoRow').innerHTML=ps.map(p=>`<div class="promo-card" onclick="copyPromo('${p.kode}')"><div class="pc-d">${p.type==='pct'?p.val+'%':'-'+Math.round(p.val/1000)+'K'}</div><div class="pc-n">${esc(plabel(p))}</div><div class="pc-k">${p.kode} <i class="fa-solid fa-copy"></i></div></div>`).join('');
+}
+function copyPromo(k){
+  const done=()=>toast('success',tw('t_promo_ok',k));
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(k).then(done).catch(done);else done();
+}
 function renderHome(){
-  $('heroNama').textContent=user.nama?user.nama.split(' ')[0]+'!':'Traveler!';
-  const cats=[['','fa-border-all',t('c_all')],['mobil','fa-car',t('c_car')],['motor','fa-motorcycle',t('c_moto')],['MPV','fa-van-shuttle','MPV'],['SUV','fa-car-side','SUV'],['Matic','fa-gauge-high','Matic']];
-  $('catChips').innerHTML=cats.map(c=>'<div class="chip" onclick="goKat(\''+c[0]+'\')"><i class="fa-solid '+c[1]+'"></i>'+c[2]+'</div>').join('');
-  const aktif=promos.filter(p=>p.status==='Aktif');
-  $('secPromo').style.display=aktif.length?'block':'none';
-  $('promoRow').innerHTML=aktif.map(p=>'<div class="promo-card" onclick="copyPromo(\''+esc(p.kode)+'\')"><div class="pc-d">'+esc(p.diskon)+'</div><div class="pc-n">'+esc(p.nama)+'</div><div class="pc-k">'+esc(p.kode)+'</div></div>').join('');
-  const popular=[...allV()].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4);
-  $('homeGrid').innerHTML=popular.map((v,i)=>vCard(v,i+1)).join('')||'<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted);font-size:13px">—</div>';
-  const dl=dayLbl();
-  const row=list=>list.slice(0,6).map(v=>{
-    const r=v.status!=='tersedia';
-    return '<div class="chip'+(r?' rented':'')+'" style="min-width:210px;padding:0;overflow:hidden;background:var(--card)" onclick="openDetail('+v.id+')"><div style="width:76px;height:62px;background-image:url('+v.img+');background-size:cover;flex-shrink:0;position:relative">'+(r?'<div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-ban" style="color:#F87171;font-size:16px"></i></div>':'')+'</div><div style="padding:8px 12px 8px 10px;text-align:left;min-width:0"><div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary)">'+esc(v.nama)+'</div><div style="font-size:11.5px;font-weight:700;margin-top:2px;color:'+(r?'var(--text-muted)':'var(--teal)')+'">'+(r?t('rented_s'):rp(v.harian)+dl)+'</div></div></div>';
-  }).join('')||'<div style="font-size:12.5px;color:var(--text-muted);padding:8px 2px">—</div>';
-  $('mobilRow').innerHTML=row(vehicles);
-  $('motorRow').innerHTML=row(motors);
+  $('heroNama').textContent=(USER&&USER.nama)?USER.nama.split(' ')[0]+'!':'Traveler!';
+  renderChips();renderPromos();renderHomeGrid();
+  $('mobilRow').innerHTML=[...data().vehicles].sort((a,b)=>b.rating-a.rating).slice(0,6).map(mCard).join('');
+  $('motorRow').innerHTML=[...data().motors].sort((a,b)=>b.rating-a.rating).slice(0,6).map(mCard).join('');
 }
-function goKat(j){katJenis=j;nav('katalog');}
-function copyPromo(kode){navigator.clipboard?.writeText(kode);toast('success',tw('t_promo_ok',kode));}
-function quickSearch(q){katJenis='';$('katQ').value=q;nav('katalog');}
 
 /* ===================== KATALOG ===================== */
+let katF='',katQs='';
+function setKatF(k){katF=k;renderKatChips();rKat();}
 function renderKatChips(){
-  const c=[['',t('c_all')],['mobil',t('c_car')],['motor',t('c_moto')],['tersedia',t('c_avail')],['fav',t('c_fav')]];
-  $('katChips').innerHTML=c.map(x=>'<div class="chip'+(katJenis===x[0]?' on':'')+'" onclick="katJenis=\''+x[0]+'\';renderKatChips();rKat()">'+x[1]+'</div>').join('');
+  $('katChips').innerHTML=chipHTML(katF==='','fa-border-all',t('c_all'),"setKatF('')")
+   +chipHTML(katF==='mobil','fa-car',t('c_car'),"setKatF('mobil')")
+   +chipHTML(katF==='motor','fa-motorcycle',t('c_moto'),"setKatF('motor')")
+   +chipHTML(katF==='avail','fa-circle-check',t('c_avail'),"setKatF('avail')")
+   +chipHTML(katF==='fav','fa-heart',t('c_fav'),"setKatF('fav')");
 }
 function rKat(){
-  const q=($('katQ').value||'').toLowerCase();
+  katQs=$('katQ').value.trim().toLowerCase();
+  const s=$('katSort').value,r=rentedIds();
   let list=allV();
-  if(katJenis==='mobil')list=list.filter(v=>v.jenis==='mobil');
-  else if(katJenis==='motor')list=list.filter(v=>v.jenis==='motor');
-  else if(katJenis==='tersedia')list=list.filter(v=>v.status==='tersedia');
-  else if(katJenis==='fav')list=list.filter(v=>isFav(v.id));
-  if(q)list=list.filter(v=>(v.nama+(v.kategori||'')+(v.merek||'')+(v.lokasi||'')).toLowerCase().includes(q));
-  const s=$('katSort').value;
+  if(katF==='mobil')list=list.filter(v=>v.jenis==='mobil');
+  if(katF==='motor')list=list.filter(v=>v.jenis==='motor');
+  if(katF==='avail')list=list.filter(v=>!r.has(v.id));
+  if(katF==='fav')list=list.filter(v=>FAV.has(v.id));
+  if(katQs)list=list.filter(v=>(v.nama+' '+v.lokasi+' '+(v.merek||'')+' '+(v.kategori||'')+' '+(v.plat||'')).toLowerCase().includes(katQs));
+  if(s==='pop'||s==='rating')list.sort((a,b)=>b.rating-a.rating);
   if(s==='murah')list.sort((a,b)=>a.harian-b.harian);
-  else if(s==='mahal')list.sort((a,b)=>b.harian-a.harian);
-  else if(s==='rating')list.sort((a,b)=>(b.rating||0)-(a.rating||0));
-  $('katGrid').innerHTML=list.map(v=>vCard(v)).join('');
+  if(s==='mahal')list.sort((a,b)=>b.harian-a.harian);
+  $('katGrid').innerHTML=list.map(v=>vCard(v,r)).join('');
+  $('katGrid').style.display=list.length?'grid':'none';
   $('katEmpty').style.display=list.length?'none':'block';
 }
 
 /* ===================== DETAIL ===================== */
-const ANGLES=[['utama','Depan','Front'],['sampingKanan','Kanan','Right'],['sampingKiri','Kiri','Left'],['belakang','Belakang','Back'],['dalam','Dalam','Inside']];
+let curV=null,curThumbs=[];
 function openDetail(id){
-  const v=findV(id);if(!v)return;
-  if(v.status!=='tersedia'){toast('warning',tw('t_rented',v.nama));return;}
-  curVeh=v;
-  if(!v.photos)v.photos={};
-  ANGLES.forEach(a=>{if(!v.photos[a[0]])v.photos[a[0]]=a[0]==='utama'?v.img:'';});
-  $('dHero').style.backgroundImage='url('+(v.photos.utama||v.img)+')';
-  $('dBadge').textContent=v.kategori||'-';
+  const v=byId(id);if(!v)return;
+  if(rentedIds().has(id)){toast('warning',tw('t_rented',v.nama));return;}
+  curV=v;
+  curThumbs=[v.img,'https://picsum.photos/seed/'+v.id+'b/600/400','https://picsum.photos/seed/'+v.id+'c/600/400','https://picsum.photos/seed/'+v.id+'d/600/400'];
+  $('dHero').style.backgroundImage=`url('${curThumbs[0]}')`;
+  $('dBadge').textContent=v.kategori||'';
   $('dNama').textContent=v.nama;
-  $('dHarga').innerHTML=rp(v.harian)+'<span style="font-size:13px;color:var(--text-muted);font-weight:500"> '+dayLbl()+'</span>';
-  $('dRating').textContent=v.rating||4.8;
-  $('dDesk').textContent=v.desk||tw('desc_tpl',v.nama);
-  const sp=[['fa-tag',t('sp_cat'),v.kategori],['fa-calendar',t('sp_year'),v.tahun],['fa-user-group',t('sp_cap'),v.kap?v.kap+' pax':'-'],['fa-gears',t('sp_trans'),v.trans],['fa-gas-pump',t('sp_fuel'),v.bbm],['fa-id-card',t('sp_plate'),v.plat],['fa-location-dot',t('sp_loc'),v.lokasi]];
-  $('dSpecs').innerHTML=sp.map(x=>'<div style="background:var(--input-bg);border:1px solid var(--card-border);border-radius:11px;padding:11px 8px;text-align:center"><i class="fa-solid '+x[0]+'" style="color:var(--teal);font-size:14px"></i><div style="font-size:9px;color:var(--text-muted);font-weight:700;margin-top:5px;text-transform:uppercase">'+x[1]+'</div><div style="font-size:12px;font-weight:700;text-transform:capitalize;margin-top:2px">'+esc(x[2]||'-')+'</div></div>').join('');
-  const exist=ANGLES.filter(a=>v.photos[a[0]]);
-  $('dThumbs').innerHTML=exist.map((a,i)=>'<div class="d-thumb'+(i===0?' on':'')+'" onclick="swPhoto(this,\''+a[0]+'\')"><img src="'+v.photos[a[0]]+'"><em>'+(lang==='id'?a[1]:a[2])+'</em></div>').join('');
-  $('dFavI').className='fa-'+(isFav(v.id)?'solid':'regular')+' fa-heart';
-  const ok=v.status==='tersedia';
-  $('dBookBtn').disabled=!ok;
-  $('dBookTxt').textContent=ok?t('btn_book'):t('btn_unavail');
+  $('dThumbs').innerHTML=curThumbs.map((u,i)=>`<div class="d-thumb ${i?'':'on'}" onclick="setThumb(${i})"><img src="${u}" alt=""></div>`).join('');
+  $('dHarga').innerHTML=rp(v.harian)+' <span style="font-size:12px;font-weight:600;color:var(--text-muted)">/'+t('day_s')+'</span>';
+  $('dRating').textContent=v.rating;
+  const specs=[[ 'fa-tag',v.kategori||'-','sp_cat' ],[ 'fa-calendar',v.tahun||'-','sp_year' ],[ 'fa-user-group',(v.kap||2)+' org','sp_cap' ],[ 'fa-gears',v.trans||v.kategori||'-','sp_trans' ],[ 'fa-gas-pump',v.bbm||'bensin','sp_fuel' ],[ 'fa-id-card',v.plat||'-','sp_plate' ],[ 'fa-location-dot',v.lokasi||'-','sp_loc' ]];
+  $('dSpecs').innerHTML=specs.map(([ic,val,k])=>`<div style="text-align:center;padding:12px 4px;background:var(--input-bg);border-radius:12px"><i class="fa-solid ${ic}" style="color:var(--teal);font-size:16px"></i><div style="font-size:11px;font-weight:800;margin-top:6px;text-transform:capitalize">${esc(val)}</div><div style="font-size:9.5px;color:var(--text-muted);margin-top:2px">${t(k)}</div></div>`).join('');
+  $('dDesk').textContent=v.desk||t('desc_tpl').replace('#',v.nama);
+  updateFavIcon();
   nav('detail');
 }
-function swPhoto(el,key){$('dHero').style.backgroundImage='url('+curVeh.photos[key]+')';document.querySelectorAll('.d-thumb').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
-function favToggle(id){
-  user.favs=user.favs||[];
-  const i=user.favs.indexOf(id);
-  if(i>-1){user.favs.splice(i,1);toast('info',t('t_fav_del'));}
-  else{user.favs.push(id);toast('success',t('t_fav_add'));}
-  saveUser();
-  if(curVeh&&curPage==='detail')$('dFavI').className='fa-'+(isFav(id)?'solid':'regular')+' fa-heart';
+function setThumb(i){$('dHero').style.backgroundImage=`url('${curThumbs[i]}')`;document.querySelectorAll('#dThumbs .d-thumb').forEach((el,j)=>el.classList.toggle('on',j===i));}
+function togFav(){if(curV)togFavId(curV.id);}
+function updateFavIcon(){if(curV)$('dFavI').className=FAV.has(curV.id)?'fa-solid fa-heart':'fa-regular fa-heart';}
+function togFavId(id){
+  if(FAV.has(id)){FAV.delete(id);toast('info',t('t_fav_del'));}
+  else{FAV.add(id);toast('success',t('t_fav_add'));}
+  saveFav();
+  if(curPage==='home')renderHome();
   if(curPage==='katalog')rKat();
-}
-function togFav(){if(curVeh)favToggle(curVeh.id);}
-
-/* ===================== PROFIL KTP ===================== */
-function isProfileComplete(){
-  return user.locked===true&&user.approved===true&&user.pending!==true
-    && user.nama&&user.nama.trim().length>=3
-    && user.telp&&user.telp.replace(/\D/g,'').length>=9
-    && user.email&&user.email.includes('@')
-    && user.alamatKtp&&user.alamatKtp.trim().length>=5
-    && user.alamatDom&&user.alamatDom.trim().length>=5;
-}
-function errIf(el,bad){el.classList.toggle('err',bad);if(bad)el.addEventListener('input',()=>el.classList.remove('err'),{once:true});return bad;}
-
-function renderProf(){
-  $('pNama').textContent=user.nama||(lang==='id'?'Belum diisi':'Not set yet');
-  let sub=t('p_ready');
-  if(user.locked&&user.pending)sub=user.telp+' • '+t('p_waitsub');
-  else if(user.locked)sub=user.telp+' • '+t('p_locked');
-  $('pSub').textContent=sub;
-  const av=$('pAv');
-  if(user.avatar){$('pAvBg').src=user.avatar;$('pAvImg').src=user.avatar;av.classList.add('has');}
-  else{$('pAvTxt').textContent=user.nama?user.nama.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase():'?';av.classList.remove('has');}
-  if(user.locked){
-    $('profEdit').style.display='none';$('profView').style.display='block';
-    $('profLock').style.display='flex';$('profBanner').style.display='none';
-    $('profPend').style.display=user.pending?'flex':'none';
-    const rows=[[t('p_name'),user.nama],[t('p_telp'),user.telp],[t('p_email'),user.email],[t('p_addr'),user.alamatKtp],[t('p_dom'),user.alamatDom],[t('lbl_status'),user.pending?t('st_pending'):t('st_approved')]];
-    $('profViewRows').innerHTML=rows.map(r=>'<div class="ro-row"><span class="rl">'+r[0]+'</span><span class="rv">'+esc(r[1]||'-')+'</span></div>').join('');
-  }else{
-    $('profEdit').style.display='block';$('profView').style.display='none';
-    $('profLock').style.display='none';$('profPend').style.display='none';
-    $('pInNama').value=user.nama||'';$('pInTelp').value=user.telp||'';
-    $('pInEmail').value=user.email||'';$('pInAlamatKtp').value=user.alamatKtp||'';$('pInAlamatDom').value=user.alamatDom||'';
-  }
-  $('pDark').classList.toggle('on',document.documentElement.classList.contains('dark'));
-}
-
-function saveProf(){
-  const nm=$('pInNama').value.trim(),tp=$('pInTelp').value.trim(),em=$('pInEmail').value.trim(),ak=$('pInAlamatKtp').value.trim(),ad=$('pInAlamatDom').value.trim();
-  ['pInNama','pInTelp','pInEmail','pInAlamatKtp','pInAlamatDom'].forEach(id=>$(id).classList.remove('err'));
-  let bad=false;
-  if(errIf($('pInNama'),nm.length<3))bad=true;
-  if(errIf($('pInTelp'),tp.replace(/\D/g,'').length<9))bad=true;
-  if(errIf($('pInEmail'),!em.includes('@')||em.length<6))bad=true;
-  if(errIf($('pInAlamatKtp'),ak.length<10))bad=true;
-  if(errIf($('pInAlamatDom'),ad.length<5))bad=true;
-  if(bad)return toast('error',t('t_valid'));
-  let approvedNow=true,pendingNow=false;
-  try{
-    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
-    const del=d.deletedCustomers||[];
-    const exist=(d.customers||[]).find(c=>c.nama.toLowerCase()===nm.toLowerCase());
-    if(del.includes(nm)){pendingNow=true;approvedNow=false;}
-    else if(exist&&exist.pending){pendingNow=true;approvedNow=false;}
-  }catch(e){}
-  Object.assign(user,{nama:nm,telp:tp,email:em,alamatKtp:ak,alamatDom:ad,locked:true,approved:approvedNow,pending:pendingNow,lockedAt:new Date().toISOString()});
-  saveUser();
-  try{
-    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
-    if(!d.customers)d.customers=[];
-    const exist=d.customers.find(c=>c.nama.toLowerCase()===nm.toLowerCase());
-    const rec={id:exist?exist.id:'CST-C'+Date.now().toString().slice(-4),nama:nm,telp:tp,email:em,tier:exist?exist.tier:'Bronze',alamat:ak,alamatDom:ad,pending:pendingNow,approved:approvedNow};
-    if(exist)Object.assign(exist,rec);else d.customers.unshift(rec);
-    localStorage.setItem('rr-data',JSON.stringify({...d,vehicles,motors,orders,promos,notifs,customers:d.customers,deletedCustomers:d.deletedCustomers||[]}));
-    customers=d.customers;
-  }catch(e){}
-  renderProf();renderHome();
-  if(pendingNow)toast('warning',t('t_same_name'));
-  else{
-    toast('success',t('t_saved'));
-    if(pendingBooking&&curVeh){pendingBooking=false;setTimeout(()=>openBooking(),900);}
-  }
-}
-function reqChange(){toast('info',t('t_need_admin'));}
-
-/* ===================== LOGOUT ===================== */
-function askLogout(){
-  const ov=document.createElement('div');
-  ov.className='sheet-ov';ov.id='logoutSheet';
-  ov.onclick=e=>{if(e.target===ov)ov.remove();};
-  ov.innerHTML='<div class="sheet">'+
-  '<div style="width:40px;height:4px;background:var(--input-border);border-radius:4px;margin:0 auto 16px"></div>'+
-  '<div style="text-align:center;margin-bottom:18px"><div style="width:56px;height:56px;border-radius:50%;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><i class="fa-solid fa-right-from-bracket" style="color:#EF4444;font-size:22px"></i></div><h3 style="font-size:16px;font-weight:800;margin-bottom:6px">'+t('lg_title')+'</h3><p style="font-size:12.5px;color:var(--text-secondary);line-height:1.6">'+t('lg_body')+'</p></div>'+
-  '<div style="display:flex;gap:10px"><button class="btn btn-s" style="flex:1" onclick="document.getElementById(\'logoutSheet\').remove()">'+t('lg_cancel')+'</button><button class="btn btn-d" style="flex:1" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> '+t('lg_yes')+'</button></div>'+
-  '</div>';
-  document.body.appendChild(ov);
-}
-function doLogout(){
-  localStorage.removeItem('rr-user');user=freshUser();
-  const sh=document.getElementById('logoutSheet');if(sh)sh.remove();
-  renderProf();renderHome();toast('info',t('t_logout'));nav('home');
+  if(curPage==='detail')updateFavIcon();
 }
 
 /* ===================== BOOKING ===================== */
+let appliedPromo=null;
 function openBooking(){
-  const v=curVeh;if(!v)return;
-  if(v.status!=='tersedia'){toast('error',tw('t_rented',v.nama));return;}
-  if(!isProfileComplete()){
-    if(user.locked&&user.pending){toast('warning',t('t_pending_book'));return;}
-    pendingBooking=true;
-    toast('warning',t('t_fill_ktp'));
-    nav('profil');
-    setTimeout(()=>{
-      const b=$('profBanner');if(b)b.style.display='flex';
-      highlightMissing();
-    },350);
-    return;
-  }
-  pendingBooking=false;
-  $('bThumb').style.backgroundImage='url('+(v.photos?.utama||v.img)+')';
-  $('bNama').textContent=v.nama;
-  $('bHarga').textContent=rp(v.harian)+' '+dayLbl();
-  $('bUser').textContent=user.nama+' • '+user.telp;
-  const today=new Date().toISOString().split('T')[0];
-  $('bMulai').value='';$('bMulai').min=today;
+  if(!curV)return;
+  if(!USER||!USER.locked){toast('warning',t('t_fill_ktp'));nav('profil');return;}
+  if(USER.status==='pending'){toast('warning',t('t_pending_book'));return;}
+  if(rentedIds().has(curV.id)){toast('warning',tw('t_rented',curV.nama));nav('katalog');return;}
+  $('bThumb').style.backgroundImage=`url('${curV.img}')`;
+  $('bNama').textContent=curV.nama;
+  $('bHarga').textContent=rp(curV.harian)+' / '+t('day_s');
+  $('bUser').textContent=USER.nama;
+  const today=new Date().toISOString().slice(0,10);
+  $('bMulai').value=today;$('bMulai').min=today;
   $('bSelesai').value='';$('bSelesai').min=today;
   $('bDriver').classList.remove('on');
-  $('bPromo').value='';$('bPromoStat').innerHTML='';promoApplied=null;bDays=0;
-  $('bDurasi').textContent='';$('pHarian').textContent=rp(v.harian);
-  $('pDurasi').textContent='-';$('pDriverRow').style.display='none';$('pPromoRow').style.display='none';$('pTotal').textContent='-';
-  nav('booking');
-}
-function highlightMissing(){
-  const checks=[
-    ['pInNama', user.nama&&user.nama.trim().length>=3],
-    ['pInTelp', user.telp&&user.telp.replace(/\D/g,'').length>=9],
-    ['pInEmail', user.email&&user.email.includes('@')],
-    ['pInAlamatKtp', user.alamatKtp&&user.alamatKtp.trim().length>=5],
-    ['pInAlamatDom', user.alamatDom&&user.alamatDom.trim().length>=5]
-  ];
-  checks.forEach(c=>{
-    const el=$(c[0]);if(!el)return;
-    el.classList.toggle('err',!c[1]);
-    if(!c[1])el.addEventListener('input',()=>el.classList.remove('err'),{once:true});
-  });
-  const firstBad=checks.find(c=>!c[1]);
-  if(firstBad)setTimeout(()=>$(firstBad[0]).focus(),400);
-}
-function checkPromo(){
-  const code=$('bPromo').value.trim().toUpperCase();
-  if(!code){$('bPromoStat').innerHTML='';promoApplied=null;calcPrice();return;}
-  const p=promos.find(x=>x.kode.toUpperCase()===code&&x.status==='Aktif');
-  if(p){promoApplied=p;$('bPromoStat').innerHTML='<i class="fa-solid fa-circle-check" style="color:#22C55E"></i>';toast('success',p.kode+' — '+p.diskon+' ✓');}
-  else{promoApplied=null;$('bPromoStat').innerHTML='<i class="fa-solid fa-circle-xmark" style="color:#EF4444"></i>';}
-  calcPrice();
+  $('bPromo').value='';$('bPromoStat').innerHTML='';appliedPromo=null;
+  calcPrice();nav('booking');
 }
 function calcPrice(){
-  const v=curVeh;if(!v)return;
-  bDays=daysBetween($('bMulai').value,$('bSelesai').value);
-  const drv=$('bDriver').classList.contains('on');
-  if(bDays>0)$('bDurasi').innerHTML='<i class="fa-solid fa-circle-info"></i> '+t('b_dur')+' <b>'+bDays+' '+t('day_s')+'</b>';
-  else $('bDurasi').textContent=(bDays===0&&$('bMulai').value&&$('bSelesai').value)?t('b_dur_bad'):'';
-  let total=v.harian*Math.max(bDays,0);
-  $('pDurasi').textContent=bDays+' × '+rp(v.harian);
-  let drvFee=0;
-  if(drv&&bDays>0){drvFee=DRIVER_FEE*bDays;total+=drvFee;}
-  $('pDriverRow').style.display=drvFee?'flex':'none';
-  $('pDriver').textContent='+'+rp(drvFee);
+  if(!curV)return;
+  $('pHarian').textContent=rp(curV.harian);
+  const a=new Date($('bMulai').value),b=new Date($('bSelesai').value);
+  let dur=0,okd=false;
+  if(!isNaN(a)&&!isNaN(b)){dur=Math.round((b-a)/86400000);okd=dur>=1;}
+  const durEl=$('bDurasi');
+  if(okd){durEl.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${t('b_dur')} ${dur} ${t('day_s')}`;durEl.style.color='#16A34A';}
+  else if($('bSelesai').value){durEl.innerHTML=`<i class="fa-solid fa-triangle-exclamation"></i> ${t('b_dur_bad')}`;durEl.style.color='#EF4444';}
+  else durEl.innerHTML='';
+  const dd=Math.max(dur,0);
+  const sub=curV.harian*dd;
+  const drv=$('bDriver').classList.contains('on')?DRIVER_FEE*dd:0;
   let disc=0;
-  if(promoApplied&&bDays>0){disc=Math.round(total*(parseInt(promoApplied.diskon)||0)/100);total-=disc;}
-  $('pPromoRow').style.display=disc?'flex':'none';
-  $('pPromo').textContent='−'+rp(disc);
-  $('pTotal').textContent=bDays>0?rp(total):'-';
+  if(appliedPromo&&okd)disc=appliedPromo.type==='pct'?Math.round(sub*appliedPromo.val/100):Math.min(appliedPromo.val,sub);
+  $('pDurasi').textContent=okd?dur+' '+t('day_s'):'-';
+  $('pDriverRow').style.display=drv?'flex':'none';if(drv)$('pDriver').textContent=rp(drv);
+  $('pPromoRow').style.display=disc?'flex':'none';if(disc)$('pPromo').textContent='- '+rp(disc);
+  $('pTotal').textContent=okd?rp(sub+drv-disc):'-';
+  $('bConfirm').disabled=!okd;
+}
+function checkPromo(){
+  const v=$('bPromo').value.trim().toUpperCase(),st=$('bPromoStat');
+  if(!v){st.innerHTML='';appliedPromo=null;calcPrice();return;}
+  const p=data().promos.find(p=>p.kode.toUpperCase()===v);
+  if(p){appliedPromo=p;st.innerHTML='<i class="fa-solid fa-circle-check" style="color:#22C55E"></i>';}
+  else{appliedPromo=null;st.innerHTML='<i class="fa-solid fa-circle-xmark" style="color:#EF4444"></i>';}
+  calcPrice();
 }
 function confirmBooking(){
-  const v=curVeh;if(!v)return;
-  if(!isProfileComplete()){
-    if(user.pending)return toast('warning',t('t_pending_cant'));
-    return toast('error',lang==='id'?'Lengkapi profil KTP dulu di halaman Profil':'Complete your ID profile first');
-  }
-  if(bDays<1)return toast('error',t('b_dur_bad'));
-  if(v.status!=='tersedia')return toast('error',tw('t_rented',v.nama));
-  let total=v.harian*bDays;
-  if($('bDriver').classList.contains('on'))total+=DRIVER_FEE*bDays;
-  if(promoApplied)total-=Math.round(total*(parseInt(promoApplied.diskon)||0)/100);
-  const tglStr=new Date().toLocaleDateString(lang==='id'?'id-ID':'en-US',{day:'numeric',month:'short',year:'numeric'});
-  const newOrder={id:'ORD-'+(2400+orders.length+1),cust:user.nama,kend:v.nama,tgl:tglStr,lama:bDays+' '+t('day_s'),total,status:'baru',penyewa:true};
-  orders.unshift(newOrder);
-  v.status='disewa';
-  if(promoApplied)promoApplied.pakai++;
-  try{
-    const d=JSON.parse(localStorage.getItem('rr-data')||'{}');
-    if(!d.customers)d.customers=[];
-    if(!d.customers.find(c=>c.nama===user.nama))d.customers.unshift({id:'CST-C'+Date.now().toString().slice(-4),nama:user.nama,telp:user.telp||'-',email:user.email||'-',tier:'Bronze',alamat:user.alamatKtp||'-',alamatDom:user.alamatDom||'-',approved:true});
-    d.vehicles=vehicles;d.motors=motors;d.orders=orders;d.promos=promos;d.notifs=notifs;
-    localStorage.setItem('rr-data',JSON.stringify(d));
-  }catch(e){saveData();}
-  renderHome();
-  toast('success',tw('t_book_ok',newOrder.id));
+  if(!curV)return;
+  if(!USER||!USER.locked){toast('warning',t('t_fill_ktp'));nav('profil');return;}
+  if(USER.status==='pending'){toast('warning',t('t_pending_book'));return;}
+  const a=$('bMulai').value,b=$('bSelesai').value;
+  const dur=Math.round((new Date(b)-new Date(a))/86400000);
+  if(!a||!b||dur<1){toast('error',t('b_dur_bad'));return;}
+  const drv=$('bDriver').classList.contains('on');
+  const sub=curV.harian*dur,drvF=drv?DRIVER_FEE*dur:0;
+  let disc=0;
+  if(appliedPromo)disc=appliedPromo.type==='pct'?Math.round(sub*appliedPromo.val/100):Math.min(appliedPromo.val,sub);
+  const code='RR-'+String(Date.now()).slice(-6);
+  const order={id:Date.now(),code,deviceId:DEV,vid:curV.id,nama:curV.nama,img:curV.img,mulai:a,selesai:b,durasi:dur,driver:!!drv,harian:curV.harian,driverFee:drvF,diskon:disc,promo:appliedPromo?appliedPromo.kode:'',total:sub+drvF-disc,status:'baru',custNama:USER.nama,created:Date.now()};
+  commit(d=>{d.orders=d.orders||[];d.orders.push(order);});
+  lastOrderStat[order.id]='baru';
+  addNotif('fa-clock','#F59E0B','od_wait',code);
+  toast('success',tw('t_book_ok',code));
   nav('pesanan');
 }
 
 /* ===================== PESANAN ===================== */
+let ordF='';
+const ORD_STEPS=['baru','konf','aktif','selesai'];
+function setOrdF(k){ordF=k;renderOrdChips();rOrders();}
 function renderOrdChips(){
-  const c=[['',t('f_all')],['baru',t('st_baru')],['konfirmasi',t('st_konf')],['aktif',t('st_aktif')],['selesai',t('st_selesai')],['batal',t('st_batal')]];
-  $('ordChips').innerHTML=c.map(x=>'<div class="chip'+(ordFilter===x[0]?' on':'')+'" onclick="ordFilter=\''+x[0]+'\';renderOrdChips();rOrders()">'+x[1]+'</div>').join('');
+  const defs=[['','fa-border-all',t('f_all')],['baru','fa-clock',t('st_baru')],['konf','fa-circle-check',t('st_konf')],['aktif','fa-road',t('st_aktif')],['selesai','fa-flag-checkered',t('st_selesai')],['batal','fa-ban',t('st_batal')]];
+  $('ordChips').innerHTML=defs.map(([k,i,l])=>`<div class="chip ${ordF===k?'on':''}" onclick="setOrdF('${k}')"><i class="fa-solid ${i}"></i>${l}</div>`).join('');
 }
 function rOrders(){
-  let list=user.nama?orders.filter(o=>o.cust===user.nama):orders;
-  if(ordFilter)list=list.filter(o=>o.status===ordFilter);
-  if(!list.length){
-    $('ordList').innerHTML='<div class="empty"><i class="fa-solid fa-clipboard-list"></i><h3>'+(user.nama?t('empty_no'):t('empty_hello'))+'</h3><p>'+(user.nama?t('empty_cta'):t('empty_fill'))+'</p><button class="btn btn-p" style="margin-top:16px" onclick="nav(\'katalog\')">'+t('btn_viewcat')+'</button></div>';
+  const mine=data().orders.filter(o=>o.deviceId===DEV).sort((a,b)=>b.created-a.created);
+  const list=ordF?mine.filter(o=>o.status===ordF):mine;
+  if(!mine.length){
+    $('ordList').innerHTML=USER
+     ?`<div class="empty"><i class="fa-solid fa-clipboard-list"></i><h3>${t('empty_no')}</h3><p>${t('empty_hello')} ${esc(USER.nama.split(' ')[0])}, ${t('empty_cta')}</p><button class="btn btn-p" style="margin-top:16px" onclick="nav('katalog')">${t('btn_viewcat')}</button></div>`
+     :`<div class="empty"><i class="fa-solid fa-user-lock"></i><h3>${t('empty_hello')} 👋</h3><p>${t('empty_fill')}</p><button class="btn btn-p" style="margin-top:16px" onclick="nav('profil')">${t('p_edit_t')}</button></div>`;
     return;
   }
-  const OSTM={baru:['bi',t('st_baru')],konfirmasi:['bi',t('st_konf')],aktif:['bs',t('st_aktif')],selesai:['b2',t('st_selesai')],batal:['bd',t('st_batal')]};
-  const stepsI=['fa-inbox','fa-circle-check','fa-key','fa-flag-checkered'];
-  const labels=[t('s_baru'),t('s_konf'),t('s_jalan'),t('s_selesai')];
-  const stepMap={baru:1,konfirmasi:2,aktif:3,selesai:4};
+  if(!list.length){$('ordList').innerHTML=`<div class="empty"><i class="fa-solid fa-filter"></i><h3>${t('no_result')}</h3><p>${t('no_result_s')}</p></div>`;return;}
+  const bc={baru:'b2',konf:'bi',aktif:'bs',selesai:'b2',batal:'bd'};
+  const sub={baru:'od_wait',konf:'od_conf',aktif:'od_on',selesai:'od_done',batal:'od_batal'};
   $('ordList').innerHTML=list.map(o=>{
-    const v=allV().find(x=>x.nama===o.kend);
-    const st=OSTM[o.status]||['b2',o.status];
-    const step=stepMap[o.status]||0;
-    const stepper=o.status==='batal'?'':'<div class="stepper">'+stepsI.map((s,i)=>'<div class="stp'+(i<step?' done':'')+'"><div class="sdot"><i class="fa-solid '+s+'"></i></div><span>'+labels[i]+'</span></div>').join('')+'</div>';
-    return '<div class="o-item" onclick="ordDetail(\''+o.id+'\')">'+
-    '<div class="o-top"><span class="o-code">'+esc(o.id)+'</span><span class="badge '+st[0]+'">'+st[1]+'</span></div>'+
-    '<div class="o-body"><div class="o-thumb" style="background-image:url('+(v?v.img:'')+')"></div>'+
-    '<div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700">'+esc(o.kend)+'</div>'+
-    '<div style="font-size:11.5px;color:var(--text-muted);margin-top:3px">'+esc(o.tgl)+' • '+esc(o.lama)+'</div>'+
-    '<div style="font-size:14px;font-weight:800;color:var(--teal);margin-top:5px">'+rp(o.total)+'</div></div></div>'+stepper+'</div>';
-  }).join('');
+    const idx=ORD_STEPS.indexOf(o.status);
+    const steps=o.status!=='batal'?`<div class="stepper">${ORD_STEPS.map((s,i)=>`<div class="stp ${i<=idx?'done':''}"><div class="sdot">${i<=idx?'<i class="fa-solid fa-check"></i>':i+1}</div><span>${t('s_'+s)}</span></div>`).join('')}</div>`:'';
+    return `<div class="o-item fade" onclick="openDetail(${o.vid})">
+     <div class="o-top"><span class="o-code"><i class="fa-solid fa-hashtag"></i> ${o.code}</span><span class="badge ${bc[o.status]||'b2'}">${t('st_'+o.status)}</span></div>
+     <div class="o-body"><div class="o-thumb" style="background-image:url('${o.img}')"></div>
+      <div style="flex:1;min-width:0"><h3 style="font-size:13.5px;font-weight:700">${esc(o.nama)}</h3>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:4px"><i class="fa-solid fa-calendar"></i> ${o.mulai} → ${o.selesai} · ${o.durasi} ${t('day_s')}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:3px"><i class="fa-solid fa-circle-info"></i> ${t(sub[o.status]||'')}</div>
+      <div style="font-size:14px;font-weight:800;color:var(--teal);margin-top:5px">${rp(o.total)}</div></div></div>
+     ${steps}
+     ${['baru','konf'].includes(o.status)?`<div style="padding:0 14px 13px"><button class="btn btn-d btn-block" style="padding:9px;font-size:12px" onclick="event.stopPropagation();askCancel(${o.id})"><i class="fa-solid fa-xmark"></i> ${t('btn_cancel')}</button></div>`:''}
+    </div>`;}).join('');
 }
-function ordDetail(id){
-  const o=orders.find(x=>x.id===id);if(!o)return;
-  const v=allV().find(x=>x.nama===o.kend);
-  const OSTM={baru:['bi',t('st_baru')],konfirmasi:['bi',t('st_konf')],aktif:['bs',t('st_aktif')],selesai:['b2',t('st_selesai')],batal:['bd',t('st_batal')]};
-  const st=OSTM[o.status]||['b2',o.status];
-  const ov=document.createElement('div');
-  ov.className='sheet-ov';ov.id='ordSheet';
-  ov.onclick=e=>{if(e.target===ov)ov.remove();};
-  const msgs={baru:t('od_wait'),konfirmasi:t('od_conf'),aktif:t('od_on'),selesai:t('od_done'),batal:t('od_batal')};
-  ov.innerHTML='<div class="sheet">'+
-  '<div style="width:40px;height:4px;background:var(--input-border);border-radius:4px;margin:0 auto 16px"></div>'+
-  '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><h3 style="font-size:16px;font-weight:800;flex:1">'+esc(o.id)+'</h3><span class="badge '+st[0]+'">'+st[1]+'</span><button class="btn btn-s" style="padding:6px 10px;font-size:12px" onclick="document.getElementById(\'ordSheet\').remove()"><i class="fa-solid fa-xmark"></i></button></div>'+
-  '<div style="display:flex;gap:12px;background:var(--input-bg);border-radius:14px;padding:12px;margin-bottom:14px"><div class="o-thumb" style="background-image:url('+(v?v.img:'')+')"></div><div><div style="font-size:13.5px;font-weight:700">'+esc(o.kend)+'</div><div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">'+esc(o.tgl)+' • '+esc(o.lama)+'</div><div style="font-size:15px;font-weight:800;color:var(--teal);margin-top:4px">'+rp(o.total)+'</div></div></div>'+
-  '<div style="font-size:12.5px;color:var(--text-secondary);line-height:2;margin-bottom:16px"><div><i class="fa-solid fa-user" style="color:var(--teal);width:18px"></i> '+esc(o.cust)+'</div><div><i class="fa-solid fa-circle-info" style="color:var(--teal);width:18px"></i> '+msgs[o.status]+'</div></div>'+
-  (o.status==='baru'||o.status==='konfirmasi'?'<button class="btn btn-d btn-block" onclick="cancelOrder(\''+o.id+'\')"><i class="fa-solid fa-ban"></i> '+t('btn_cancel')+'</button>':'')+
-  '</div>';
-  document.body.appendChild(ov);
+function askCancel(id){
+  const o=data().orders.find(o=>o.id===id&&o.deviceId===DEV);if(!o)return;
+  sheet(t('btn_cancel'),tw('od_batal',o.code)+'?',t('btn_cancel'),()=>cancelOrder(id),'btn-d','fa-ban');
 }
 function cancelOrder(id){
-  const o=orders.find(x=>x.id===id);if(!o)return;
-  o.status='batal';
-  const v=allV().find(x=>x.nama===o.kend);
-  if(v&&v.status==='disewa')v.status='tersedia';
-  saveData();rOrders();renderHome();
-  const sh=document.getElementById('ordSheet');if(sh)sh.remove();
-  toast('info',tw('t_cancel_ok',id));
+  const o=data().orders.find(o=>o.id===id&&o.deviceId===DEV);if(!o)return;
+  commit(d=>{d.orders=d.orders||[];const x=d.orders.find(x=>x.id===id);if(x)x.status='batal';});
+  lastOrderStat[id]='batal';
+  addNotif('fa-ban','#EF4444','od_batal',o.code);
+  toast('success',tw('t_cancel_ok',o.code));
+  rOrders();
 }
 
-/* ===================== NOTIF ===================== */
-function togNP(){$('npOv').classList.toggle('on');$('np').classList.toggle('on');renderN();}
-function renderN(){
-  const unread=notifs.filter(n=>!n.read).length;
-  $('nDot').style.display=unread?'block':'none';
-  $('nList').innerHTML=notifs.map((n,i)=>'<div style="padding:14px 18px;display:flex;gap:12px;border-bottom:1px solid var(--card-border);cursor:pointer;opacity:'+(n.read?'.55':'1')+'" onclick="readN('+i+')"><div style="width:34px;height:34px;border-radius:10px;background:'+n.color+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid '+n.icon+'" style="color:'+n.color+';font-size:13px"></i></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500;line-height:1.45">'+esc(n.title)+'</div><div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">'+esc(n.time)+'</div></div></div>').join('')||'<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px">—</div>';
+/* ===================== PROFIL ===================== */
+function renderProf(){
+  const has=!!(USER&&USER.locked);
+  $('pNama').textContent=USER?USER.nama:'-';
+  $('pSub').textContent=!USER?t('p_ready'):USER.status==='pending'?t('p_waitsub'):t('p_locked');
+  const av=$('pAv');
+  if(USER&&USER.avatar){av.classList.add('has');$('pAvImg').src=USER.avatar;$('pAvBg').src=USER.avatar;}
+  else{av.classList.remove('has');$('pAvTxt').textContent=USER&&USER.nama?USER.nama[0]:'?';}
+  $('profEdit').style.display=has?'none':'block';
+  $('profView').style.display=has?'block':'none';
+  $('profBanner').style.display=!USER?'flex':'none';
+  $('profPend').style.display=has&&USER.status==='pending'?'flex':'none';
+  $('profLock').style.display=has?'flex':'none';
+  if(has){
+    $('profViewRows').innerHTML=[['p_name',USER.nama],['p_telp',USER.telp],['p_email',USER.email],['p_addr',USER.alamatKtp],['p_dom',USER.alamatDom]]
+     .map(([k,v])=>`<div class="ro-row"><span class="rl">${t(k)}</span><span class="rv">${esc(v)}</span></div>`).join('')
+     +`<div class="ro-row"><span class="rl">${t('lbl_status')}</span><span class="rv"><span class="badge ${USER.status==='approved'?'bs':'bw'}">${USER.status==='approved'?t('st_approved'):t('st_pending')}</span></span></div>`;
+  }
+  $('pDark').classList.toggle('on',document.documentElement.classList.contains('dark'));
 }
-function readN(i){notifs[i].read=true;renderN();saveData();}
-function clrN(){notifs.forEach(n=>n.read=true);renderN();saveData();toast('success',t('read_all'));}
+function saveProf(){
+  const n=$('pInNama').value.trim(),tp=$('pInTelp').value.trim(),em=$('pInEmail').value.trim(),ak=$('pInAlamatKtp').value.trim(),ad=$('pInAlamatDom').value.trim();
+  let ok=true;
+  const mark=(el,bad)=>{el.classList.toggle('err',bad);if(bad)ok=false;};
+  mark($('pInNama'),n.length<3);
+  mark($('pInTelp'),!/^[0-9+ -]{9,16}$/.test(tp));
+  mark($('pInEmail'),!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em));
+  mark($('pInAlamatKtp'),ak.length<8);
+  mark($('pInAlamatDom'),ad.length<5);
+  if(!ok){toast('error',t('t_valid'));return;}
+  const same=data().customers.some(c=>c.nama&&String(c.nama).trim().toLowerCase()===n.toLowerCase()&&c.deviceId!==DEV);
+  const status=same?'pending':'approved';
+  USER={deviceId:DEV,nama:n,telp:tp,email:em,alamatKtp:ak,alamatDom:ad,avatar:(USER&&USER.avatar)||null,locked:true,status,ts:Date.now()};
+  commit(d=>{
+    d.customers=d.customers||[];
+    d.customers=d.customers.filter(c=>c.deviceId!==DEV);
+    d.customers.push({deviceId:DEV,nama:n,telp:tp,email:em,alamatKtp:ak,alamatDom:ad,status,ts:USER.ts});
+  });
+  saveUser();
+  toast('success',same?t('t_same_name'):t('t_saved'));
+  addNotif(same?'fa-hourglass-half':'fa-circle-check',same?'#F59E0B':'#22C55E',same?'t_same_name':'t_saved');
+  renderProf();
+}
+function reqChange(){toast('info',t('t_need_admin'));}
+function upAv(inp){
+  if(!inp.files||!inp.files[0])return;
+  compressImg(inp.files[0],url=>{if(!USER)USER={};USER.avatar=url;saveUser();renderProf();toast('success',t('t_photo'));},300,.7);
+  inp.value='';
+}
+function askLogout(){sheet(t('lg_title'),t('lg_body'),t('lg_yes'),doLogout,'btn-d','fa-right-from-bracket');}
+function doLogout(){
+  localStorage.removeItem('rr-user');localStorage.removeItem('rr-fav');localStorage.removeItem('rr-notifs-'+DEV);
+  USER=null;FAV=new Set();NOTIFS=[];updDot();
+  toast('info',t('t_logout'));
+  renderProf();nav('home');
+}
 
-/* ===================== UPLOAD AVATAR ===================== */
-function upAv(input){
-  const f=input.files[0];if(!f)return;
-  compressImg(f,url=>{user.avatar=url;saveUser();renderProf();toast('success',t('t_photo'));},400,0.85);
+/* ===================== NOTIFIKASI ===================== */
+function togNP(){
+  const ov=$('npOv'),p=$('np');
+  const open=p.classList.toggle('on');
+  ov.classList.toggle('on',open);
+  if(open){NOTIFS.forEach(n=>n.read=true);saveNotifs();renderNotifs();}
+}
+function clrN(){NOTIFS=[];saveNotifs();renderNotifs();}
+function renderNotifs(){
+  const l=$('nList');
+  if(!NOTIFS.length){l.innerHTML=`<div class="empty"><i class="fa-solid fa-bell-slash"></i><h3>${t('notif')}</h3><p>—</p></div>`;return;}
+  l.innerHTML=NOTIFS.map(n=>`<div class="toast" style="margin-bottom:8px"><i class="fa-solid ti ${n.icon}" style="color:${n.color}"></i><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;line-height:1.4">${tw(n.k,n.p||'')}</div><div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">${timeAgo(n.ts)}</div></div></div>`).join('');
+}
+
+/* ===================== NAVIGASI & TEMA ===================== */
+let curPage='home';
+function nav(p){
+  curPage=p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  $('pg-'+p).classList.add('on');
+  document.querySelectorAll('#bnav button[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  window.scrollTo({top:0});
+  if(p==='home')renderHome();
+  if(p==='katalog'){renderKatChips();rKat();}
+  if(p==='pesanan'){renderOrdChips();rOrders();}
+  if(p==='profil')renderProf();
+}
+function togDM(){
+  const r=document.documentElement;
+  r.classList.toggle('dark');
+  const dk=r.classList.contains('dark');
+  localStorage.setItem('rr-dm',dk?'1':'0');
+  $('dmBtn').innerHTML=`<i class="fa-solid ${dk?'fa-sun':'fa-moon'}"></i>`;
+  if(curPage==='profil')$('pDark').classList.toggle('on',dk);
 }
 
 /* ===================== INIT ===================== */
-loadData();
-applyI18n();
-applySplashLogo();
-applyLogo();
-checkUserStatus();
-renderHome();
+(function init(){
+  if(localStorage.getItem('rr-dm')==='1'){document.documentElement.classList.add('dark');$('dmBtn').innerHTML='<i class="fa-solid fa-sun"></i>';}
+  applyI18n();
+  sync();
+  renderHome();
+  renderNotifs();
+  updDot();
+  updCloudUI(false);
+  /* Polling cadangan (untuk mode offline/fallback lokal) */
+  setInterval(()=>{if(!cloudOn)sync();},5000);
+  window.addEventListener('storage',e=>{if(e.key==='rr-data'&&!cloudOn)sync();});
+})();
 </script>
 </body>
 </html>
