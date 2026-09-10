@@ -30,9 +30,11 @@
     @keyframes sfU{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     body.splashed{animation:appIn .5s}
     @keyframes appIn{from{opacity:0}to{opacity:1}}
-    /* HEADER: teks saja */
+    /* HEADER */
     .app-top{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0C2E2E,#0F4A4A);padding:14px 18px;display:flex;align-items:center;gap:12px}
     .app-top .brand{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
+    /* ✅ LOGO BOY.JPG: bulatan penuh (crop tengah) — tidak ada kotak putih */
+    .app-top .brand img{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center;flex-shrink:0;border:2px solid rgba(255,255,255,.25)}
     .app-top .brand .bt{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.1}
     .app-top .brand .bs{font-size:9px;color:#FFFFFF;letter-spacing:1.5px;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.55)}
     .icon-btn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:15px;transition:all .2s;position:relative}
@@ -67,13 +69,11 @@
     .promo-card .pc-d{font-size:26px;font-weight:800}
     .promo-card .pc-n{font-size:12.5px;font-weight:600;margin-top:2px}
     .promo-card .pc-k{display:inline-block;margin-top:10px;padding:4px 10px;background:rgba(255,255,255,.2);border-radius:8px;font-size:11px;font-weight:700;font-family:monospace;letter-spacing:.5px}
-    /* VEHICLE CARDS */
     .v-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-card);cursor:pointer;transition:all .3s;position:relative}
     .v-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-4px)}
     .v-card:active{transform:scale(.98)}
     .v-img{height:170px;background-size:cover;background-position:center;position:relative}
     .v-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 55%)}
-    /* ✅ BADGE PERINGKAT POPULER */
     .v-card .rank{position:absolute;top:10px;left:10px;z-index:3;width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,#64748B,#334155);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.35)}
     .v-card .rank.r1{background:linear-gradient(135deg,#FBBF24,#D97706)}
     .v-card .rank.r2{background:linear-gradient(135deg,#CBD5E1,#64748B)}
@@ -192,6 +192,7 @@
     <div class="sp-bar-w"><div class="sp-bar" id="spBar"></div></div>
   </div>
 
+  <!-- ✅ HEADER dengan logo BOY.jpg (bulatan) -->
   <header class="app-top">
     <div class="brand" onclick="nav('home')">
       <img id="hdLogo" alt="Logo">
@@ -361,7 +362,7 @@
       <button class="btn btn-d btn-block" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">Keluar (Logout)</span></button>
       <p style="font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:9px" data-i18n="logout_hint">Logout akan menghapus data dari perangkat ini — Anda harus isi ulang saat sewa kembali</p>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.7<br>© 2025 — RentRide Admin Panel</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:16px 0 8px">RentRide Customer v1.8<br>© 2025 — RentRide Admin Panel</div>
     </div>
   </div>
 
@@ -458,6 +459,17 @@ function freshUser(){return {nama:'',telp:'',email:'',alamatKtp:'',alamatDom:'',
 let user=JSON.parse(localStorage.getItem('rr-user')||'null')||freshUser();
 function saveUser(){localStorage.setItem('rr-user',JSON.stringify(user));}
 
+/* ===================== ✅ LOGO BOY.JPG (header) ===================== */
+/* Prioritas: settings.logo (upload admin) → BOY.jpg → sembunyikan jika file tak ada */
+function applyLogo(){
+  let src='BOY.jpg';
+  try{const d=JSON.parse(localStorage.getItem('rr-data'));if(d&&d.settings&&d.settings.logo)src=d.settings.logo;}catch(e){}
+  const el=document.getElementById('hdLogo');if(!el)return;
+  el.onerror=()=>{el.style.display='none';}; /* file tidak ada → sembunyikan rapi */
+  el.style.display='';
+  el.src=src;
+}
+
 /* ===================== STATE ===================== */
 let curPage='home',curVeh=null,katJenis='',ordFilter='',promoApplied=null,bDays=0,pendingBooking=false;
 
@@ -490,7 +502,7 @@ function togDM(){
 }
 if(localStorage.getItem('rr-dark')==='1'){document.documentElement.classList.add('dark');document.addEventListener('DOMContentLoaded',()=>{$('dmBtn').innerHTML='<i class="fa-solid fa-sun"></i>';});}
 
-/* Sinkronisasi real-time dengan admin */
+/* Sinkronisasi real-time dengan admin (folder/tab yang sama) */
 window.addEventListener('storage',e=>{
   if(e.key==='rr-data'){
     loadData();checkUserStatus();
@@ -528,10 +540,9 @@ function allV(){return vehicles.concat(motors);}
 function findV(id){return allV().find(v=>v.id===id);}
 function isFav(id){return (user.favs||[]).includes(id);}
 function daysBetween(a,b){if(!a||!b)return 0;const d=Math.round((new Date(b)-new Date(a))/86400000);return d>0?d:0;}
-/* ✅ label /hari atau /day — dipanggil dari variabel, TIDAK ada ternary di dalam string */
 function dayLbl(){return lang==='id'?'/hari':'/day';}
 
-/* ===================== ✅ VEHICLE CARD — FIXED (tanpa bug /hari berulang) ===================== */
+/* ===================== VEHICLE CARD (dengan badge peringkat) ===================== */
 function vCard(v,rank){
   const fav=isFav(v.id);
   const rented=v.status!=='tersedia';
@@ -557,7 +568,7 @@ function renderHome(){
   const aktif=promos.filter(p=>p.status==='Aktif');
   $('secPromo').style.display=aktif.length?'block':'none';
   $('promoRow').innerHTML=aktif.map(p=>'<div class="promo-card" onclick="copyPromo(\''+esc(p.kode)+'\')"><div class="pc-d">'+esc(p.diskon)+'</div><div class="pc-n">'+esc(p.nama)+'</div><div class="pc-k">'+esc(p.kode)+'</div></div>').join('');
-  /* ✅ POPULER: 4 teratas berdasarkan rating, dengan badge peringkat 🥇🥈🥉 */
+  /* POPULER: 4 teratas + badge peringkat 🥇🥈🥉 */
   const popular=[...allV()].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4);
   $('homeGrid').innerHTML=popular.map((v,i)=>vCard(v,i+1)).join('')||'<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted);font-size:13px">—</div>';
   const dl=dayLbl();
@@ -895,6 +906,7 @@ function upAv(input){
 /* ===================== INIT ===================== */
 loadData();
 applyI18n();
+applyLogo();
 checkUserStatus();
 renderHome();
 </script>
